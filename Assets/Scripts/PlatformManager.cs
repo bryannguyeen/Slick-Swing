@@ -8,6 +8,7 @@ public class PlatformManager : MonoBehaviour {
     public GameObject borderPlatform;
     public GameObject obstaclePlatform;
     public float distanceBetweenBorders;
+    public Transform player;
 
     GameObject bp1Upper, bp1Lower, bp2Upper, bp2Lower;
     List<GameObject> obstacles = new List<GameObject>();
@@ -49,9 +50,9 @@ public class PlatformManager : MonoBehaviour {
         //Debug.Log((int) ((transform.position.x + obstacleWidth/2) / spaceBetweenObstacles + 0.5f));
         updateNumObstaclesPassed();
 
-        if ((int) (transform.position.x /borderWidth) > counter)
+        if ((int) (player.position.x /borderWidth) > counter)
         {
-            counter = (int) (transform.position.x / borderWidth);
+            counter = (int) (player.position.x / borderWidth);
 
             Destroy(bp1Upper);
             Destroy(bp1Lower);
@@ -110,7 +111,7 @@ public class PlatformManager : MonoBehaviour {
 
     void updateNumObstaclesPassed()
     {
-        int currentNum = (int) ((transform.position.x + obstacleWidth / 2) / spaceBetweenObstacles + 0.5f);
+        int currentNum = (int) ((player.position.x + spaceBetweenObstacles) / spaceBetweenObstacles);
 
         if (currentNum > numObstaclesPassed)
             numObstaclesPassed = currentNum;
