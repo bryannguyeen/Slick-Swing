@@ -10,8 +10,10 @@ public class PlatformManager : MonoBehaviour {
     public float distanceBetweenBorders;
     public Transform player;
 
-    GameObject bp1Upper, bp1Lower, bp2Upper, bp2Lower;
-    List<GameObject> obstacles = new List<GameObject>();
+    //GameObject bp1Upper, bp1Lower, bp2Upper, bp2Lower;
+    Queue<GameObject> obstacles = new Queue<GameObject>();
+    Queue<GameObject> borders = new Queue<GameObject>();
+
     public int obstaclesPerScreen;
     public static float spaceBetweenObstacles;
     public float obstacleWidth;
@@ -33,19 +35,16 @@ public class PlatformManager : MonoBehaviour {
         upperBound = (distanceBetweenBorders / 2 - borderHeight / 2);
         lowerBound = -upperBound;
 
-        bp1Upper = (GameObject)Instantiate(borderPlatform, new Vector3(0, distanceBetweenBorders/2, 0), Quaternion.identity);
-        bp1Lower = (GameObject)Instantiate(borderPlatform, new Vector3(0, -distanceBetweenBorders/2, 0), Quaternion.identity);
-        bp2Upper = (GameObject)Instantiate(borderPlatform, new Vector3(borderWidth, distanceBetweenBorders/2, 0), Quaternion.identity);
-        bp2Lower = (GameObject)Instantiate(borderPlatform, new Vector3(borderWidth, -distanceBetweenBorders/2, 0), Quaternion.identity);
+        addBorderToQueue(-1);
+        addBorderToQueue(0);
+        addBorderToQueue(1);
 
-        for (int i = 0; i < obstaclesPerScreen * 3; i++)
-        {
-            obstacles.Add(createObstacle(i * spaceBetweenObstacles));
-        }
+        addObstaclesToQueue(0);
+        addObstaclesToQueue(1);
+
     }
 
-    // Update is called once per frame
-    void FixedUpdate () {
+    void Update () {
         // FOR KEEPING TRACK OF SCORE
         //Debug.Log((int) ((transform.position.x + obstacleWidth/2) / spaceBetweenObstacles + 0.5f));
         updateNumObstaclesPassed();
@@ -54,27 +53,14 @@ public class PlatformManager : MonoBehaviour {
         {
             counter = (int) (player.position.x / borderWidth);
 
-            Destroy(bp1Upper);
-            Destroy(bp1Lower);
-            bp1Upper = bp2Upper;
-            bp1Lower = bp2Lower;
-
-            bp2Upper = (GameObject)Instantiate(borderPlatform, new Vector3((counter + 1) * borderWidth, distanceBetweenBorders / 2, 0), Quaternion.identity);
-            bp2Lower = (GameObject)Instantiate(borderPlatform, new Vector3((counter + 1) * borderWidth, -distanceBetweenBorders / 2, 0), Quaternion.identity);
+            destroyBehindBorders();
+            addBorderToQueue(counter + 1);
 
             if (counter > 1)
             {
-                for (int i = 0; i < obstaclesPerScreen; i++)
-                {
-                    Destroy(obstacles[0]);
-                    obstacles.RemoveAt(0);
-                }
+                destroyBehindObsticles();
             }
-
-            for (int i = 0; i < obstaclesPerScreen; i++)
-            {
-                obstacles.Add(createObstacle((counter + 2) * borderWidth + (i * spaceBetweenObstacles)));
-            }
+            addObstaclesToQueue(counter + 1);
         }
     }
 
@@ -115,5 +101,39 @@ public class PlatformManager : MonoBehaviour {
 
         if (currentNum > numObstaclesPassed)
             numObstaclesPassed = currentNum;
+    }
+
+    void addBorderToQueue(int offset)
+    {
+        float xCoord = offset * borderWidth;
+        float yCoord = distanceBetweenBorders / 2;
+        GameObject upperPlatform = (GameObject)Instantiate(borderPlatform, new Vector3(xCoord, yCoord, 0), Quaternion.identity);
+        GameObject lowerPlatform = (GameObject)Instantiate(borderPlatform, new Vector3(xCoord, -yCoord, 0), Quaternion.identity);
+
+        borders.Enqueue(upperPlatform);
+        borders.Enqueue(lowerPlatform);
+    }
+
+    void addObstaclesToQueue(int offset)
+    {
+        for (int i = 0; i < obstaclesPerScreen; i++)
+        {
+            obstacles.Enqueue(createObstacle(offset * borderWidth + (i * spaceBetweenObstacles)));
+        }
+    }
+
+    void destroyBehindBorders()
+    {
+        for (int i = 0; i < 2; i++) {
+            Destroy(borders.Dequeue());
+        }
+    }
+
+    void destroyBehindObsticles()
+    {
+        for (int i = 0; i < obstaclesPerScreen; i++)
+        {
+            Destroy(obstacles.Dequeue());
+        }
     }
 }

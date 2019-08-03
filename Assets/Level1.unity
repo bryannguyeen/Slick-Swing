@@ -180,7 +180,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: dcf553a290ed7a14ba28394fa88dec1b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -271,8 +271,8 @@ MonoBehaviour:
   bungeeStiffness: 4400
   dampingConstant: 6000
   boostScale: 680
-  startingPosition: {x: -35, y: -10}
-  startingJump: {x: 1300, y: 1900}
+  startingPosition: {x: -45, y: -10}
+  startingJump: {x: 1500, y: 2000}
 --- !u!120 &664200272
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -310,7 +310,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
@@ -433,7 +433,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Time: 0.1
   m_Parameters:
     serializedVersion: 3
@@ -768,11 +768,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1489708341}
   - component: {fileID: 1489708340}
-  - component: {fileID: 1489708339}
   - component: {fileID: 1489708338}
   - component: {fileID: 1489708337}
   - component: {fileID: 1489708342}
   - component: {fileID: 1489708343}
+  - component: {fileID: 1489708339}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -796,14 +796,21 @@ Behaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489708336}
   m_Enabled: 1
---- !u!92 &1489708339
-Behaviour:
+--- !u!114 &1489708339
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489708336}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170758548f5ae5044821df2972c01943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundSprite: {fileID: 554632239163499910, guid: 804856e113de7df4a919e9e340fb468f,
+    type: 3}
+  interpolation: 0.95
 --- !u!20 &1489708340
 Camera:
   m_ObjectHideFlags: 0
@@ -893,6 +900,7 @@ MonoBehaviour:
   obstaclePlatform: {fileID: 1000013116670576, guid: 870c2bbb6e586c9469ad1d86d8e8033b,
     type: 3}
   distanceBetweenBorders: 30
+  player: {fileID: 664200268}
   obstaclesPerScreen: 4
   obstacleWidth: 3
   pixelsPerUnit: 16
