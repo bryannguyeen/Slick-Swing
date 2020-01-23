@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class PlatformManager : MonoBehaviour {
 
-    public Sprite upperObstacle;
     public GameObject borderPlatform;
     public GameObject obstaclePlatform;
     public float distanceBetweenBorders;
@@ -87,9 +86,9 @@ public class PlatformManager : MonoBehaviour {
         GameObject obstacle = (GameObject)Instantiate(obstaclePlatform, new Vector3(xPosition, yPosition, 0), Quaternion.identity);
 
         if (obstacles.Count % 2 == 1)
-            obstacle.GetComponent<SpriteRenderer>().sprite = upperObstacle;
+            obstacle.GetComponent<SpriteRenderer>().flipY = true;
 
-        // resizing obstacle
+        // resizing obstacle, setting it in transform won't take advantage of slice mode
         obstacle.GetComponent<SpriteRenderer>().size = new Vector2(obstacleWidth, yScale);
         obstacle.GetComponent<BoxCollider2D>().size = new Vector2(obstacleWidth, yScale);
         return obstacle;

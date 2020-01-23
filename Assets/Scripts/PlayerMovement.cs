@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
 
+    public Transform tf;
     public Rigidbody2D rb;
     public LineRenderer lr;
     public TrailRenderer trail;
@@ -21,15 +22,19 @@ public class PlayerMovement : MonoBehaviour {
 
     Vector2 prevMousePosition;
 
-    bool mouseHold = false;
-    bool mouseClick = false;
+    bool mouseHold;
+    bool mouseClick;
 
 	// Use this for initialization
 	void Start () {
         rb.position = startingPosition;
         rb.AddForce(startingJump);
         prevMousePosition = Input.mousePosition;
-	}
+
+        mouseClick = Input.GetMouseButtonDown(0);
+        mouseHold = mouseClick;
+
+    }
 	
     void Update() {
         if (Input.GetMouseButtonDown(0))

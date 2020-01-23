@@ -181,12 +181,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: dcf553a290ed7a14ba28394fa88dec1b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 41205829713131647a5f6122aa817e3f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.01, y: 2.04}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -244,8 +244,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.46, y: 0.72}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 2.01, y: 2.04}
+    newSize: {x: 2.01, y: 2.04}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -265,6 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2edc2de2a427564f82db075d736592f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tf: {fileID: 664200268}
   rb: {fileID: 664200269}
   lr: {fileID: 664200272}
   trail: {fileID: 664200274}
@@ -678,7 +679,7 @@ GameObject:
   - component: {fileID: 1426987687}
   - component: {fileID: 1426987689}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Score Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -721,8 +722,6 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: da55114ae90c1ad4e9032327044177c0, type: 3}
     m_FontSize: 50
@@ -894,7 +893,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936424fc6a2999e4a854aceac7dd0b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upperObstacle: {fileID: 21300000, guid: 181f295c8574d8241a793c0f8377e134, type: 3}
   borderPlatform: {fileID: 1000011995746672, guid: 730d1fa6c5052a74da924a055cfa3d83,
     type: 3}
   obstaclePlatform: {fileID: 1000013116670576, guid: 870c2bbb6e586c9469ad1d86d8e8033b,
