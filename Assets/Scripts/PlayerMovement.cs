@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour {
     public float bungeeStiffness;
     public float dampingConstant;
     public float boostScale;
+    public float ropeCooldown;
 
     public Vector2 startingPosition;
     public Vector2 startingJump;
@@ -25,11 +26,14 @@ public class PlayerMovement : MonoBehaviour {
     bool mouseHold;
     bool mouseClick;
 
+    float ropeCooldownTimer;
+
 	// Use this for initialization
 	void Start () {
         rb.position = startingPosition;
         rb.AddForce(startingJump);
         prevMousePosition = Input.mousePosition;
+        ropeCooldownTimer = ropeCooldown;
 
         mouseClick = Input.GetMouseButtonDown(0);
         mouseHold = mouseClick;
@@ -48,6 +52,7 @@ public class PlayerMovement : MonoBehaviour {
 	void FixedUpdate () {
         netForce = new Vector2(0, 0);
         netBurstForce = new Vector2(0, 0);
+        decrementTimers();
 
         // if mouse is being held currently
         if (mouseHold)
@@ -60,6 +65,9 @@ public class PlayerMovement : MonoBehaviour {
 
                 // give a boost if the user flicked their finger upon release
                 netBurstForce += getBoostForce();
+
+                // give a cooldown for when the bungee can be used again
+                ropeCooldownTimer = ropeCooldown;
             }
 
             // otherwise add the forces due to the bungie and update the rope position
@@ -76,7 +84,7 @@ public class PlayerMovement : MonoBehaviour {
         else
         {
             // check for mouse clicks
-            if (mouseClick)
+            if (mouseClick & ropeCooldownTimer == 0f)
             {
                 updateBungee();
 
@@ -133,5 +141,12 @@ public class PlayerMovement : MonoBehaviour {
     void enableTrail()
     {
         trail.time = 0.2f;
+    }
+
+    void decrementTimers()
+    {
+        ropeCooldownTimer -= Time.deltaTime;
+        if (ropeCooldownTimer < 0f)
+            ropeCooldownTimer = 0f;
     }
 }

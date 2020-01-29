@@ -26,7 +26,7 @@ public class BackgroundManager : MonoBehaviour
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Debug.Log(camera.position.x);
         if ((int) (camera.position.x / backgroundRefreshDistance) > counter)

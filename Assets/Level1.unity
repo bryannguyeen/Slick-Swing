@@ -274,6 +274,7 @@ MonoBehaviour:
   bungeeStiffness: 4400
   dampingConstant: 6000
   boostScale: 680
+  ropeCooldown: 0.25
   startingPosition: {x: -45, y: -8}
   startingJump: {x: 1500, y: 2000}
 --- !u!120 &664200272
