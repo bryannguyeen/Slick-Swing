@@ -6,6 +6,7 @@ public class BackgroundManager : MonoBehaviour
 {
 
     public GameObject backgroundSprite;
+    public Transform camera;
     public float interpolation;
 
     List<GameObject> backgrounds = new List<GameObject>();
@@ -25,13 +26,12 @@ public class BackgroundManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        //Debug.Log(transform.position.x);
-        if ((int) (transform.position.x / backgroundRefreshDistance) > counter)
+        //Debug.Log(camera.position.x);
+        if ((int) (camera.position.x / backgroundRefreshDistance) > counter)
         {
-            counter = (int)(transform.position.x / backgroundRefreshDistance);
+            counter = (int)(camera.position.x / backgroundRefreshDistance);
 
             destroyEarliestBackground();
             addBackgroundToQueue();
@@ -39,7 +39,7 @@ public class BackgroundManager : MonoBehaviour
 
         for(int i = 0; i < backgrounds.Count; i++)
         {
-            backgrounds[i].transform.position = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(transform.position.x, 0, 1), interpolation) + new Vector3((counter + i) * backgroundWidth, 0, 0);
+            backgrounds[i].transform.position = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(camera.position.x, 0, 1), interpolation) + new Vector3((counter + i) * backgroundWidth, 0, 0);
         }
     }
 
