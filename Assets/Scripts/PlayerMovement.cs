@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour {
     public Rigidbody2D rb;
     public LineRenderer lr;
     public TrailRenderer trail;
+    public Animator animator;
 
     public float bungeeStiffness;
     public float dampingConstant;
@@ -68,31 +69,48 @@ public class PlayerMovement : MonoBehaviour {
 
                 // give a cooldown for when the bungee can be used again
                 ropeCooldownTimer = ropeCooldown;
+
+                // set player rotation back to neutral
+                resetPlayerRotation();
+
+                // turn off swinging animation
+                animator.SetBool("isSwinging", false);
+
+                // play backflip animation
+                animator.SetBool("doBackflip", true);
+
             }
 
             // otherwise add the forces due to the bungie and update the rope position
+            // as well as update the orientation of the player sprite
             else
             {
                 netForce += getBungeeForce();
                 netForce += getDampingForce();
 
                 lr.SetPosition(1, transform.position);
+                updatePlayerRotation();
             }
         }
 
         // if mouse isn't being held currently
         else
         {
-            // check for mouse clicks
+            // check for mouse clicks, if it is clicked, the player will start swinging
             if (mouseClick & ropeCooldownTimer == 0f)
             {
                 updateBungee();
 
                 mouseHold = true;
 
+                // set up line renderer
                 lr.SetPosition(0, connectionPoint);
                 lr.SetPosition(1, transform.position);
                 lr.enabled = true;
+
+                // set up swinging animation
+                animator.SetBool("doBackflip", false);
+                animator.SetBool("isSwinging", true);
             }
         }
 
@@ -148,5 +166,19 @@ public class PlayerMovement : MonoBehaviour {
         ropeCooldownTimer -= Time.deltaTime;
         if (ropeCooldownTimer < 0f)
             ropeCooldownTimer = 0f;
+    }
+
+    void updatePlayerRotation()
+    {
+        Vector2 direction = (connectionPoint - rb.position).normalized;
+        float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
+        if (direction.x > 0)
+            angle = -angle;
+        tf.eulerAngles = new Vector3(0, 0, angle);
+    }
+
+    void resetPlayerRotation()
+    {
+        tf.eulerAngles = new Vector3(0, 0, 0);
     }
 }

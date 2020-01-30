@@ -74,8 +74,8 @@ public class PlatformManager : MonoBehaviour {
     float randomY()
     {
         if (obstacles.Count % 2 == 0)
-            return 0.5f * (Random.Range(-distanceBetweenBorders / 5.0f, distanceBetweenBorders / 5.0f) + lowerBound);
-        return 0.5f * (Random.Range(-distanceBetweenBorders / 5.0f, distanceBetweenBorders / 5.0f) + upperBound);
+            return 0.5f * (Random.Range(-distanceBetweenBorders / 5.5f, distanceBetweenBorders / 5.5f) + lowerBound);
+        return 0.5f * (Random.Range(-distanceBetweenBorders / 5.5f, distanceBetweenBorders / 5.5f) + upperBound);
     }
 
     GameObject createObstacle(float xPosition)
