@@ -11,12 +11,21 @@ public class PlayerCollision : MonoBehaviour {
     public TrailRenderer trail;
     public ParticleSystem particles;
 
+    public GameState gs;
+
+    public Transform camera;
+
     void OnCollisionEnter2D(Collision2D collisionInfo) {
-        Debug.Log(collisionInfo.collider.tag);
-        killPlayer();
+        KillPlayer();
     }
 
-    void killPlayer()
+    void FixedUpdate ()
+    {
+        if (camera.position.x - transform.position.x > 20 & !string.Equals(GameState.state, "game over"))
+            KillPlayer();
+    }
+
+    void KillPlayer()
     {
         trail.enabled = false;
         sprite.enabled = false;
@@ -25,6 +34,9 @@ public class PlayerCollision : MonoBehaviour {
         boxCollider.enabled = false;
         rb.velocity = new Vector2(0, 0);
         particles.Play();
+
+        // update game state
+        gs.EndGame();
     }
 
 }

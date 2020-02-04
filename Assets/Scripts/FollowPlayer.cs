@@ -6,16 +6,21 @@ public class FollowPlayer : MonoBehaviour {
     public Transform player;
     public Vector3 offset;
 
-    // Use this for initialization
+    Vector3 destination;
+
     void Start()
     {
         transform.position = getDestination();
+        Debug.Log(getDestination());
     }
 
 
-    // Update is called once per frame
     void FixedUpdate () {
-        transform.position = Vector3.Lerp(transform.position, getDestination(), 0.1f);
+        destination = getDestination();
+
+        // only allow camera to move right
+        if (destination.x > transform.position.x)
+            transform.position = Vector3.Lerp(transform.position, destination, 0.1f);
 	}
 
     Vector3 getDestination()

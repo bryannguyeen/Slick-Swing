@@ -13,10 +13,11 @@ public class BackgroundManager : MonoBehaviour
 
     float backgroundWidth;
     float backgroundRefreshDistance;
-    int counter = 0;
+    int counter;
 
     void Start()
     {
+        counter = 0;
         backgroundWidth = backgroundSprite.GetComponent<Renderer>().bounds.size.x;
 
         backgroundRefreshDistance = backgroundWidth / (1 - interpolation);

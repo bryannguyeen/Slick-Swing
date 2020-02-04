@@ -22,11 +22,12 @@ public class PlatformManager : MonoBehaviour {
     float borderWidth, borderHeight;
     float upperBound, lowerBound;
 
-    public static int numObstaclesPassed = 0;
+    public static int numObstaclesPassed;
 
 	// Use this for initialization
 	void Start () {
         counter = 0;
+        numObstaclesPassed = 0;
         Random.InitState(5);
         borderWidth = borderPlatform.GetComponent<Renderer>().bounds.size.x;
         borderHeight = borderPlatform.GetComponent<Renderer>().bounds.size.y;
