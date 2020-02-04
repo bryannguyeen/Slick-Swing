@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour {
                 netForce += getBungeeForce();
                 netForce += getDampingForce();
 
-                lr.SetPosition(1, transform.position);
+                lr.SetPosition(1, transform.position + new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime);
                 updatePlayerRotation();
             }
         }
