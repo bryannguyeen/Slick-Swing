@@ -24,6 +24,7 @@ public class BackgroundManager : MonoBehaviour
 
         addBackgroundToQueue();
         addBackgroundToQueue();
+        FollowCamera();
 
     }
 
@@ -38,7 +39,12 @@ public class BackgroundManager : MonoBehaviour
             addBackgroundToQueue();
         }
 
-        for(int i = 0; i < backgrounds.Count; i++)
+        FollowCamera();
+    }
+
+    void FollowCamera()
+    {
+        for (int i = 0; i < backgrounds.Count; i++)
         {
             backgrounds[i].transform.position = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(camera.position.x, 0, 1), interpolation) + new Vector3((counter + i) * backgroundWidth, 0, 0);
         }

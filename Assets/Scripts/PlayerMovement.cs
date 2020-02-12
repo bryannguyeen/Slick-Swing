@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 netForce;
     Vector2 netBurstForce;  // give an instantaneous force indepent of time, for things like jumping
 
+    Vector2 preservedVelocity; // used for when the player is paused
+
     Vector2 prevMousePosition;
 
     bool mouseHold;
@@ -32,9 +34,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb.position = startingPosition;
-        rb.AddForce(startingJump);
         prevMousePosition = Input.mousePosition;
-        ropeCooldownTimer = ropeCooldown;
 
         mouseClick = Input.GetMouseButtonDown(0);
         mouseHold = mouseClick;
@@ -42,11 +42,14 @@ public class PlayerMovement : MonoBehaviour {
     }
 	
     void Update() {
-        if (Input.GetMouseButtonDown(0))
-            mouseClick = true;
+        if (string.Equals(GameState.state, "gameplay"))
+        {
+            if (Input.GetMouseButtonDown(0))
+                mouseClick = true;
 
-        if (Input.GetMouseButtonUp(0))
-            mouseClick = false;
+            if (Input.GetMouseButtonUp(0))
+                mouseClick = false;
+        }
     }
 
 	// Update is called once per frame
@@ -180,5 +183,12 @@ public class PlayerMovement : MonoBehaviour {
     void resetPlayerRotation()
     {
         tf.eulerAngles = new Vector3(0, 0, 0);
+    }
+
+    public void StartPlayer()
+    {
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.AddForce(startingJump);
+        ropeCooldownTimer = ropeCooldown;
     }
 }

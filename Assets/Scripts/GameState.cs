@@ -5,14 +5,18 @@ public class GameState : MonoBehaviour
 {
     public static string state = "start";
     public GameObject gameOverUI;
+
+
+    public PlayerMovement player;
     public float gameOverAnimationDuration;
+
+    public Animator welcomeScreenAnimator;
 
     float gameOverAnimationTimer;
 
     void Start()
     {
         state = "start";
-
         gameOverAnimationTimer = 0f;
     }
 
@@ -22,6 +26,9 @@ public class GameState : MonoBehaviour
         {
             if (string.Equals(state, "game over") & gameOverAnimationTimer == 0f)
                 ResetGame();
+
+            if (string.Equals(state, "start"))
+                StartGame();
         }
 
         decrementTimers();
@@ -30,6 +37,9 @@ public class GameState : MonoBehaviour
     public void StartGame()
     {
         state = "gameplay";
+        player.StartPlayer();
+
+        welcomeScreenAnimator.SetBool("gameHasStarted", true);
     }
 
     public void EndGame()
