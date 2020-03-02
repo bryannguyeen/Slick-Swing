@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
 
-    public Transform tf;
+    public SpriteRenderer sprite;
     public Rigidbody2D rb;
     public LineRenderer lr;
     public TrailRenderer trail;
@@ -82,6 +82,10 @@ public class PlayerMovement : MonoBehaviour {
                 // play backflip animation
                 animator.SetBool("doBackflip", true);
 
+                // ensure that the player is facing right
+                sprite.flipX = false;
+
+
             }
 
             // otherwise add the forces due to the bungie and update the rope position
@@ -91,7 +95,7 @@ public class PlayerMovement : MonoBehaviour {
                 netForce += getBungeeForce();
                 netForce += getDampingForce();
 
-                lr.SetPosition(1, transform.position + new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime);
+                lr.SetPosition(1, transform.position + (transform.up * sprite.size.y) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime));
                 updatePlayerRotation();
             }
         }
@@ -108,8 +112,12 @@ public class PlayerMovement : MonoBehaviour {
 
                 // set up line renderer
                 lr.SetPosition(0, connectionPoint);
-                lr.SetPosition(1, transform.position);
+                lr.SetPosition(1, transform.position + (transform.up * sprite.size.y) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime));
                 lr.enabled = true;
+
+                // flip players sprite depending on where the rope is connected to relative to the player
+                if ((connectionPoint - rb.position).x > 0 && (connectionPoint - rb.position).y < 0)
+                    sprite.flipX = true;
 
                 // set up swinging animation
                 animator.SetBool("doBackflip", false);
@@ -177,12 +185,12 @@ public class PlayerMovement : MonoBehaviour {
         float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
         if (direction.x > 0)
             angle = -angle;
-        tf.eulerAngles = new Vector3(0, 0, angle);
+        transform.eulerAngles = new Vector3(0, 0, angle);
     }
 
     void resetPlayerRotation()
     {
-        tf.eulerAngles = new Vector3(0, 0, 0);
+        transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
     public void StartPlayer()
@@ -190,5 +198,6 @@ public class PlayerMovement : MonoBehaviour {
         rb.constraints = RigidbodyConstraints2D.None;
         rb.AddForce(startingJump);
         ropeCooldownTimer = ropeCooldown;
+        animator.SetBool("doBackflip", true);
     }
 }
