@@ -11,7 +11,6 @@ public class FollowPlayer : MonoBehaviour {
     void Start()
     {
         transform.position = getDestination();
-        Debug.Log(getDestination());
     }
 
 

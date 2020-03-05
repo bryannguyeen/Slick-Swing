@@ -116,7 +116,7 @@ public class PlayerMovement : MonoBehaviour {
                 lr.enabled = true;
 
                 // flip players sprite depending on where the rope is connected to relative to the player
-                if ((connectionPoint - rb.position).x > 0 && (connectionPoint - rb.position).y < 0)
+                if ((connectionPoint - rb.position).y < 0)
                     sprite.flipX = true;
 
                 // set up swinging animation
