@@ -9,7 +9,7 @@ public class PlayerCollision : MonoBehaviour {
     public SpriteRenderer sprite;
     public Rigidbody2D rb;
     public TrailRenderer trail;
-    public ParticleSystem particles;
+    public ParticlePlayer particleAnimation;
 
     public GameState gs;
 
@@ -33,7 +33,7 @@ public class PlayerCollision : MonoBehaviour {
         lr.enabled = false;
         boxCollider.enabled = false;
         rb.velocity = new Vector2(0, 0);
-        particles.Play();
+        particleAnimation.PlayParticles(transform.position);
 
         // update game state
         gs.EndGame();
