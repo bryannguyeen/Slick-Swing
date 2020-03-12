@@ -3,9 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class GameState : MonoBehaviour
 {
-    public static string state = "start";
-    public GameObject gameOverUI;
+    public static string state;
+    public static bool canBoost;
 
+    public GameObject gameOverUI;
 
     public PlayerMovement player;
     public float gameOverAnimationDuration;
@@ -17,6 +18,7 @@ public class GameState : MonoBehaviour
     void Start()
     {
         state = "start";
+        canBoost = true;
         gameOverAnimationTimer = 0f;
     }
 

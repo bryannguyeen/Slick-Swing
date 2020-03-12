@@ -6,9 +6,9 @@ public class BackgroundManager : MonoBehaviour
 {
 
     public GameObject backgroundSprite;
-    public Transform camera;
-    public float interpolation;
+    public float parallax;
 
+    Transform cameraT;
     List<GameObject> backgrounds = new List<GameObject>();
 
     float backgroundWidth;
@@ -18,9 +18,10 @@ public class BackgroundManager : MonoBehaviour
     void Start()
     {
         counter = 0;
+        cameraT = Camera.main.transform;
         backgroundWidth = backgroundSprite.GetComponent<Renderer>().bounds.size.x;
 
-        backgroundRefreshDistance = backgroundWidth / (1 - interpolation);
+        backgroundRefreshDistance = backgroundWidth / (1 - parallax);
 
         addBackgroundToQueue();
         addBackgroundToQueue();
@@ -30,10 +31,9 @@ public class BackgroundManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Debug.Log(camera.position.x);
-        if ((int) (camera.position.x / backgroundRefreshDistance) > counter)
+        if ((int) (cameraT.position.x / backgroundRefreshDistance) > counter)
         {
-            counter = (int)(camera.position.x / backgroundRefreshDistance);
+            counter = (int)(cameraT.position.x / backgroundRefreshDistance);
 
             destroyEarliestBackground();
             addBackgroundToQueue();
@@ -46,7 +46,7 @@ public class BackgroundManager : MonoBehaviour
     {
         for (int i = 0; i < backgrounds.Count; i++)
         {
-            backgrounds[i].transform.position = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(camera.position.x, 0, 1), interpolation) + new Vector3((counter + i) * backgroundWidth, 0, 0);
+            backgrounds[i].transform.position = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(cameraT.position.x, 0, 1), parallax) + new Vector3((counter + i) * backgroundWidth, 0, 0);
         }
     }
 

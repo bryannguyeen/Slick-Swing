@@ -5,8 +5,6 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
 
-    public Transform camera;
-
     Vector3 initialPosition;
     void Start()
     {
@@ -15,6 +13,6 @@ public class FollowCamera : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.position = Vector3.Lerp(initialPosition, new Vector3(camera.position.x, 0, 1), 0.95f);
+        transform.position = Vector3.Lerp(initialPosition, new Vector3(transform.position.x, 0, 1), 0.95f);
     }
 }

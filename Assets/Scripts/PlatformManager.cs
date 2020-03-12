@@ -21,6 +21,7 @@ public class PlatformManager : MonoBehaviour {
     int counter;
     float borderWidth, borderHeight;
     float upperBound, lowerBound;
+    float minHeight, maxHeight;
 
     public static int numObstaclesPassed;
 
@@ -28,7 +29,7 @@ public class PlatformManager : MonoBehaviour {
 	void Start () {
         counter = 0;
         numObstaclesPassed = 0;
-        Random.InitState(5);
+        Random.InitState(1);
         borderWidth = borderPlatform.GetComponent<Renderer>().bounds.size.x;
         borderHeight = borderPlatform.GetComponent<Renderer>().bounds.size.y;
         spaceBetweenObstacles = borderWidth / obstaclesPerScreen;
@@ -74,9 +75,10 @@ public class PlatformManager : MonoBehaviour {
     // odd numbered obstacles = potrudes from top
     float randomY()
     {
+        float result = Random.Range(lowerBound, upperBound) * 0.5f;
         if (obstacles.Count % 2 == 0)
-            return 0.5f * (Random.Range(-distanceBetweenBorders / 5.5f, distanceBetweenBorders / 5.5f) + lowerBound);
-        return 0.5f * (Random.Range(-distanceBetweenBorders / 5.5f, distanceBetweenBorders / 5.5f) + upperBound);
+            return Random.Range(lowerBound * 0.8f, lowerBound * 0.3f);
+        return Random.Range(upperBound * 0.3f, upperBound * 0.8f);
     }
 
     GameObject createObstacle(float xPosition)
@@ -97,10 +99,13 @@ public class PlatformManager : MonoBehaviour {
 
     void updateNumObstaclesPassed()
     {
-        int currentNum = (int) ((player.position.x + spaceBetweenObstacles) / spaceBetweenObstacles);
+        int currentNumOsbataclesPassed = (int) ((player.position.x + spaceBetweenObstacles) / spaceBetweenObstacles);
 
-        if (currentNum > numObstaclesPassed)
-            numObstaclesPassed = currentNum;
+        if (currentNumOsbataclesPassed > numObstaclesPassed)
+        {
+            numObstaclesPassed = currentNumOsbataclesPassed;
+            GameState.canBoost = true;  // player can boost again after passing an obstacle
+        }
     }
 
     void addBorderToQueue(int offset)

@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour {
     public LineRenderer lr;
     public TrailRenderer trail;
     public Animator animator;
+    public AfterimageEffect afterimage;
 
     public float bungeeStiffness;
     public float dampingConstant;
@@ -31,7 +32,6 @@ public class PlayerMovement : MonoBehaviour {
 
     float ropeCooldownTimer;
 
-	// Use this for initialization
 	void Start () {
         rb.position = startingPosition;
         prevMousePosition = Input.mousePosition;
@@ -52,7 +52,6 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
-	// Update is called once per frame
 	void FixedUpdate () {
         netForce = new Vector2(0, 0);
         netBurstForce = new Vector2(0, 0);
@@ -68,7 +67,13 @@ public class PlayerMovement : MonoBehaviour {
                 lr.enabled = false;
 
                 // give a boost if the user flicked their finger upon release
-                netBurstForce += getBoostForce();
+                // players can only boost once per obstacle
+                if ((Vector2) Input.mousePosition != prevMousePosition & GameState.canBoost)
+                {
+                    GameState.canBoost = false;
+                    netBurstForce += getBoostForce();
+                    afterimage.Play();
+                }
 
                 // give a cooldown for when the bungee can be used again
                 ropeCooldownTimer = ropeCooldown;

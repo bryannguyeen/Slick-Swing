@@ -10,10 +10,9 @@ public class PlayerCollision : MonoBehaviour {
     public Rigidbody2D rb;
     public TrailRenderer trail;
     public ParticlePlayer particleAnimation;
+    public AfterimageEffect afterimage;
 
     public GameState gs;
-
-    public Transform camera;
 
     void OnCollisionEnter2D(Collision2D collisionInfo) {
         KillPlayer();
@@ -21,7 +20,7 @@ public class PlayerCollision : MonoBehaviour {
 
     void FixedUpdate ()
     {
-        if (camera.position.x - transform.position.x > 20 & !string.Equals(GameState.state, "game over"))
+        if (Camera.main.transform.position.x - transform.position.x > 20 & !string.Equals(GameState.state, "game over"))
             KillPlayer();
     }
 
@@ -34,6 +33,7 @@ public class PlayerCollision : MonoBehaviour {
         boxCollider.enabled = false;
         rb.velocity = new Vector2(0, 0);
         particleAnimation.PlayParticles(transform.position);
+        afterimage.Stop();
 
         // update game state
         gs.EndGame();
