@@ -13,7 +13,7 @@ public class PlatformManager : MonoBehaviour {
     Queue<GameObject> obstacles = new Queue<GameObject>();
     Queue<GameObject> borders = new Queue<GameObject>();
 
-    public int obstaclesPerScreen;
+    public int ObstaclesPerBorder;
     public static float spaceBetweenObstacles;
     public float obstacleWidth;
     public int pixelsPerUnit;
@@ -29,10 +29,9 @@ public class PlatformManager : MonoBehaviour {
 	void Start () {
         counter = 0;
         numObstaclesPassed = 0;
-        Random.InitState(1);
         borderWidth = borderPlatform.GetComponent<Renderer>().bounds.size.x;
         borderHeight = borderPlatform.GetComponent<Renderer>().bounds.size.y;
-        spaceBetweenObstacles = borderWidth / obstaclesPerScreen;
+        spaceBetweenObstacles = borderWidth / ObstaclesPerBorder;
         upperBound = (distanceBetweenBorders / 2 - borderHeight / 2);
         lowerBound = -upperBound;
 
@@ -40,7 +39,12 @@ public class PlatformManager : MonoBehaviour {
         addBorderToQueue(0);
         addBorderToQueue(1);
 
+        Random.State oldState = Random.state;
+        // Seed = 5 seems to be have nice y-positions for easy beginner-friendly obstacles
+        Random.InitState(5);
         addObstaclesToQueue(0);
+
+        Random.state = oldState;
         addObstaclesToQueue(1);
 
     }
@@ -59,42 +63,49 @@ public class PlatformManager : MonoBehaviour {
 
             if (counter > 1)
             {
-                destroyBehindObsticles();
+                destroyBehindObstacles();
             }
             addObstaclesToQueue(counter + 1);
         }
     }
 
-    Vector3 randomPosition(float xPosition)
-    {
-        float y = 0.5f *(Random.Range(-distanceBetweenBorders / 6.0f, distanceBetweenBorders / 6.0f) + lowerBound);
-        return new Vector3(xPosition, y, 0);
-    }
-
     // even numbered obstacles = potrudes from bottom
     // odd numbered obstacles = potrudes from top
-    float randomY()
+    float randomYPosition()
     {
-        float result = Random.Range(lowerBound, upperBound) * 0.5f;
-        if (obstacles.Count % 2 == 0)
-            return Random.Range(lowerBound * 0.8f, lowerBound * 0.3f);
-        return Random.Range(upperBound * 0.3f, upperBound * 0.8f);
+        return Random.Range(lowerBound, upperBound) * 0.55f;
     }
 
-    GameObject createObstacle(float xPosition)
+    GameObject createObstacle(float xPos, float yPos, bool bottom)
     {
-        float yPosition = randomY();
-        float yScale = 2 * (upperBound -  Mathf.Abs(yPosition)) + 2.0f / pixelsPerUnit;
+        //Debug.Log(xPos + ", " + yPos + ", " + bottom);
+        // since unity scales objects relative to their center, the position of the obstacle
+        // needs to be offsetted to be in the position I want
+        if (bottom)
+            yPos = Mathf.Lerp(lowerBound, yPos, 0.5f);
+        else
+            yPos = Mathf.Lerp(upperBound, yPos, 0.5f);
 
-        GameObject obstacle = (GameObject)Instantiate(obstaclePlatform, new Vector3(xPosition, yPosition, 0), Quaternion.identity);
+        float yScale = 2 * (upperBound - Mathf.Abs(yPos)) + 2.0f / pixelsPerUnit;
 
-        if (obstacles.Count % 2 == 1)
+        GameObject obstacle = (GameObject)Instantiate(obstaclePlatform, new Vector3(xPos, yPos, 0), Quaternion.identity);
+
+        if (!bottom)
             obstacle.GetComponent<SpriteRenderer>().flipY = true;
 
         // resizing obstacle, setting it in transform won't take advantage of slice mode
+        // so we must resize the sprite renderer and boxcollider instead
         obstacle.GetComponent<SpriteRenderer>().size = new Vector2(obstacleWidth, yScale);
         obstacle.GetComponent<BoxCollider2D>().size = new Vector2(obstacleWidth, yScale);
         return obstacle;
+    }
+
+    // Overload method for automated randomized obstacles
+    GameObject createObstacle(float xPos)
+    {
+        // even numbered obstacles = potrudes from bottom
+        // odd numbered obstacles = potrudes from top
+        return createObstacle(xPos, randomYPosition(), obstacles.Count % 2 == 0);
     }
 
     void updateNumObstaclesPassed()
@@ -112,16 +123,13 @@ public class PlatformManager : MonoBehaviour {
     {
         float xCoord = offset * borderWidth;
         float yCoord = distanceBetweenBorders / 2;
-        GameObject upperPlatform = (GameObject)Instantiate(borderPlatform, new Vector3(xCoord, yCoord, 0), Quaternion.identity);
-        GameObject lowerPlatform = (GameObject)Instantiate(borderPlatform, new Vector3(xCoord, -yCoord, 0), Quaternion.identity);
-
-        borders.Enqueue(upperPlatform);
-        borders.Enqueue(lowerPlatform);
+        borders.Enqueue((GameObject)Instantiate(borderPlatform, new Vector3(xCoord, yCoord, 0), Quaternion.identity));
+        borders.Enqueue((GameObject)Instantiate(borderPlatform, new Vector3(xCoord, -yCoord, 0), Quaternion.identity));
     }
 
     void addObstaclesToQueue(int offset)
     {
-        for (int i = 0; i < obstaclesPerScreen; i++)
+        for (int i = 0; i < ObstaclesPerBorder; i++)
         {
             obstacles.Enqueue(createObstacle(offset * borderWidth + (i * spaceBetweenObstacles)));
         }
@@ -134,9 +142,9 @@ public class PlatformManager : MonoBehaviour {
         }
     }
 
-    void destroyBehindObsticles()
+    void destroyBehindObstacles()
     {
-        for (int i = 0; i < obstaclesPerScreen; i++)
+        for (int i = 0; i < ObstaclesPerBorder; i++)
         {
             Destroy(obstacles.Dequeue());
         }

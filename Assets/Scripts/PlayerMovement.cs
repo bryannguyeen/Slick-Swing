@@ -19,16 +19,18 @@ public class PlayerMovement : MonoBehaviour {
     public Vector2 startingJump;
 
     Vector2 connectionPoint;
-    float bungeeLength;
+    float ropeLength;
     Vector2 netForce;
-    Vector2 netBurstForce;  // give an instantaneous force indepent of time, for things like jumping
+    Vector2 netBurstForce;
 
     Vector2 preservedVelocity; // used for when the player is paused
 
     Vector2 prevMousePosition;
 
-    bool mouseHold;
-    bool mouseClick;
+    bool mouseClick;    // is true only if the mouse is clicked on current frame
+    bool mouseRelease;  // is true only if the mouse is released on current frame
+    bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
+
 
     float ropeCooldownTimer;
 
@@ -36,19 +38,24 @@ public class PlayerMovement : MonoBehaviour {
         rb.position = startingPosition;
         prevMousePosition = Input.mousePosition;
 
-        mouseClick = Input.GetMouseButtonDown(0);
-        mouseHold = mouseClick;
-
+        mouseClick = false;
+        mouseRelease = false;
     }
 	
     void Update() {
         if (string.Equals(GameState.state, "gameplay"))
         {
             if (Input.GetMouseButtonDown(0))
+            {
                 mouseClick = true;
+                mouseHold = true;
+            }
 
-            if (Input.GetMouseButtonUp(0))
-                mouseClick = false;
+            if (Input.GetMouseButtonUp(0) & mouseHold)
+            {
+                mouseRelease = true;
+                mouseHold = false;
+            }
         }
     }
 
@@ -57,104 +64,108 @@ public class PlayerMovement : MonoBehaviour {
         netBurstForce = new Vector2(0, 0);
         decrementTimers();
 
+        // if mouse was clicked on this frame
+        if (mouseClick)
+        {
+            mouseClick = false;
+            ShootRope();
+        }
+
+        // if mouse was released on this frame
+        if (mouseRelease)
+        {
+            mouseRelease = false;
+            ReleaseRope();
+        }
+
         // if mouse is being held currently
         if (mouseHold)
         {
-            // if mouse button is released at this frame
-            if (!mouseClick)
-            {
-                mouseHold = false;
-                lr.enabled = false;
-
-                // give a boost if the user flicked their finger upon release
-                // players can only boost once per obstacle
-                if ((Vector2) Input.mousePosition != prevMousePosition & GameState.canBoost)
-                {
-                    GameState.canBoost = false;
-                    netBurstForce += getBoostForce();
-                    afterimage.Play();
-                }
-
-                // give a cooldown for when the bungee can be used again
-                ropeCooldownTimer = ropeCooldown;
-
-                // set player rotation back to neutral
-                resetPlayerRotation();
-
-                // turn off swinging animation
-                animator.SetBool("isSwinging", false);
-
-                // play backflip animation
-                animator.SetBool("doBackflip", true);
-
-                // ensure that the player is facing right
-                sprite.flipX = false;
-
-
-            }
-
-            // otherwise add the forces due to the bungie and update the rope position
+            // add the forces that the rope acts on the player and update the line renderer position
             // as well as update the orientation of the player sprite
-            else
-            {
-                netForce += getBungeeForce();
-                netForce += getDampingForce();
+            netForce += getRopeForce();
+            netForce += getDampingForce();
 
-                lr.SetPosition(1, transform.position + (transform.up * sprite.size.y) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime));
-                updatePlayerRotation();
-            }
-        }
-
-        // if mouse isn't being held currently
-        else
-        {
-            // check for mouse clicks, if it is clicked, the player will start swinging
-            if (mouseClick & ropeCooldownTimer == 0f)
-            {
-                updateBungee();
-
-                mouseHold = true;
-
-                // set up line renderer
-                lr.SetPosition(0, connectionPoint);
-                lr.SetPosition(1, transform.position + (transform.up * sprite.size.y) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime));
-                lr.enabled = true;
-
-                // flip players sprite depending on where the rope is connected to relative to the player
-                if ((connectionPoint - rb.position).y < 0)
-                    sprite.flipX = true;
-
-                // set up swinging animation
-                animator.SetBool("doBackflip", false);
-                animator.SetBool("isSwinging", true);
-            }
+            lr.SetPosition(1, transform.position + (transform.up * sprite.size.y) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime));
+            updatePlayerRotation();
         }
 
         prevMousePosition = Input.mousePosition;
-        rb.AddForce(netForce * Time.deltaTime);
+
+        // add forces as a function of time
+        rb.AddForce(netForce * Time.fixedDeltaTime);
+
+        // give an instantaneous force indepent of time, for things like jumping
         rb.AddForce(netBurstForce);
 	}
 
-    Vector2 getBungeeForce()
+    void ShootRope()
     {
-        float distanceFromEquilibrium = bungeeLength - (rb.position - connectionPoint).magnitude;
+        updateRope();
+
+        // set up line renderer
+        lr.SetPosition(0, connectionPoint);
+        lr.SetPosition(1, transform.position + (transform.up * sprite.size.y) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime));
+        lr.enabled = true;
+
+        // flip players sprite depending on where the rope is connected to relative to the player
+        if ((connectionPoint - rb.position).y < 0)
+        sprite.flipX = true;
+
+        // set up swinging animation
+        animator.SetBool("doBackflip", false);
+        animator.SetBool("isSwinging", true);
+    }
+
+    void ReleaseRope()
+    {
+        lr.enabled = false;
+
+        // give a boost if the user flicked their finger upon release
+        // players can only boost once per obstacle
+        if ((Vector2)Input.mousePosition != prevMousePosition & GameState.canBoost)
+        {
+            GameState.canBoost = false;
+            netBurstForce += getBoostForce();
+            afterimage.Play();
+        }
+
+        // give a cooldown for when the rope swing can be used again
+        ropeCooldownTimer = ropeCooldown;
+
+        // set player rotation back to neutral
+        resetPlayerRotation();
+
+        // turn off swinging animation
+        animator.SetBool("isSwinging", false);
+
+        // play backflip animation
+        animator.SetBool("doBackflip", true);
+
+        // ensure that the player is facing to the right
+        sprite.flipX = false;
+    }
+
+    Vector2 getRopeForce()
+    {
+        float distanceFromEquilibrium = ropeLength - (rb.position - connectionPoint).magnitude;
 
         // unlike a spring, a compressed bungee does not give a force
         if (distanceFromEquilibrium < 0)
         {
-            return bungeeStiffness * (bungeeLength - (rb.position - connectionPoint).magnitude) * (rb.position - connectionPoint).normalized;
+            return bungeeStiffness * (ropeLength - (rb.position - connectionPoint).magnitude) * (rb.position - connectionPoint).normalized;
         }
         return new Vector2(0, 0);
     }
 
     Vector2 getDampingForce()
     {
-        Vector2 bungeeForce = getBungeeForce();
-        if (bungeeForce.magnitude != 0)
+        Vector2 RopeForce = getRopeForce();
+        if (RopeForce.magnitude != 0)
         {
-            bungeeForce = bungeeForce.normalized;
+            RopeForce = RopeForce.normalized;
 
-            return -dampingConstant * Vector2.Dot(rb.velocity, bungeeForce) / Vector2.Dot(bungeeForce, bungeeForce) * bungeeForce;
+            return -dampingConstant * Vector2.Dot(rb.velocity, RopeForce) / Vector2.Dot(RopeForce, RopeForce) * RopeForce;
         }
         return new Vector2(0, 0);
         //return -dampingConstant * rb.velocity;
@@ -165,11 +176,11 @@ public class PlayerMovement : MonoBehaviour {
         return ((Vector2)Input.mousePosition - prevMousePosition).normalized * boostScale;
     }
 
-    void updateBungee()
+    void updateRope()
     {
         connectionPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        bungeeLength = (rb.position - connectionPoint).magnitude;
+        ropeLength = (rb.position - connectionPoint).magnitude;
     }
 
     void enableTrail()
@@ -179,7 +190,7 @@ public class PlayerMovement : MonoBehaviour {
 
     void decrementTimers()
     {
-        ropeCooldownTimer -= Time.deltaTime;
+        ropeCooldownTimer -= Time.fixedDeltaTime;
         if (ropeCooldownTimer < 0f)
             ropeCooldownTimer = 0f;
     }
