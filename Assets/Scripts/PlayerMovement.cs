@@ -25,8 +25,6 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 netForce;
     Vector2 netBurstForce;
 
-    Vector2 preservedVelocity; // used for when the player is paused
-
     Vector2 prevMousePosition;
 
     bool mouseClick;    // is true only if the mouse is clicked on current frame
@@ -43,7 +41,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 	
     void Update() {
-        if (string.Equals(GameState.state, "gameplay"))
+        if (GameState.state == "gameplay")
         {
             CheckForMouseClick();
             CheckForMouseRelease();
@@ -130,7 +128,7 @@ public class PlayerMovement : MonoBehaviour {
             }
             else
             {
-                ropeLength += ropeCastSpeed;
+                ropeLength += ropeCastSpeed * Time.fixedDeltaTime;
             }
         }
     }
@@ -144,7 +142,7 @@ public class PlayerMovement : MonoBehaviour {
 
         shootDirection = clickPoint - origin;
         shootDirection = shootDirection.normalized;
-        ropeLength = ropeCastSpeed;
+        ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
 
         // set up line renderer
         lr.SetPosition(0, origin + ropeLength * shootDirection);
@@ -195,9 +193,9 @@ public class PlayerMovement : MonoBehaviour {
 
         // give a boost if the user flicked their finger upon release
         // players can only boost once per obstacle
-        if (GameState.canBoost && PlayerState.isSwinging() && (Vector2)Input.mousePosition != prevMousePosition)
+        if (PlayerState.canBoost && PlayerState.isSwinging() && (Vector2)Input.mousePosition != prevMousePosition)
         {
-            GameState.canBoost = false;
+            PlayerState.canBoost = false;
             netBurstForce += getBoostForce();
             afterimage.Play();
         }
@@ -228,7 +226,6 @@ public class PlayerMovement : MonoBehaviour {
             return -dampingConstant * Vector2.Dot(rb.velocity, RopeForce) / Vector2.Dot(RopeForce, RopeForce) * RopeForce;
         }
         return new Vector2(0, 0);
-        //return -dampingConstant * rb.velocity;
     }
 
     Vector2 getBoostForce()

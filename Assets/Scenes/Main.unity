@@ -552,8 +552,7 @@ MonoBehaviour:
   bungeeStiffness: 4400
   dampingConstant: 6000
   boostScale: 680
-  ropeCooldown: 0.25
-  ropeCastSpeed: 1.2
+  ropeCastSpeed: 150
   startingPosition: {x: -45, y: -8}
   startingJump: {x: 1700, y: 1800}
 --- !u!120 &664200272
@@ -6210,7 +6209,7 @@ MonoBehaviour:
     type: 3}
   distanceBetweenBorders: 30
   player: {fileID: 664200268}
-  ObstaclesPerBorder: 4
+  ObstaclesPerBorder: 3
   obstacleWidth: 3
   pixelsPerUnit: 16
 --- !u!4 &1621331566

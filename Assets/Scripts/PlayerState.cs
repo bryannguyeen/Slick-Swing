@@ -8,10 +8,13 @@ public class PlayerState : MonoBehaviour
     public const int SWINGING = 3;
 
     private static int state;
+    public static bool canBoost;
+
 
     void Start()
     {
         state = BEGINNING;
+        canBoost = true;
     }
    
     public static int getState()

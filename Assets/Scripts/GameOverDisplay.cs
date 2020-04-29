@@ -13,12 +13,6 @@ public class GameOverDisplay : MonoBehaviour
         highScore.text = PlayerPrefs.GetInt("HighScore").ToString();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void declareNewRecord()
     {
         message.text = "A NEW RECORD";

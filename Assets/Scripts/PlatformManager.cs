@@ -23,6 +23,9 @@ public class PlatformManager : MonoBehaviour {
     float upperBound, lowerBound;
     float minHeight, maxHeight;
 
+    // to spawn the pillar either top or bottom
+    bool bottom;
+
     public static int numObstaclesPassed;
 
 	// Use this for initialization
@@ -35,13 +38,15 @@ public class PlatformManager : MonoBehaviour {
         upperBound = (distanceBetweenBorders / 2 - borderHeight / 2);
         lowerBound = -upperBound;
 
+        bottom = true;
+
         addBorderToQueue(-1);
         addBorderToQueue(0);
         addBorderToQueue(1);
 
         Random.State oldState = Random.state;
-        // Seed = 5 seems to be have nice y-positions for easy beginner-friendly obstacles
-        Random.InitState(5);
+        // Seed = 5 seems to be have nice initial heights for easy beginner-friendly obstacles
+        Random.InitState(1);
         addObstaclesToQueue(0);
 
         Random.state = oldState;
@@ -71,20 +76,23 @@ public class PlatformManager : MonoBehaviour {
 
     // even numbered obstacles = potrudes from bottom
     // odd numbered obstacles = potrudes from top
-    float randomYPosition()
+    float randomHeight()
     {
-        return Random.Range(lowerBound, upperBound) * 0.55f;
+        return Random.Range(6f, 12.5f);
     }
 
-    GameObject createObstacle(float xPos, float yPos, bool bottom)
+    GameObject createObstacle(float xPos, float height, bool bottom)
     {
-        //Debug.Log(xPos + ", " + yPos + ", " + bottom);
+        float yPos;
+
         // since unity scales objects relative to their center, the position of the obstacle
         // needs to be offsetted to be in the position I want
         if (bottom)
-            yPos = Mathf.Lerp(lowerBound, yPos, 0.5f);
+            //yPos = Mathf.Lerp(lowerBound, lowerBound + height, 0.5f);
+            yPos = lowerBound + height / 2.0f;
         else
-            yPos = Mathf.Lerp(upperBound, yPos, 0.5f);
+            //yPos = Mathf.Lerp(upperBound, upperBound - height, 0.5f);
+            yPos = upperBound - height / 2.0f;
 
         float yScale = 2 * (upperBound - Mathf.Abs(yPos)) + 2.0f / pixelsPerUnit;
 
@@ -105,7 +113,8 @@ public class PlatformManager : MonoBehaviour {
     {
         // even numbered obstacles = potrudes from bottom
         // odd numbered obstacles = potrudes from top
-        return createObstacle(xPos, randomYPosition(), obstacles.Count % 2 == 0);
+        return createObstacle(xPos, randomHeight(), bottom);
+        //return createObstacle(xPos, randomHeight(), Random.Range(0, 2) == 0);
     }
 
     void updateNumObstaclesPassed()
@@ -115,7 +124,7 @@ public class PlatformManager : MonoBehaviour {
         if (currentNumOsbataclesPassed > numObstaclesPassed)
         {
             numObstaclesPassed = currentNumOsbataclesPassed;
-            GameState.canBoost = true;  // player can boost again after passing an obstacle
+            PlayerState.canBoost = true;  // player can boost again after passing an obstacle
         }
     }
 
@@ -132,6 +141,7 @@ public class PlatformManager : MonoBehaviour {
         for (int i = 0; i < ObstaclesPerBorder; i++)
         {
             obstacles.Enqueue(createObstacle(offset * borderWidth + (i * spaceBetweenObstacles)));
+            bottom = !bottom;
         }
     }
 

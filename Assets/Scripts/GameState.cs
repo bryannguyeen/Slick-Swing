@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 public class GameState : MonoBehaviour
 {
     public static string state;
-    public static bool canBoost;
 
     public GameObject gameOverUI;
 
@@ -18,7 +17,6 @@ public class GameState : MonoBehaviour
     void Start()
     {
         state = "start";
-        canBoost = true;
         gameOverAnimationTimer = 0f;
     }
 
@@ -26,10 +24,10 @@ public class GameState : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (string.Equals(state, "game over") & gameOverAnimationTimer == 0f)
+            if (state == "game over" & gameOverAnimationTimer == 0f)
                 ResetGame();
 
-            if (string.Equals(state, "start"))
+            if (state == "start")
                 StartGame();
         }
 
