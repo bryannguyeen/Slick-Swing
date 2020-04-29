@@ -18,7 +18,7 @@ public class PlatformManager : MonoBehaviour {
     public float obstacleWidth;
     public int pixelsPerUnit;
 
-    int counter;
+    int numOfBorders;
     float borderWidth, borderHeight;
     float upperBound, lowerBound;
     float minHeight, maxHeight;
@@ -27,7 +27,7 @@ public class PlatformManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        counter = 0;
+        numOfBorders = 0;
         numObstaclesPassed = 0;
         borderWidth = borderPlatform.GetComponent<Renderer>().bounds.size.x;
         borderHeight = borderPlatform.GetComponent<Renderer>().bounds.size.y;
@@ -54,18 +54,18 @@ public class PlatformManager : MonoBehaviour {
         //Debug.Log((int) ((transform.position.x + obstacleWidth/2) / spaceBetweenObstacles + 0.5f));
         updateNumObstaclesPassed();
 
-        if ((int) (player.position.x /borderWidth) > counter)
+        if ((int) (player.position.x /borderWidth) > numOfBorders)
         {
-            counter = (int) (player.position.x / borderWidth);
+            numOfBorders = (int) (player.position.x / borderWidth);
 
             destroyBehindBorders();
-            addBorderToQueue(counter + 1);
+            addBorderToQueue(numOfBorders + 1);
 
-            if (counter > 1)
+            if (numOfBorders > 1)
             {
                 destroyBehindObstacles();
             }
-            addObstaclesToQueue(counter + 1);
+            addObstaclesToQueue(numOfBorders + 1);
         }
     }
 
