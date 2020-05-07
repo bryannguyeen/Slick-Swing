@@ -5,7 +5,6 @@ using UnityEngine;
 public class AfterimageEffect : MonoBehaviour
 {
     public ParticleSystem afterimageParticleSystem;
-    public Material afterimageMaterial;
     public SpriteRenderer playerSprite;
     ParticleSystemRenderer particleRenderer;
 

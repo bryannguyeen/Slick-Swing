@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour {
     public LineRenderer lr;
     public Animator animator;
     public AfterimageEffect afterimage;
+    public BlipPlayer blip;
 
     public float bungeeStiffness;
     public float dampingConstant;
@@ -122,6 +123,7 @@ public class PlayerMovement : MonoBehaviour {
             lr.SetPosition(0, getRopeHandPosition() + ropeLength * shootDirection);
             lr.SetPosition(1, getRopeHandPosition());
 
+            // if rope has hit a surface
             if (hit.collider != null && hit.collider.tag == "Platform")
             {
                 AttachRope(hit.point, hit.distance);
@@ -170,6 +172,7 @@ public class PlayerMovement : MonoBehaviour {
     void AttachRope(Vector2 point, float length)
     {
         PlayerState.setToSwinging();
+        blip.Play(point);
 
         connectionPoint = point;
         ropeLength = length;

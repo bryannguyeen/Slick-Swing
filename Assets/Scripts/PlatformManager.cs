@@ -94,7 +94,7 @@ public class PlatformManager : MonoBehaviour {
             //yPos = Mathf.Lerp(upperBound, upperBound - height, 0.5f);
             yPos = upperBound - height / 2.0f;
 
-        float yScale = 2 * (upperBound - Mathf.Abs(yPos)) + 2.0f / pixelsPerUnit;
+        float yScale = 2 * (upperBound - Mathf.Abs(yPos)) + 4.0f / pixelsPerUnit;
 
         GameObject obstacle = (GameObject)Instantiate(obstaclePlatform, new Vector3(xPos, yPos, 0), Quaternion.identity);
 
