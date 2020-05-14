@@ -597,7 +597,7 @@ LineRenderer:
   m_SortingOrder: 3
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -6240,7 +6240,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOverUI: {fileID: 459853818}
   player: {fileID: 664200271}
-  gameOverAnimationDuration: 0.6
+  gameOverAnimationDuration: 1
   welcomeScreenAnimator: {fileID: 2036517648}
 --- !u!1 &1645101874
 GameObject:
@@ -6301,7 +6301,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_Sprite: {fileID: 0}
-  m_Color: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
+  m_Color: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

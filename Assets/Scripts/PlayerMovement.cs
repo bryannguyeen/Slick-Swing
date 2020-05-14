@@ -26,72 +26,34 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 netForce;
     Vector2 netBurstForce;
 
-    Vector2 prevMousePosition;
-
-    bool mouseClick;    // is true only if the mouse is clicked on current frame
-    bool mouseRelease;  // is true only if the mouse is released on current frame
-    bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
-
-
 	void Start () {
         transform.position = startingPosition;
-        prevMousePosition = Input.mousePosition;
-
-        mouseClick = false;
-        mouseRelease = false;
-    }
-	
-    void Update() {
-        if (GameState.state == "gameplay")
-        {
-            CheckForMouseClick();
-            CheckForMouseRelease();
-        }
     }
 
-    void CheckForMouseClick()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            mouseClick = true;
-            mouseHold = true;
-        }
-    }
-
-    void CheckForMouseRelease()
-    {
-        if (Input.GetMouseButtonUp(0) && mouseHold)
-        {
-            mouseRelease = true;
-            mouseHold = false;
-        }
-    }
 
     void FixedUpdate () {
         netForce = new Vector2(0, 0);
         netBurstForce = new Vector2(0, 0);
 
         // if mouse was clicked on this frame
-        if (mouseClick && PlayerState.isFreefall())
+        if (PlayerState.mouseClick && PlayerState.isFreefall())
         {
-            mouseClick = false;
+            PlayerState.mouseClick = false;
             CastRope();
         }
 
         // if mouse was released on this frame
-        if (mouseRelease)
+        if (PlayerState.mouseRelease)
         {
-            mouseRelease = false;
+            PlayerState.mouseRelease = false;
             OnMouseRelease();
         }
 
         // if mouse is being held currently
-        if (mouseHold)
+        if (PlayerState.mouseHold)
         {
             OnMouseHold();
         }
-
-        prevMousePosition = Input.mousePosition;
 
         // add forces as a function of time
         rb.AddForce(netForce * Time.fixedDeltaTime);
@@ -110,8 +72,8 @@ public class PlayerMovement : MonoBehaviour {
         {
             // add the forces that the rope acts on the player and update the line renderer position
             // as well as update the orientation of the player sprite
-            netForce += getRopeForce();
-            netForce += getDampingForce();
+            netForce += GetRopeForce();
+            netForce += GetDampingForce();
 
             lr.SetPosition(1, getRopeHandPosition());
             SetPlayerRotation(connectionPoint - (Vector2) transform.position);
@@ -119,7 +81,7 @@ public class PlayerMovement : MonoBehaviour {
 
         else if (PlayerState.isCasting())
         {
-            RaycastHit2D hit = getCastStatus();
+            RaycastHit2D hit = GetCastStatus();
             lr.SetPosition(0, getRopeHandPosition() + ropeLength * shootDirection);
             lr.SetPosition(1, getRopeHandPosition());
 
@@ -163,7 +125,7 @@ public class PlayerMovement : MonoBehaviour {
         animator.SetBool("isSwinging", true);
     }
 
-    RaycastHit2D getCastStatus()
+    RaycastHit2D GetCastStatus()
     {
         Vector2 origin = getRopeHandPosition();
         return Physics2D.Raycast(origin, shootDirection, ropeLength);
@@ -194,19 +156,19 @@ public class PlayerMovement : MonoBehaviour {
         // ensure that the player is facing to the right
         sprite.flipX = false;
 
-        // give a boost if the user flicked their finger upon release
+        // give a boost if the user quickly flicked their finger upon release
         // players can only boost once per obstacle
-        if (PlayerState.canBoost && PlayerState.isSwinging() && (Vector2)Input.mousePosition != prevMousePosition)
+        if (PlayerState.canBoost && PlayerState.isSwinging() && ((Vector2)Input.mousePosition - GameState.prevMousePosition).magnitude > 7f)
         {
             PlayerState.canBoost = false;
-            netBurstForce += getBoostForce();
+            netBurstForce += GetBoostForce();
             afterimage.Play();
         }
 
         PlayerState.setToFreefall();
     }
 
-    Vector2 getRopeForce()
+    Vector2 GetRopeForce()
     {
         Vector2 playerPosition = getRopeHandPosition();
         float distanceFromEquilibrium = ropeLength - (playerPosition - connectionPoint).magnitude;
@@ -219,9 +181,9 @@ public class PlayerMovement : MonoBehaviour {
         return new Vector2(0, 0);
     }
 
-    Vector2 getDampingForce()
+    Vector2 GetDampingForce()
     {
-        Vector2 RopeForce = getRopeForce();
+        Vector2 RopeForce = GetRopeForce();
         if (RopeForce.magnitude != 0)
         {
             RopeForce = RopeForce.normalized;
@@ -231,9 +193,9 @@ public class PlayerMovement : MonoBehaviour {
         return new Vector2(0, 0);
     }
 
-    Vector2 getBoostForce()
+    Vector2 GetBoostForce()
     {
-        return ((Vector2)Input.mousePosition - prevMousePosition).normalized * boostScale;
+        return ((Vector2)Input.mousePosition - GameState.prevMousePosition).normalized * boostScale;
     }
 
 

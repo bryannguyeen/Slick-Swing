@@ -22,7 +22,7 @@ public class PlayerCollision : MonoBehaviour {
 
     void Update ()
     {
-        if (Camera.main.transform.position.x - transform.position.x > 20 & !string.Equals(GameState.state, "game over"))
+        if (Camera.main.transform.position.x - transform.position.x > 20 & GameState.state == GameState.GAMEPLAY)
             KillPlayer();
     }
 

@@ -10,13 +10,48 @@ public class PlayerState : MonoBehaviour
     private static int state;
     public static bool canBoost;
 
+    public static bool mouseClick;    // is true only if the mouse is clicked on current frame
+    public static bool mouseRelease;  // is true only if the mouse is released on current frame
+    public static bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
+
 
     void Start()
     {
         state = BEGINNING;
         canBoost = true;
+
+        mouseClick = false;
+        mouseRelease = false;
+        mouseHold = false;
     }
-   
+
+    void Update()
+    {
+        if (GameState.state == GameState.GAMEPLAY)
+        {
+            CheckForMouseClick();
+            CheckForMouseRelease();
+        }
+    }
+
+    void CheckForMouseClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            mouseClick = true;
+            mouseHold = true;
+        }
+    }
+
+    void CheckForMouseRelease()
+    {
+        if (Input.GetMouseButtonUp(0) && mouseHold)
+        {
+            mouseRelease = true;
+            mouseHold = false;
+        }
+    }
+
     public static int getState()
     {
         return state;
