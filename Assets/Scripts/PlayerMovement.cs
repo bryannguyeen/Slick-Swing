@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour {
     public Animator animator;
     public AfterimageEffect afterimage;
     public BlipPlayer blip;
+    public AudioManager audioManager;
 
     public float bungeeStiffness;
     public float dampingConstant;
@@ -123,6 +124,8 @@ public class PlayerMovement : MonoBehaviour {
         // set up swinging animation
         animator.SetBool("doBackflip", false);
         animator.SetBool("isSwinging", true);
+
+        audioManager.Play("RopeShoot");
     }
 
     RaycastHit2D GetCastStatus()
@@ -138,6 +141,8 @@ public class PlayerMovement : MonoBehaviour {
 
         connectionPoint = point;
         ropeLength = length;
+
+        audioManager.Play("RopeHit");
     }
 
     void OnMouseRelease()
@@ -158,7 +163,7 @@ public class PlayerMovement : MonoBehaviour {
 
         // give a boost if the user quickly flicked their finger upon release
         // players can only boost once per obstacle
-        if (PlayerState.canBoost && PlayerState.isSwinging() && ((Vector2)Input.mousePosition - GameState.prevMousePosition).magnitude > 7f)
+        if (PlayerState.canBoost && PlayerState.isSwinging() && ((Vector2)Input.mousePosition - GameState.prevMousePosition).magnitude > 5f)
         {
             PlayerState.canBoost = false;
             netBurstForce += GetBoostForce();
