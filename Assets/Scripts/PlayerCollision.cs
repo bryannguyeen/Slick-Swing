@@ -10,6 +10,7 @@ public class PlayerCollision : MonoBehaviour {
     public Rigidbody2D rb;
     public TrailRenderer trail;
     public AfterimageEffect afterimage;
+    public AudioManager audioManager;
 
     public GameObject explosion;
 
@@ -36,6 +37,7 @@ public class PlayerCollision : MonoBehaviour {
         rb.velocity = new Vector2(0, 0);
         Instantiate(explosion, transform.position, Quaternion.identity);
         afterimage.Stop();
+        audioManager.Play("Explosion");
 
         // update game state
         gs.EndGame();

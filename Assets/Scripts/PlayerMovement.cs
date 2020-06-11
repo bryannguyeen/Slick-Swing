@@ -33,13 +33,14 @@ public class PlayerMovement : MonoBehaviour {
 
 
     void FixedUpdate () {
-        netForce = new Vector2(0, 0);
-        netBurstForce = new Vector2(0, 0);
+        netForce.Set(0, 0);
+        netBurstForce.Set(0, 0);
 
         // if mouse was clicked on this frame
         if (PlayerState.mouseClick && PlayerState.isFreefall())
         {
             PlayerState.mouseClick = false;
+            //Debug.Log(GameState.state);
             CastRope();
         }
 
@@ -141,8 +142,9 @@ public class PlayerMovement : MonoBehaviour {
 
         connectionPoint = point;
         ropeLength = length;
+        lr.SetPosition(0, point);
 
-        audioManager.Play("RopeHit");
+        //audioManager.Play("RopeHit");
     }
 
     void OnMouseRelease()
@@ -168,6 +170,7 @@ public class PlayerMovement : MonoBehaviour {
             PlayerState.canBoost = false;
             netBurstForce += GetBoostForce();
             afterimage.Play();
+            audioManager.Play("BigLeap");
         }
 
         PlayerState.setToFreefall();
@@ -207,7 +210,7 @@ public class PlayerMovement : MonoBehaviour {
     // Sets the Z-axis euler angle based on a 2D direction vector
     void SetPlayerRotation(Vector2 direction)
     {
-        direction = direction.normalized;
+        direction.Normalize();
         float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
         if (direction.x > 0)
             angle = -angle;
@@ -225,5 +228,6 @@ public class PlayerMovement : MonoBehaviour {
         rb.constraints = RigidbodyConstraints2D.None;
         rb.AddForce(startingJump);
         animator.SetBool("doBackflip", true);
+        audioManager.Play("BigLeap");
     }
 }

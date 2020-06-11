@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameState : MonoBehaviour
 {
@@ -18,27 +20,21 @@ public class GameState : MonoBehaviour
 
     public Animator welcomeScreenAnimator;
 
+    public Toggle audioToggle;
+
     float gameOverAnimationTimer;
 
     void Start()
     {
         state = START;
         prevMousePosition = Input.mousePosition;
+        audioToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
 
         gameOverAnimationTimer = 0f;
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (state == GAMEOVER & gameOverAnimationTimer == 0f)
-                ResetGame();
-
-            if (state == START)
-                StartGame();
-        }
-
         decrementTimers();
     }
 
@@ -76,7 +72,8 @@ public class GameState : MonoBehaviour
 
     public void ResetGame()
     {
-        SceneManager.LoadScene("Main");
+        if (gameOverAnimationTimer == 0f)
+            SceneManager.LoadScene("Main");
     }
 
     public void decrementTimers()
