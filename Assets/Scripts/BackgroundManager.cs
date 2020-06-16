@@ -23,20 +23,20 @@ public class BackgroundManager : MonoBehaviour
 
         backgroundRefreshDistance = backgroundWidth / (1 - parallax);
 
-        addBackgroundToQueue();
-        addBackgroundToQueue();
+        AddBackgroundToQueue();
+        AddBackgroundToQueue();
         FollowCamera();
 
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if ((int) (cameraT.position.x / backgroundRefreshDistance) > counter)
         {
             counter = (int)(cameraT.position.x / backgroundRefreshDistance);
 
-            destroyEarliestBackground();
-            addBackgroundToQueue();
+            DestroyEarliestBackground();
+            AddBackgroundToQueue();
         }
 
         FollowCamera();
@@ -50,19 +50,14 @@ public class BackgroundManager : MonoBehaviour
         }
     }
 
-    void addBackgroundToQueue()
+    void AddBackgroundToQueue()
     {
         backgrounds.Add((GameObject)Instantiate(backgroundSprite, new Vector3(0, 0, 1), Quaternion.identity));
     }
 
-    void destroyEarliestBackground()
+    void DestroyEarliestBackground()
     {
         Destroy(backgrounds[0]);
         backgrounds.RemoveAt(0);
-    }
-
-    float MathMod(float a, float b)
-    {
-        return (Mathf.Abs(a * b) + a) % b;
     }
 }

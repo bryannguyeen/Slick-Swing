@@ -15,7 +15,7 @@ public class GameOverDisplay : MonoBehaviour
         welcomeScreen.SetActive(false);
     }
 
-    public void declareNewRecord()
+    public void DeclareNewRecord()
     {
         message.text = "A NEW RECORD";
         messageShadow.text = message.text;

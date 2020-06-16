@@ -14,6 +14,7 @@ public class GameState : MonoBehaviour
     public const int GAMEOVER = 2;
 
     public GameObject gameOverUI;
+    public Text HighScoreText;
 
     public PlayerMovement player;
     public float gameOverAnimationDuration;
@@ -29,13 +30,14 @@ public class GameState : MonoBehaviour
         state = START;
         prevMousePosition = Input.mousePosition;
         audioToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
+        HighScoreText.text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore");
 
         gameOverAnimationTimer = 0f;
     }
 
     void Update()
     {
-        decrementTimers();
+        DecrementTimers();
     }
 
     private void LateUpdate()
@@ -61,7 +63,7 @@ public class GameState : MonoBehaviour
         if (score > PlayerPrefs.GetInt("HighScore"))
         {
             PlayerPrefs.SetInt("HighScore", score);
-            gameOverUI.GetComponent<GameOverDisplay>().declareNewRecord();
+            gameOverUI.GetComponent<GameOverDisplay>().DeclareNewRecord();
         }
 
         // display game over screen
@@ -76,7 +78,7 @@ public class GameState : MonoBehaviour
             SceneManager.LoadScene("Main");
     }
 
-    public void decrementTimers()
+    public void DecrementTimers()
     {
         gameOverAnimationTimer -= Time.deltaTime;
         if (gameOverAnimationTimer < 0f)

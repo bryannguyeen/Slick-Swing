@@ -16,7 +16,7 @@ public class AfterimageEffect : MonoBehaviour
         particleRenderer.material.mainTexture = playerSprite.sprite.texture;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         // only update texture if particle system is currently playing
         if (afterimageParticleSystem.isPlaying)

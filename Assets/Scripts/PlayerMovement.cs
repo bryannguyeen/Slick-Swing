@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 shootDirection;
 
     float ropeLength;
+
     Vector2 netForce;
     Vector2 netBurstForce;
 
@@ -37,10 +38,9 @@ public class PlayerMovement : MonoBehaviour {
         netBurstForce.Set(0, 0);
 
         // if mouse was clicked on this frame
-        if (PlayerState.mouseClick && PlayerState.isFreefall())
+        if (PlayerState.mouseClick && PlayerState.IsFreefall())
         {
             PlayerState.mouseClick = false;
-            //Debug.Log(GameState.state);
             CastRope();
         }
 
@@ -63,29 +63,29 @@ public class PlayerMovement : MonoBehaviour {
         rb.AddForce(netBurstForce);
 	}
 
-    Vector2 getRopeHandPosition()
+    Vector2 GetRopeHandPosition()
     {
        return transform.position + (transform.up * sprite.size.y) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime);
     }
 
     void OnMouseHold()
     {
-        if (PlayerState.isSwinging())
+        if (PlayerState.IsSwinging())
         {
             // add the forces that the rope acts on the player and update the line renderer position
             // as well as update the orientation of the player sprite
             netForce += GetRopeForce();
             netForce += GetDampingForce();
 
-            lr.SetPosition(1, getRopeHandPosition());
+            lr.SetPosition(1, GetRopeHandPosition());
             SetPlayerRotation(connectionPoint - (Vector2) transform.position);
         }
 
-        else if (PlayerState.isCasting())
+        else if (PlayerState.IsCasting())
         {
             RaycastHit2D hit = GetCastStatus();
-            lr.SetPosition(0, getRopeHandPosition() + ropeLength * shootDirection);
-            lr.SetPosition(1, getRopeHandPosition());
+            lr.SetPosition(0, GetRopeHandPosition() + ropeLength * shootDirection);
+            lr.SetPosition(1, GetRopeHandPosition());
 
             // if rope has hit a surface
             if (hit.collider != null && hit.collider.tag == "Platform")
@@ -101,9 +101,9 @@ public class PlayerMovement : MonoBehaviour {
 
     void CastRope()
     {
-        PlayerState.setToCasting();
+        PlayerState.SetToCasting();
 
-        Vector2 origin = getRopeHandPosition();
+        Vector2 origin = GetRopeHandPosition();
         Vector2 clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         shootDirection = clickPoint - origin;
@@ -131,13 +131,13 @@ public class PlayerMovement : MonoBehaviour {
 
     RaycastHit2D GetCastStatus()
     {
-        Vector2 origin = getRopeHandPosition();
+        Vector2 origin = GetRopeHandPosition();
         return Physics2D.Raycast(origin, shootDirection, ropeLength);
     }
 
     void AttachRope(Vector2 point, float length)
     {
-        PlayerState.setToSwinging();
+        PlayerState.SetToSwinging();
         blip.Play(point);
 
         connectionPoint = point;
@@ -152,7 +152,7 @@ public class PlayerMovement : MonoBehaviour {
         lr.enabled = false;
 
         // set player rotation back to neutral
-        resetPlayerRotation();
+        ResetPlayerRotation();
 
         // turn off swinging animations
         animator.SetBool("isSwinging", false);
@@ -165,7 +165,7 @@ public class PlayerMovement : MonoBehaviour {
 
         // give a boost if the user quickly flicked their finger upon release
         // players can only boost once per obstacle
-        if (PlayerState.canBoost && PlayerState.isSwinging() && ((Vector2)Input.mousePosition - GameState.prevMousePosition).magnitude > 5f)
+        if (PlayerState.canBoost && PlayerState.IsSwinging() && ((Vector2)Input.mousePosition - GameState.prevMousePosition).magnitude > 5f)
         {
             PlayerState.canBoost = false;
             netBurstForce += GetBoostForce();
@@ -173,18 +173,18 @@ public class PlayerMovement : MonoBehaviour {
             audioManager.Play("BigLeap");
         }
 
-        PlayerState.setToFreefall();
+        PlayerState.SetToFreefall();
     }
 
     Vector2 GetRopeForce()
     {
-        Vector2 playerPosition = getRopeHandPosition();
+        Vector2 playerPosition = GetRopeHandPosition();
         float distanceFromEquilibrium = ropeLength - (playerPosition - connectionPoint).magnitude;
 
         // unlike a spring, a compressed bungee does not give a force
         if (distanceFromEquilibrium < 0)
         {
-            return bungeeStiffness * (ropeLength - (playerPosition - connectionPoint).magnitude) * (playerPosition - connectionPoint).normalized;
+            return bungeeStiffness * distanceFromEquilibrium * (playerPosition - connectionPoint).normalized;
         }
         return new Vector2(0, 0);
     }
@@ -192,13 +192,12 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 GetDampingForce()
     {
         Vector2 RopeForce = GetRopeForce();
-        if (RopeForce.magnitude != 0)
-        {
-            RopeForce = RopeForce.normalized;
 
-            return -dampingConstant * Vector2.Dot(rb.velocity, RopeForce) / Vector2.Dot(RopeForce, RopeForce) * RopeForce;
-        }
-        return new Vector2(0, 0);
+        if (RopeForce.magnitude == 0)
+            return new Vector2(0, 0);
+
+        RopeForce.Normalize();
+        return -dampingConstant * Vector2.Dot(rb.velocity, RopeForce) / Vector2.Dot(RopeForce, RopeForce) * RopeForce;
     }
 
     Vector2 GetBoostForce()
@@ -217,14 +216,14 @@ public class PlayerMovement : MonoBehaviour {
         transform.eulerAngles = new Vector3(0, 0, angle);
     }
 
-    void resetPlayerRotation()
+    void ResetPlayerRotation()
     {
         transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
     public void StartPlayer()
     {
-        PlayerState.setToFreefall();
+        PlayerState.SetToFreefall();
         rb.constraints = RigidbodyConstraints2D.None;
         rb.AddForce(startingJump);
         animator.SetBool("doBackflip", true);

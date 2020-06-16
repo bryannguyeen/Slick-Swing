@@ -35,6 +35,7 @@ public class PlayerCollision : MonoBehaviour {
         lr.enabled = false;
         boxCollider.enabled = false;
         rb.velocity = new Vector2(0, 0);
+        rb.gravityScale = 0;
         Instantiate(explosion, transform.position, Quaternion.identity);
         afterimage.Stop();
         audioManager.Play("Explosion");

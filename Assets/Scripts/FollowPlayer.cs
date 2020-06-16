@@ -10,19 +10,19 @@ public class FollowPlayer : MonoBehaviour {
 
     void Start()
     {
-        transform.position = getDestination();
+        transform.position = GetDestination();
     }
 
 
     void FixedUpdate () {
-        destination = getDestination();
+        destination = GetDestination();
 
         // only allow camera to move right
         if (destination.x > transform.position.x)
             transform.position = Vector3.Lerp(transform.position, destination, 0.1f);
 	}
 
-    Vector3 getDestination()
+    Vector3 GetDestination()
     {
         Vector3 result = player.position + offset;
         result.y = 0;

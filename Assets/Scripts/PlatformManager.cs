@@ -9,7 +9,6 @@ public class PlatformManager : MonoBehaviour {
     public float distanceBetweenBorders;
     public Transform player;
 
-    //GameObject bp1Upper, bp1Lower, bp2Upper, bp2Lower;
     Queue<GameObject> obstacles = new Queue<GameObject>();
     Queue<GameObject> borders = new Queue<GameObject>();
 
@@ -21,9 +20,8 @@ public class PlatformManager : MonoBehaviour {
     int numOfBorders;
     float borderWidth, borderHeight;
     float upperBound, lowerBound;
-    float minHeight, maxHeight;
 
-    // to spawn the pillar either top or bottom
+    // To determine whether to spawn the pillar either top or bottom
     bool bottom;
 
     public static int numObstaclesPassed;
@@ -40,48 +38,48 @@ public class PlatformManager : MonoBehaviour {
 
         bottom = true;
 
-        addBorderToQueue(-1);
-        addBorderToQueue(0);
-        addBorderToQueue(1);
+        AddBorderToQueue(-1);
+        AddBorderToQueue(0);
+        AddBorderToQueue(1);
 
         Random.State oldState = Random.state;
         // Seed = 5 seems to be have nice initial heights for easy beginner-friendly obstacles
         Random.InitState(1);
-        addObstaclesToQueue(0);
+        AddObstaclesToQueue(0);
 
         Random.state = oldState;
-        addObstaclesToQueue(1);
+        AddObstaclesToQueue(1);
 
     }
 
     void Update () {
         // FOR KEEPING TRACK OF SCORE
         //Debug.Log((int) ((transform.position.x + obstacleWidth/2) / spaceBetweenObstacles + 0.5f));
-        updateNumObstaclesPassed();
+        UpdateNumObstaclesPassed();
 
         if ((int) (player.position.x /borderWidth) > numOfBorders)
         {
             numOfBorders = (int) (player.position.x / borderWidth);
 
-            destroyBehindBorders();
-            addBorderToQueue(numOfBorders + 1);
+            DestroyEarliestBorders();
+            AddBorderToQueue(numOfBorders + 1);
 
             if (numOfBorders > 1)
             {
-                destroyBehindObstacles();
+                DestroyEarliestObstacles();
             }
-            addObstaclesToQueue(numOfBorders + 1);
+            AddObstaclesToQueue(numOfBorders + 1);
         }
     }
 
     // even numbered obstacles = potrudes from bottom
     // odd numbered obstacles = potrudes from top
-    float randomHeight()
+    float RandomHeight()
     {
         return Random.Range(6f, 12.5f);
     }
 
-    GameObject createObstacle(float xPos, float height, bool bottom)
+    GameObject CreateObstacle(float xPos, float height, bool bottom)
     {
         float yPos;
 
@@ -109,15 +107,15 @@ public class PlatformManager : MonoBehaviour {
     }
 
     // Overload method for automated randomized obstacles
-    GameObject createObstacle(float xPos)
+    GameObject CreateObstacle(float xPos)
     {
         // even numbered obstacles = potrudes from bottom
         // odd numbered obstacles = potrudes from top
-        return createObstacle(xPos, randomHeight(), bottom);
+        return CreateObstacle(xPos, RandomHeight(), bottom);
         //return createObstacle(xPos, randomHeight(), Random.Range(0, 2) == 0);
     }
 
-    void updateNumObstaclesPassed()
+    void UpdateNumObstaclesPassed()
     {
         int currentNumOsbataclesPassed = (int) ((player.position.x + spaceBetweenObstacles) / spaceBetweenObstacles);
 
@@ -128,7 +126,7 @@ public class PlatformManager : MonoBehaviour {
         }
     }
 
-    void addBorderToQueue(int offset)
+    void AddBorderToQueue(int offset)
     {
         float xCoord = offset * borderWidth;
         float yCoord = distanceBetweenBorders / 2;
@@ -136,23 +134,23 @@ public class PlatformManager : MonoBehaviour {
         borders.Enqueue((GameObject)Instantiate(borderPlatform, new Vector3(xCoord, -yCoord, 0), Quaternion.identity));
     }
 
-    void addObstaclesToQueue(int offset)
+    void AddObstaclesToQueue(int offset)
     {
         for (int i = 0; i < ObstaclesPerBorder; i++)
         {
-            obstacles.Enqueue(createObstacle(offset * borderWidth + (i * spaceBetweenObstacles)));
+            obstacles.Enqueue(CreateObstacle(offset * borderWidth + (i * spaceBetweenObstacles)));
             bottom = !bottom;
         }
     }
 
-    void destroyBehindBorders()
+    void DestroyEarliestBorders()
     {
         for (int i = 0; i < 2; i++) {
             Destroy(borders.Dequeue());
         }
     }
 
-    void destroyBehindObstacles()
+    void DestroyEarliestObstacles()
     {
         for (int i = 0; i < ObstaclesPerBorder; i++)
         {

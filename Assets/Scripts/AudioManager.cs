@@ -5,11 +5,11 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
-    public static bool disableAudio;
+    public static bool mute;
 
     void Awake()
     {
-        disableAudio = Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
+        mute = Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -20,7 +20,7 @@ public class AudioManager : MonoBehaviour
 
     public void Play(string name)
     {
-        if (disableAudio)
+        if (mute)
             return;
 
         Sound s = Array.Find(sounds, sound => sound.name == name);
@@ -33,9 +33,9 @@ public class AudioManager : MonoBehaviour
         s.source.Play();
     }
 
-    public void DisableAudio(bool disabled)
+    public void DisableAudio(bool isOn)
     {
-        disableAudio = disabled;
-        PlayerPrefs.SetInt("DisableAudio", Convert.ToInt32(disabled));
+        mute = isOn;
+        PlayerPrefs.SetInt("DisableAudio", Convert.ToInt32(isOn));
     }
 }

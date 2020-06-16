@@ -52,42 +52,42 @@ public class PlayerState : MonoBehaviour
         }
     }
 
-    public static int getState()
+    public static int GetState()
     {
         return state;
     }
 
-    public static bool isStarting()
+    public static bool IsStarting()
     {
         return state == BEGINNING;
     }
 
-    public static bool isFreefall()
+    public static bool IsFreefall()
     {
         return state == FREEFALL;
     }
 
-    public static bool isCasting()
+    public static bool IsCasting()
     {
         return state == CASTING;
     }
 
-    public static bool isSwinging()
+    public static bool IsSwinging()
     {
         return state == SWINGING;
     }
 
-    public static void setToFreefall()
+    public static void SetToFreefall()
     {
         state = FREEFALL;
     }
 
-    public static void setToCasting()
+    public static void SetToCasting()
     {
         state = CASTING;
     }
 
-    public static void setToSwinging()
+    public static void SetToSwinging()
     {
         state = SWINGING;
     }
