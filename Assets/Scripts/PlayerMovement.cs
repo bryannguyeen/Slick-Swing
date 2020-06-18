@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour {
             lr.SetPosition(1, GetRopeHandPosition());
 
             // if rope has hit a surface
-            if (hit.collider != null && hit.collider.tag == "Platform")
+            if (hit.collider != null && hit.collider.CompareTag("Platform"))
             {
                 AttachRope(hit.point, hit.distance);
             }
