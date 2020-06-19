@@ -7,6 +7,7 @@ public class GameState : MonoBehaviour
 {
     public static int state;
     public static Vector2 prevMousePosition;
+    public static Vector2 cursorVelocity;
 
 
     public const int START = 0;
@@ -42,6 +43,8 @@ public class GameState : MonoBehaviour
 
     private void LateUpdate()
     {
+        cursorVelocity = ((Vector2) Input.mousePosition - prevMousePosition) / Time.deltaTime;
+
         // previous mouse position should be recorded at the end of the frame
         prevMousePosition = Input.mousePosition;
     }

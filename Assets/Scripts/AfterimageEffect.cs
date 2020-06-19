@@ -12,8 +12,10 @@ public class AfterimageEffect : MonoBehaviour
     {
         afterimageParticleSystem.Stop();
         particleRenderer = GetComponent<ParticleSystemRenderer>();
-        particleRenderer.material = new Material(Shader.Find("Mobile/Particles/Alpha Blended"));
-        particleRenderer.material.mainTexture = playerSprite.sprite.texture;
+        particleRenderer.material = new Material(Shader.Find("Sprites/Default"))
+        {
+            mainTexture = playerSprite.sprite.texture
+        };
     }
 
     void Update()

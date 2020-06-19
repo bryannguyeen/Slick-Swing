@@ -165,7 +165,7 @@ public class PlayerMovement : MonoBehaviour {
 
         // give a boost if the user quickly flicked their finger upon release
         // players can only boost once per obstacle
-        if (PlayerState.canBoost && PlayerState.IsSwinging() && ((Vector2)Input.mousePosition - GameState.prevMousePosition).magnitude != 0f)
+        if (PlayerState.canBoost && PlayerState.IsSwinging() && GameState.cursorVelocity.magnitude > 650f)
         {
             PlayerState.canBoost = false;
             netBurstForce += GetBoostForce();
@@ -202,7 +202,7 @@ public class PlayerMovement : MonoBehaviour {
 
     Vector2 GetBoostForce()
     {
-        return ((Vector2)Input.mousePosition - GameState.prevMousePosition).normalized * boostScale;
+        return GameState.cursorVelocity.normalized * boostScale;
     }
 
 
