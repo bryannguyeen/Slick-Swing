@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4168473, g: 0.13777146, b: 0.6792453, a: 1}
+  m_Color: {r: 0.38416696, g: 0.518583, b: 0.9150943, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -268,7 +268,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SWING GAME
+  m_Text: SLICK SWING
 --- !u!222 &199984469
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6187,7 +6187,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SWING GAME
+  m_Text: SLICK SWING
 --- !u!222 &1210716786
 CanvasRenderer:
   m_ObjectHideFlags: 0

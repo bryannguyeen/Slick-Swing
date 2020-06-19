@@ -54,7 +54,6 @@ public class PlatformManager : MonoBehaviour {
 
     void Update () {
         // FOR KEEPING TRACK OF SCORE
-        //Debug.Log((int) ((transform.position.x + obstacleWidth/2) / spaceBetweenObstacles + 0.5f));
         UpdateNumObstaclesPassed();
 
         if ((int) (player.position.x /borderWidth) > numOfBorders)
