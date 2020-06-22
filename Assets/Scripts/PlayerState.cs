@@ -91,4 +91,9 @@ public class PlayerState : MonoBehaviour
     {
         state = SWINGING;
     }
+
+    public static bool BoostInput()
+    {
+        return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 650f;
+    }
 }

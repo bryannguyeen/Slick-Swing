@@ -180,7 +180,7 @@ public class PlayerMovement : MonoBehaviour {
 
         // give a boost if the user quickly flicked their finger upon release
         // players can only boost once per obstacle
-        if (PlayerState.canBoost && PlayerState.IsSwinging() && GameState.cursorVelocity.magnitude > 650f)
+        if (PlayerState.BoostInput())
         {
             PlayerState.canBoost = false;
             netBurstForce += GetBoostForce();
