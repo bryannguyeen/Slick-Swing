@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -104,9 +105,23 @@ public class PlayerMovement : MonoBehaviour {
         PlayerState.SetToCasting();
 
         Vector2 origin = GetRopeHandPosition();
-        Vector2 clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        shootDirection = clickPoint - origin;
+        // determing the shoot direction relative to finger press position
+        if (Input.mousePosition.y > Screen.height / 2)
+        {
+            if (Input.mousePosition.x > Screen.width / 2)
+                shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, (Input.mousePosition.x - Screen.width / 2) / (Screen.width / 2)));
+            else
+                shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, (Input.mousePosition.x) / (Screen.width / 2)));
+        }
+        
+        else
+        {
+            if (Input.mousePosition.x > Screen.width / 2)
+                shootDirection = AngleToVectorD(Mathf.Lerp(-75f, -50f, (Input.mousePosition.x - Screen.width / 2) / (Screen.width / 2)));
+            else
+                shootDirection = AngleToVectorD(Mathf.Lerp(-95f, -75f, (Input.mousePosition.x) / (Screen.width / 2)));
+        }
         shootDirection = shootDirection.normalized;
         ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
 
@@ -228,5 +243,10 @@ public class PlayerMovement : MonoBehaviour {
         rb.AddForce(startingJump);
         animator.SetBool("doBackflip", true);
         audioManager.Play("BigLeap");
+    }
+
+    Vector2 AngleToVectorD(float angle)
+    {
+        return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
     }
 }

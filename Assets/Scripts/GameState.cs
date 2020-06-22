@@ -15,12 +15,14 @@ public class GameState : MonoBehaviour
     public const int GAMEOVER = 2;
 
     public GameObject gameOverUI;
+    public GameObject tutorialUI;
     public Text HighScoreText;
 
     public PlayerMovement player;
     public float gameOverAnimationDuration;
 
     public Animator welcomeScreenAnimator;
+    public Animator tutorialAnimator;
 
     public Toggle audioToggle;
 
@@ -55,6 +57,9 @@ public class GameState : MonoBehaviour
         player.StartPlayer();
 
         welcomeScreenAnimator.SetBool("gameHasStarted", true);
+
+        if (!TutorialManager.tutorialOff)
+            tutorialUI.SetActive(true);
     }
 
     public void EndGame()
@@ -71,6 +76,9 @@ public class GameState : MonoBehaviour
 
         // display game over screen
         gameOverUI.SetActive(true);
+
+        // turn of tutorial ui if it is currently on
+        tutorialAnimator.SetBool("firstSwing", true);
 
         gameOverAnimationTimer = gameOverAnimationDuration;
     }
