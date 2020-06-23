@@ -13,27 +13,32 @@ public class TutorialManager : MonoBehaviour
     public Animator tutorialAnimator;
     public Animator jumpTutorialAnimator;
 
+    [Range(0.2f, 1f)]
+    public float tutorialTimeScale;
+
     void Start()
     {
-        //tutorialOff = Convert.ToBoolean(PlayerPrefs.GetInt("DisableTutorial"));
-        disableTutorialToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("DisableTutorial"));
+        // Tutorial is on by default and then checks PlayerPrefs too see whether to disable it
+        Time.timeScale = tutorialTimeScale;
+
+        tutorialOff = disableTutorialToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("DisableTutorial"));
     }
 
     void Update()
     {
-        if (PlayerState.IsSwinging())
+        // no need to show tutorial prompts once player completes tutorial
+        if ((tutorialAnimator.GetBool("firstSwing") && jumpTutorialAnimator.GetBool("firstJump")))
+            return;
+
+        if (PlayerState.IsCasting())
         {
             tutorialAnimator.SetBool("firstSwing", true);
+            Time.timeScale = 1f;
         }
 
         jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
         if (PlayerState.BoostInput())
             jumpTutorialAnimator.SetBool("firstJump", true);
-
-        // once the player has completed their first swing and jump, they completed the tutorial
-        // so this script's duty is finished.
-        //if (tutorialAnimator.GetBool("firstSwing") && jumpTutorialAnimator.GetBool("firstJump"))
-            //this.enabled = false;
     }
 
     public void DisableTutorial(bool isOn)
@@ -43,9 +48,12 @@ public class TutorialManager : MonoBehaviour
         if (tutorialOff)
         {
             toggleText.text = "TUTORIAL: OFF";
-        } else
+            Time.timeScale = 1f;
+        }
+        else
         {
             toggleText.text = "TUTORIAL: ON";
+            Time.timeScale = tutorialTimeScale;
         }
 
         PlayerPrefs.SetInt("DisableTutorial", Convert.ToInt32(tutorialOff));

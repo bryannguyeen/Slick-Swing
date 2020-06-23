@@ -138,7 +138,6 @@ public class PlayerMovement : MonoBehaviour {
         SetPlayerRotation(shootDirection);
 
         // set up swinging animation
-        animator.SetBool("doBackflip", false);
         animator.SetBool("isSwinging", true);
 
         audioManager.Play("RopeShoot");
@@ -173,7 +172,7 @@ public class PlayerMovement : MonoBehaviour {
         animator.SetBool("isSwinging", false);
 
         // play backflip animation
-        animator.SetBool("doBackflip", true);
+        animator.SetTrigger("doBackflip");
 
         // ensure that the player is facing to the right
         sprite.flipX = false;
@@ -241,7 +240,7 @@ public class PlayerMovement : MonoBehaviour {
         PlayerState.SetToFreefall();
         rb.constraints = RigidbodyConstraints2D.None;
         rb.AddForce(startingJump);
-        animator.SetBool("doBackflip", true);
+        animator.SetTrigger("doBackflip");
         audioManager.Play("BigLeap");
     }
 

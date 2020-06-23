@@ -15,7 +15,6 @@ public class GameState : MonoBehaviour
     public const int GAMEOVER = 2;
 
     public GameObject gameOverUI;
-    public GameObject tutorialUI;
     public Text HighScoreText;
 
     public PlayerMovement player;
@@ -56,10 +55,10 @@ public class GameState : MonoBehaviour
         state = GAMEPLAY;
         player.StartPlayer();
 
-        welcomeScreenAnimator.SetBool("gameHasStarted", true);
+        welcomeScreenAnimator.SetTrigger("disappear");
 
         if (!TutorialManager.tutorialOff)
-            tutorialUI.SetActive(true);
+            tutorialAnimator.SetTrigger("showTutorial");
     }
 
     public void EndGame()
