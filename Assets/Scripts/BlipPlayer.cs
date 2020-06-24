@@ -9,6 +9,8 @@ public class BlipPlayer : MonoBehaviour
     public void Play(Vector2 position)
     {
         transform.position = (Vector3) position;
-        animator.Play("blip", -1, 0);
+        animator.SetTrigger("playBlip");
+        //animator.Play("blip", -1, 0);
+
     }
 }

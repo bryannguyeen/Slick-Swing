@@ -19,21 +19,23 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         // Tutorial is on by default and then checks PlayerPrefs too see whether to disable it
-        Time.timeScale = tutorialTimeScale;
+        SlowTime();
 
-        tutorialOff = disableTutorialToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("DisableTutorial"));
+        tutorialOff = disableTutorialToggle.isOn = GetDisableTutorialPlayerPref();
     }
 
     void Update()
     {
         // no need to show tutorial prompts once player completes tutorial
-        if ((tutorialAnimator.GetBool("firstSwing") && jumpTutorialAnimator.GetBool("firstJump")))
-            return;
+        // completion of the jump tutorial implies completion of swing tutorial and that
+        // GameState.state is in GAMEPLAY
+        if (jumpTutorialAnimator.GetBool("firstJump"))
+            this.enabled = false;
 
         if (PlayerState.IsCasting())
         {
             tutorialAnimator.SetBool("firstSwing", true);
-            Time.timeScale = 1f;
+            ResumeNormalTime();
         }
 
         jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
@@ -48,14 +50,34 @@ public class TutorialManager : MonoBehaviour
         if (tutorialOff)
         {
             toggleText.text = "TUTORIAL: OFF";
-            Time.timeScale = 1f;
+            ResumeNormalTime();
         }
         else
         {
             toggleText.text = "TUTORIAL: ON";
-            Time.timeScale = tutorialTimeScale;
+            SlowTime();
         }
 
-        PlayerPrefs.SetInt("DisableTutorial", Convert.ToInt32(tutorialOff));
+        SetDisableTutorialPlayerPref(tutorialOff);
+    }
+
+    void SlowTime()
+    {
+        Time.timeScale = tutorialTimeScale;
+    }
+
+    void ResumeNormalTime()
+    {
+        Time.timeScale = 1f;
+    }
+
+    bool GetDisableTutorialPlayerPref()
+    {
+        return Convert.ToBoolean(PlayerPrefs.GetInt("DisableTutorial"));
+    }
+
+    void SetDisableTutorialPlayerPref(bool disable)
+    {
+        PlayerPrefs.SetInt("DisableTutorial", Convert.ToInt32(disable));
     }
 }

@@ -18,7 +18,6 @@ public class PlayerMovement : MonoBehaviour {
 
     public float ropeCastSpeed;
 
-    public Vector2 startingPosition;
     public Vector2 startingJump;
 
     Vector2 connectionPoint;
@@ -28,11 +27,6 @@ public class PlayerMovement : MonoBehaviour {
 
     Vector2 netForce;
     Vector2 netBurstForce;
-
-	void Start () {
-        transform.position = startingPosition;
-    }
-
 
     void FixedUpdate () {
         netForce.Set(0, 0);

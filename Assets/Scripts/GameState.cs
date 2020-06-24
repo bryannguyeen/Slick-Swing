@@ -15,6 +15,8 @@ public class GameState : MonoBehaviour
     public const int GAMEOVER = 2;
 
     public GameObject gameOverUI;
+    public GameObject welcomeUI;
+
     public Text HighScoreText;
 
     public PlayerMovement player;
@@ -72,6 +74,9 @@ public class GameState : MonoBehaviour
             PlayerPrefs.SetInt("HighScore", score);
             gameOverUI.GetComponent<GameOverDisplay>().DeclareNewRecord();
         }
+
+        // turn off welcome screen ui
+        welcomeUI.SetActive(false);
 
         // display game over screen
         gameOverUI.SetActive(true);
