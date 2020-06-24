@@ -635,7 +635,7 @@ RectTransform:
   - {fileID: 1932811208}
   - {fileID: 2139677169}
   m_Father: {fileID: 768970510}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -694,7 +694,6 @@ MonoBehaviour:
   message: {fileID: 1557630255}
   messageShadow: {fileID: 95212201}
   highScore: {fileID: 1932811210}
-  welcomeScreen: {fileID: 2036517646}
   newRecordColor: {r: 0.28773582, g: 1, b: 0.53124493, a: 1}
 --- !u!95 &459853823
 Animator:
@@ -6247,8 +6246,8 @@ RectTransform:
   - {fileID: 1426987686}
   - {fileID: 1477871662}
   - {fileID: 866320558}
-  - {fileID: 459853819}
   - {fileID: 2036517647}
+  - {fileID: 459853819}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7639,6 +7638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverUI: {fileID: 459853818}
+  welcomeUI: {fileID: 2036517646}
   HighScoreText: {fileID: 803981175}
   player: {fileID: 664200271}
   gameOverAnimationDuration: 1
@@ -8219,7 +8219,7 @@ RectTransform:
   - {fileID: 1721969144}
   - {fileID: 135376300}
   m_Father: {fileID: 768970510}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
