@@ -25,16 +25,13 @@ public class GameState : MonoBehaviour
     public Animator welcomeScreenAnimator;
     public Animator tutorialAnimator;
 
-    public Toggle audioToggle;
-
     float gameOverAnimationTimer;
 
     void Start()
     {
         state = START;
         prevMousePosition = Input.mousePosition;
-        audioToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
-        HighScoreText.text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore");
+        HighScoreText.text = "HIGH SCORE: " + GetHighScore();
 
         gameOverAnimationTimer = 0f;
     }
@@ -69,9 +66,9 @@ public class GameState : MonoBehaviour
 
         // update high score
         int score = PlatformManager.numObstaclesPassed;
-        if (score > PlayerPrefs.GetInt("HighScore"))
+        if (score > GetHighScore())
         {
-            PlayerPrefs.SetInt("HighScore", score);
+            SetHighScore(score);
             gameOverUI.GetComponent<GameOverDisplay>().DeclareNewRecord();
         }
 
@@ -98,5 +95,15 @@ public class GameState : MonoBehaviour
         gameOverAnimationTimer -= Time.deltaTime;
         if (gameOverAnimationTimer < 0f)
             gameOverAnimationTimer = 0f;
+    }
+
+    public static int GetHighScore()
+    {
+        return PlayerPrefs.GetInt("HighScore");
+    }
+
+    public static void SetHighScore(int highScore)
+    {
+        PlayerPrefs.SetInt("HighScore", highScore);
     }
 }

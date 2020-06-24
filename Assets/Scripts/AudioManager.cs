@@ -1,15 +1,18 @@
 ﻿using UnityEngine.Audio;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
+    public Toggle audioToggle;
     public Sound[] sounds;
     public static bool mute;
 
     void Awake()
     {
-        mute = Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
+        audioToggle.isOn = GetMutePref();
+
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -36,6 +39,16 @@ public class AudioManager : MonoBehaviour
     public void DisableAudio(bool isOn)
     {
         mute = isOn;
-        PlayerPrefs.SetInt("DisableAudio", Convert.ToInt32(isOn));
+        SetMutePref(mute);
+    }
+
+    bool GetMutePref()
+    {
+        return Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
+    }
+
+    void SetMutePref(bool mutePref)
+    {
+        PlayerPrefs.SetInt("DisableAudio", Convert.ToInt32(mutePref));
     }
 }

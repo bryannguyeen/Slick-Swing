@@ -7644,7 +7644,6 @@ MonoBehaviour:
   gameOverAnimationDuration: 1
   welcomeScreenAnimator: {fileID: 2036517648}
   tutorialAnimator: {fileID: 1477871665}
-  audioToggle: {fileID: 1721969145}
 --- !u!114 &1621331568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8059,6 +8058,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3ae9ccb8accb5f4aa76de0b8310c19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioToggle: {fileID: 1721969145}
   sounds:
   - name: RopeShoot
     clip: {fileID: 8300000, guid: b14ca3a855329a744ac93e7d68fe8c3e, type: 3}

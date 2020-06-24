@@ -10,7 +10,7 @@ public class GameOverDisplay : MonoBehaviour
     public Color newRecordColor;
     void Start()
     {
-        highScore.text = PlayerPrefs.GetInt("HighScore").ToString();
+        highScore.text = GameState.GetHighScore().ToString();
     }
 
     public void DeclareNewRecord()
@@ -18,6 +18,6 @@ public class GameOverDisplay : MonoBehaviour
         message.text = "A NEW RECORD";
         messageShadow.text = message.text;
         messageShadow.color = newRecordColor;
-        highScore.text = PlayerPrefs.GetInt("HighScore").ToString();
+        highScore.text = GameState.GetHighScore().ToString();
     }
 }
