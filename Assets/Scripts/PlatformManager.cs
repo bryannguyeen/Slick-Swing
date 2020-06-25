@@ -15,7 +15,8 @@ public class PlatformManager : MonoBehaviour {
     public int ObstaclesPerBorder;
     public static float spaceBetweenObstacles;
     public float obstacleWidth;
-    public int pixelsPerUnit;
+
+    float pixelsPerUnit;
 
     int numOfBorders;
     float borderWidth, borderHeight;
@@ -28,6 +29,8 @@ public class PlatformManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
+
         numOfBorders = 0;
         numObstaclesPassed = 0;
         borderWidth = borderPlatform.GetComponent<Renderer>().bounds.size.x;

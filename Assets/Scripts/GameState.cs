@@ -19,10 +19,8 @@ public class GameState : MonoBehaviour
 
     public Text HighScoreText;
 
-    public PlayerMovement player;
     public float gameOverAnimationDuration;
 
-    public Animator welcomeScreenAnimator;
     public Animator tutorialAnimator;
 
     float gameOverAnimationTimer;
@@ -52,9 +50,9 @@ public class GameState : MonoBehaviour
     public void StartGame()
     {
         state = GAMEPLAY;
-        player.StartPlayer();
+        playerState.StartPlayer();
 
-        welcomeScreenAnimator.SetTrigger("disappear");
+        welcomeUI.GetComponent<Animator>().SetTrigger("disappear");
 
         if (!TutorialManager.tutorialOff)
             tutorialAnimator.SetTrigger("showTutorial");

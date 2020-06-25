@@ -21,11 +21,15 @@ public class PlayerState : MonoBehaviour
     Rigidbody2D rb;
     TrailRenderer trail;
     AfterimageEffect afterimage;
+    Animator animator;
 
     public AudioManager audioManager;
     public GameObject explosion;
 
     public GameState gs;
+
+    public Vector2 startingJump;
+
 
     void Start()
     {
@@ -43,6 +47,7 @@ public class PlayerState : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         trail = GetComponent<TrailRenderer>();
         afterimage = GetComponent<AfterimageEffect>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -115,6 +120,15 @@ public class PlayerState : MonoBehaviour
     public static bool BoostInput()
     {
         return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 650f;
+    }
+
+    public void StartPlayer()
+    {
+        PlayerState.SetToFreefall();
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.AddForce(startingJump);
+        animator.SetTrigger("doBackflip");
+        audioManager.Play("BigLeap");
     }
 
     public void KillPlayer()

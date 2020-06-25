@@ -1034,7 +1034,6 @@ MonoBehaviour:
   dampingConstant: 6000
   boostScale: 680
   ropeCastSpeed: 130
-  startingJump: {x: 1550, y: 1400}
 --- !u!120 &664200272
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -6029,6 +6028,7 @@ MonoBehaviour:
   explosion: {fileID: 1630898001838446640, guid: ad5bb609dde1d5045bb0d99ccf9fe1e3,
     type: 3}
   gs: {fileID: 1621331567}
+  startingJump: {x: 1550, y: 1400}
 --- !u!1 &712524497
 GameObject:
   m_ObjectHideFlags: 0
@@ -7597,7 +7597,6 @@ MonoBehaviour:
   player: {fileID: 664200268}
   ObstaclesPerBorder: 3
   obstacleWidth: 3
-  pixelsPerUnit: 16
 --- !u!4 &1621331566
 Transform:
   m_ObjectHideFlags: 0
@@ -7628,7 +7627,6 @@ MonoBehaviour:
   gameOverUI: {fileID: 459853818}
   welcomeUI: {fileID: 2036517646}
   HighScoreText: {fileID: 803981175}
-  player: {fileID: 664200271}
   gameOverAnimationDuration: 1
   welcomeScreenAnimator: {fileID: 2036517648}
   tutorialAnimator: {fileID: 1477871665}

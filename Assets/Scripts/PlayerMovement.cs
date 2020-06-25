@@ -19,8 +19,6 @@ public class PlayerMovement : MonoBehaviour {
 
     public float ropeCastSpeed;
 
-    public Vector2 startingJump;
-
     Vector2 connectionPoint;
     Vector2 shootDirection;
 
@@ -88,10 +86,10 @@ public class PlayerMovement : MonoBehaviour {
 
         else if (PlayerState.IsCasting())
         {
-            RaycastHit2D hit = GetCastStatus();
             lr.SetPosition(0, GetRopeHandPosition() + ropeLength * shootDirection);
             lr.SetPosition(1, GetRopeHandPosition());
 
+            RaycastHit2D hit = GetCastStatus();
             // if rope has hit a surface
             if (hit.collider != null && hit.collider.CompareTag("Platform"))
             {
@@ -114,19 +112,18 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.mousePosition.y > Screen.height / 2)
         {
             if (Input.mousePosition.x > Screen.width / 2)
-                shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, (Input.mousePosition.x - Screen.width / 2) / (Screen.width / 2)));
+                shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, RelativeMousePositionX() - 1));
             else
-                shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, (Input.mousePosition.x) / (Screen.width / 2)));
+                shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, RelativeMousePositionX()));
         }
         
         else
         {
             if (Input.mousePosition.x > Screen.width / 2)
-                shootDirection = AngleToVectorD(Mathf.Lerp(-75f, -50f, (Input.mousePosition.x - Screen.width / 2) / (Screen.width / 2)));
+                shootDirection = AngleToVectorD(Mathf.Lerp(-75f, -50f, RelativeMousePositionX() - 1));
             else
-                shootDirection = AngleToVectorD(Mathf.Lerp(-95f, -75f, (Input.mousePosition.x) / (Screen.width / 2)));
+                shootDirection = AngleToVectorD(Mathf.Lerp(-95f, -75f, RelativeMousePositionX()));
         }
-        shootDirection = shootDirection.normalized;
         ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
 
         // set up line renderer
@@ -239,17 +236,17 @@ public class PlayerMovement : MonoBehaviour {
         transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
-    public void StartPlayer()
-    {
-        PlayerState.SetToFreefall();
-        rb.constraints = RigidbodyConstraints2D.None;
-        rb.AddForce(startingJump);
-        animator.SetTrigger("doBackflip");
-        audioManager.Play("BigLeap");
-    }
-
+    // returns a 2D unit vector pointing to the specified angle in degrees
     Vector2 AngleToVectorD(float angle)
     {
         return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+    }
+
+    // returns a float from 0.0f to 2.0f
+    // 0.0f meaning the cursor is at the leftmost side of the screen
+    // 2.0f meaning the cursor is at the rightmost side
+    float RelativeMousePositionX()
+    {
+        return (Input.mousePosition.x) / (Screen.width / 2);
     }
 }
