@@ -4,11 +4,12 @@ using System;
 
 public class PlayerMovement : MonoBehaviour {
 
-    public SpriteRenderer sprite;
-    public Rigidbody2D rb;
-    public LineRenderer lr;
-    public Animator animator;
-    public AfterimageEffect afterimage;
+    SpriteRenderer sprite;
+    Rigidbody2D rb;
+    LineRenderer lr;
+    Animator animator;
+    AfterimageEffect afterimage;
+
     public BlipPlayer blip;
     public AudioManager audioManager;
 
@@ -28,6 +29,15 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 netForce;
     Vector2 netBurstForce;
 
+    private void Start()
+    {
+        sprite = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        lr = GetComponent<LineRenderer>();
+        animator = GetComponent<Animator>();
+        afterimage = GetComponent<AfterimageEffect>();
+
+    }
     void FixedUpdate () {
         netForce.Set(0, 0);
         netBurstForce.Set(0, 0);

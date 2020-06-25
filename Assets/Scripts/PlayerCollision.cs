@@ -2,46 +2,14 @@
 using System.Collections;
 
 public class PlayerCollision : MonoBehaviour {
-
-    public PlayerMovement movement;
-    public LineRenderer lr;
-    public BoxCollider2D boxCollider;
-    public SpriteRenderer sprite;
-    public Rigidbody2D rb;
-    public TrailRenderer trail;
-    public AfterimageEffect afterimage;
-    public AudioManager audioManager;
-
-    public GameObject explosion;
-
-
     public GameState gs;
-
     void OnCollisionEnter2D(Collision2D collisionInfo) {
-        KillPlayer();
+        gs.EndGame();
     }
 
     void Update ()
     {
         if (Camera.main.transform.position.x - transform.position.x > 20 & GameState.state == GameState.GAMEPLAY)
-            KillPlayer();
+            gs.EndGame();
     }
-
-    void KillPlayer()
-    {
-        trail.enabled = false;
-        sprite.enabled = false;
-        movement.enabled = false;
-        lr.enabled = false;
-        boxCollider.enabled = false;
-        rb.velocity = new Vector2(0, 0);
-        rb.gravityScale = 0;
-        Instantiate(explosion, transform.position, Quaternion.identity);
-        afterimage.Stop();
-        audioManager.Play("Explosion");
-
-        // update game state
-        gs.EndGame();
-    }
-
 }

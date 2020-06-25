@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class AfterimageEffect : MonoBehaviour
 {
-    public ParticleSystem afterimageParticleSystem;
-    public SpriteRenderer playerSprite;
+    ParticleSystem afterimageParticleSystem;
+    SpriteRenderer playerSprite;
+
     ParticleSystemRenderer particleRenderer;
 
     void Start()
     {
+        afterimageParticleSystem = GetComponent<ParticleSystem>();
+        playerSprite = GetComponent<SpriteRenderer>();
+
         afterimageParticleSystem.Stop();
         particleRenderer = GetComponent<ParticleSystemRenderer>();
         particleRenderer.material = new Material(Shader.Find("Sprites/Default"))

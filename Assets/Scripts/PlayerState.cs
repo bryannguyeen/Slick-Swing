@@ -14,6 +14,18 @@ public class PlayerState : MonoBehaviour
     public static bool mouseRelease;  // is true only if the mouse is released on current frame
     public static bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
 
+    PlayerMovement movement;
+    LineRenderer lr;
+    BoxCollider2D boxCollider;
+    SpriteRenderer sprite;
+    Rigidbody2D rb;
+    TrailRenderer trail;
+    AfterimageEffect afterimage;
+
+    public AudioManager audioManager;
+    public GameObject explosion;
+
+    public GameState gs;
 
     void Start()
     {
@@ -23,6 +35,14 @@ public class PlayerState : MonoBehaviour
         mouseClick = false;
         mouseRelease = false;
         mouseHold = false;
+
+        movement = GetComponent<PlayerMovement>();
+        lr = GetComponent<LineRenderer>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        trail = GetComponent<TrailRenderer>();
+        afterimage = GetComponent<AfterimageEffect>();
     }
 
     void Update()
@@ -95,5 +115,19 @@ public class PlayerState : MonoBehaviour
     public static bool BoostInput()
     {
         return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 650f;
+    }
+
+    public void KillPlayer()
+    {
+        trail.enabled = false;
+        this.sprite.enabled = false;
+        movement.enabled = false;
+        lr.enabled = false;
+        boxCollider.enabled = false;
+        rb.velocity = new Vector2(0, 0);
+        rb.gravityScale = 0;
+        Instantiate(explosion, transform.position, Quaternion.identity);
+        afterimage.Stop();
+        audioManager.Play("Explosion");
     }
 }

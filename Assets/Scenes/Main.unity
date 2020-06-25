@@ -889,15 +889,15 @@ GameObject:
   - component: {fileID: 664200267}
   - component: {fileID: 664200269}
   - component: {fileID: 664200270}
-  - component: {fileID: 664200272}
-  - component: {fileID: 664200274}
+  - component: {fileID: 664200279}
   - component: {fileID: 664200271}
   - component: {fileID: 664200273}
+  - component: {fileID: 664200278}
+  - component: {fileID: 664200272}
+  - component: {fileID: 664200274}
   - component: {fileID: 664200275}
   - component: {fileID: 664200277}
   - component: {fileID: 664200276}
-  - component: {fileID: 664200278}
-  - component: {fileID: 664200279}
   m_Layer: 2
   m_Name: guy
   m_TagString: Player
@@ -1028,11 +1028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2edc2de2a427564f82db075d736592f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 664200267}
-  rb: {fileID: 664200269}
-  lr: {fileID: 664200272}
-  animator: {fileID: 664200275}
-  afterimage: {fileID: 664200278}
   blip: {fileID: 1645101878}
   audioManager: {fileID: 1723907395}
   bungeeStiffness: 4400
@@ -1158,16 +1153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34673dd078f0ec841b6ca37275164c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 664200271}
-  lr: {fileID: 664200272}
-  boxCollider: {fileID: 664200270}
-  sprite: {fileID: 664200267}
-  rb: {fileID: 664200269}
-  trail: {fileID: 664200274}
-  afterimage: {fileID: 664200278}
-  audioManager: {fileID: 1723907395}
-  explosion: {fileID: 1630898001838446640, guid: ad5bb609dde1d5045bb0d99ccf9fe1e3,
-    type: 3}
   gs: {fileID: 1621331567}
 --- !u!96 &664200274
 TrailRenderer:
@@ -6028,8 +6013,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f99c13401cd504698f4b325659c616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  afterimageParticleSystem: {fileID: 664200277}
-  playerSprite: {fileID: 664200267}
 --- !u!114 &664200279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6042,6 +6025,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb9e0026160ec944e983e64c4b4b08f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioManager: {fileID: 1723907395}
+  explosion: {fileID: 1630898001838446640, guid: ad5bb609dde1d5045bb0d99ccf9fe1e3,
+    type: 3}
+  gs: {fileID: 1621331567}
 --- !u!1 &712524497
 GameObject:
   m_ObjectHideFlags: 0
@@ -7637,6 +7624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f0eb0aec6dd97468bc885337dd4c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerState: {fileID: 664200279}
   gameOverUI: {fileID: 459853818}
   welcomeUI: {fileID: 2036517646}
   HighScoreText: {fileID: 803981175}
