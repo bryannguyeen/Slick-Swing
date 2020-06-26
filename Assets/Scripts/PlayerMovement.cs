@@ -108,22 +108,17 @@ public class PlayerMovement : MonoBehaviour {
 
         Vector2 origin = GetRopeHandPosition();
 
-        // determing the shoot direction relative to finger press position
-        if (Input.mousePosition.y > Screen.height / 2)
-        {
-            if (Input.mousePosition.x > Screen.width / 2)
-                shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, RelativeMousePositionX() - 1));
-            else
-                shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, RelativeMousePositionX()));
-        }
-        
+        // determing the angle of the shoot direction
+        // relative to finger press position on the screen
+        if (RelativeMousePositionX() > 0)
+            shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, RelativeMousePositionX()));
         else
-        {
-            if (Input.mousePosition.x > Screen.width / 2)
-                shootDirection = AngleToVectorD(Mathf.Lerp(-75f, -50f, RelativeMousePositionX() - 1));
-            else
-                shootDirection = AngleToVectorD(Mathf.Lerp(-95f, -75f, RelativeMousePositionX()));
-        }
+            shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, RelativeMousePositionX() + 1));
+
+        // shoot downward when player taps on bottom half of screen
+        if (RelativeMousePositionY() < 0)
+            shootDirection.y = -shootDirection.y;
+
         ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
 
         // set up line renderer
@@ -242,11 +237,16 @@ public class PlayerMovement : MonoBehaviour {
         return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
     }
 
-    // returns a float from 0.0f to 2.0f
-    // 0.0f meaning the cursor is at the leftmost side of the screen
-    // 2.0f meaning the cursor is at the rightmost side
+    // returns a float from -1.0f to +1.0f
+    // -1.0f meaning the cursor is at the leftmost side of the screen
+    // +1.0f meaning the cursor is at the rightmost side
     float RelativeMousePositionX()
     {
-        return (Input.mousePosition.x) / (Screen.width / 2);
+        return (Input.mousePosition.x) / (Screen.width) * 2 - 1;
+    }
+
+    float RelativeMousePositionY()
+    {
+        return (Input.mousePosition.y) / (Screen.height) * 2 - 1;
     }
 }
