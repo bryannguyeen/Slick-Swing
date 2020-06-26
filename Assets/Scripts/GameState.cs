@@ -105,4 +105,17 @@ public class GameState : MonoBehaviour
     {
         PlayerPrefs.SetInt("HighScore", highScore);
     }
+
+    // returns a float from -1.0f to +1.0f
+    // -1.0f meaning the cursor is at the leftmost side of the screen
+    // +1.0f meaning the cursor is at the rightmost side
+    public static float RelativeMousePositionX()
+    {
+        return (Input.mousePosition.x) / (Screen.width) * 2 - 1;
+    }
+
+    public static float RelativeMousePositionY()
+    {
+        return (Input.mousePosition.y) / (Screen.height) * 2 - 1;
+    }
 }

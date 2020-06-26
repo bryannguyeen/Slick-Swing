@@ -6215,7 +6215,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -7628,7 +7628,6 @@ MonoBehaviour:
   welcomeUI: {fileID: 2036517646}
   HighScoreText: {fileID: 803981175}
   gameOverAnimationDuration: 1
-  welcomeScreenAnimator: {fileID: 2036517648}
   tutorialAnimator: {fileID: 1477871665}
 --- !u!114 &1621331568
 MonoBehaviour:
@@ -7761,7 +7760,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e2358432c100645ac210b0b8591c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1645101876}
 --- !u!1 &1650051241
 GameObject:
   m_ObjectHideFlags: 0

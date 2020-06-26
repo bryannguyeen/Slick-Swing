@@ -110,13 +110,13 @@ public class PlayerMovement : MonoBehaviour {
 
         // determing the angle of the shoot direction
         // relative to finger press position on the screen
-        if (RelativeMousePositionX() > 0)
-            shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, RelativeMousePositionX()));
+        if (GameState.RelativeMousePositionX() > 0)
+            shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, GameState.RelativeMousePositionX()));
         else
-            shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, RelativeMousePositionX() + 1));
+            shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, GameState.RelativeMousePositionX() + 1));
 
         // shoot downward when player taps on bottom half of screen
-        if (RelativeMousePositionY() < 0)
+        if (GameState.RelativeMousePositionY() < 0)
             shootDirection.y = -shootDirection.y;
 
         ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
@@ -153,8 +153,6 @@ public class PlayerMovement : MonoBehaviour {
         connectionPoint = point;
         ropeLength = length;
         lr.SetPosition(0, point);
-
-        //audioManager.Play("RopeHit");
     }
 
     void OnMouseRelease()
@@ -178,7 +176,7 @@ public class PlayerMovement : MonoBehaviour {
         if (PlayerState.BoostInput())
         {
             PlayerState.canBoost = false;
-            netBurstForce += GetBoostForce();
+            netBurstForce += GetBoostForce(GameState.cursorVelocity);
             afterimage.Play();
             audioManager.Play("BigLeap");
         }
@@ -191,7 +189,7 @@ public class PlayerMovement : MonoBehaviour {
         Vector2 playerPosition = GetRopeHandPosition();
         float distanceFromEquilibrium = ropeLength - (playerPosition - connectionPoint).magnitude;
 
-        // unlike a spring, a compressed bungee does not give a force
+        // unlike a spring, a compressed rope does not give a force
         if (distanceFromEquilibrium < 0)
         {
             return bungeeStiffness * distanceFromEquilibrium * (playerPosition - connectionPoint).normalized;
@@ -210,9 +208,9 @@ public class PlayerMovement : MonoBehaviour {
         return -dampingConstant * Vector2.Dot(rb.velocity, RopeForce) / Vector2.Dot(RopeForce, RopeForce) * RopeForce;
     }
 
-    Vector2 GetBoostForce()
+    Vector2 GetBoostForce(Vector2 boostDirection)
     {
-        return GameState.cursorVelocity.normalized * boostScale;
+        return boostDirection.normalized * boostScale;
     }
 
 
@@ -235,18 +233,5 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 AngleToVectorD(float angle)
     {
         return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-    }
-
-    // returns a float from -1.0f to +1.0f
-    // -1.0f meaning the cursor is at the leftmost side of the screen
-    // +1.0f meaning the cursor is at the rightmost side
-    float RelativeMousePositionX()
-    {
-        return (Input.mousePosition.x) / (Screen.width) * 2 - 1;
-    }
-
-    float RelativeMousePositionY()
-    {
-        return (Input.mousePosition.y) / (Screen.height) * 2 - 1;
     }
 }

@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class BlipPlayer : MonoBehaviour
 {
-    public Animator animator;
-
     public void Play(Vector2 position)
     {
         transform.position = (Vector3) position;
-        animator.SetTrigger("playBlip");
-        //animator.Play("blip", -1, 0);
-
+        GetComponent<Animator>().SetTrigger("playBlip");
     }
 }
