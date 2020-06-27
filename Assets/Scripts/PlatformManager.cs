@@ -15,24 +15,25 @@ public class PlatformManager : MonoBehaviour {
     public int ObstaclesPerBorder;
     public static float spaceBetweenObstacles;
     public float obstacleWidth;
+    public float obstacleMinHeight;
+    public float obstacleMaxHeight;
+    public int beginningRandomSeed;
 
     float pixelsPerUnit;
-
-    int numOfBorders;
     float borderWidth, borderHeight;
     float upperBound, lowerBound;
 
     // To determine whether to spawn the pillar either top or bottom
     bool bottom;
 
+    int numBordersPassed;
     public static int numObstaclesPassed;
 
-	// Use this for initialization
 	void Start () {
-        pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
-
-        numOfBorders = 0;
+        numBordersPassed = 0;
         numObstaclesPassed = 0;
+
+        pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         borderWidth = borderPlatform.GetComponent<Renderer>().bounds.size.x;
         borderHeight = borderPlatform.GetComponent<Renderer>().bounds.size.y;
         spaceBetweenObstacles = borderWidth / ObstaclesPerBorder;
@@ -46,8 +47,8 @@ public class PlatformManager : MonoBehaviour {
         AddBorderToQueue(1);
 
         Random.State oldState = Random.state;
-        // Seed = 5 seems to be have nice initial heights for easy beginner-friendly obstacles
-        Random.InitState(1);
+
+        Random.InitState(beginningRandomSeed);
         AddObstaclesToQueue(0);
 
         Random.state = oldState;
@@ -59,26 +60,21 @@ public class PlatformManager : MonoBehaviour {
         // FOR KEEPING TRACK OF SCORE
         UpdateNumObstaclesPassed();
 
-        if ((int) (player.position.x /borderWidth) > numOfBorders)
+        if ((int) (player.position.x /borderWidth) > numBordersPassed)
         {
-            numOfBorders = (int) (player.position.x / borderWidth);
+            numBordersPassed = (int) (player.position.x / borderWidth);
 
             DestroyEarliestBorders();
-            AddBorderToQueue(numOfBorders + 1);
+            AddBorderToQueue(numBordersPassed + 1);
 
-            if (numOfBorders > 1)
-            {
-                DestroyEarliestObstacles();
-            }
-            AddObstaclesToQueue(numOfBorders + 1);
+            DestroyEarliestObstacles();
+            AddObstaclesToQueue(numBordersPassed + 1);
         }
     }
 
-    // even numbered obstacles = potrudes from bottom
-    // odd numbered obstacles = potrudes from top
     float RandomHeight()
     {
-        return Random.Range(6f, 12.5f);
+        return Random.Range(obstacleMinHeight, obstacleMaxHeight);
     }
 
     GameObject CreateObstacle(float xPos, float height, bool bottom)
@@ -88,10 +84,8 @@ public class PlatformManager : MonoBehaviour {
         // since unity scales objects relative to their center, the position of the obstacle
         // needs to be offsetted to be in the position I want
         if (bottom)
-            //yPos = Mathf.Lerp(lowerBound, lowerBound + height, 0.5f);
             yPos = lowerBound + height / 2.0f;
         else
-            //yPos = Mathf.Lerp(upperBound, upperBound - height, 0.5f);
             yPos = upperBound - height / 2.0f;
 
         float yScale = 2 * (upperBound - Mathf.Abs(yPos)) + 4.0f / pixelsPerUnit;
@@ -111,20 +105,17 @@ public class PlatformManager : MonoBehaviour {
     // Overload method for automated randomized obstacles
     GameObject CreateObstacle(float xPos)
     {
-        // even numbered obstacles = potrudes from bottom
-        // odd numbered obstacles = potrudes from top
         return CreateObstacle(xPos, RandomHeight(), bottom);
-        //return createObstacle(xPos, randomHeight(), Random.Range(0, 2) == 0);
     }
 
     void UpdateNumObstaclesPassed()
     {
-        int currentNumOsbataclesPassed = (int) ((player.position.x + spaceBetweenObstacles) / spaceBetweenObstacles);
+        int currentNumOsbataclesPassed = (int) (player.position.x / spaceBetweenObstacles + 1);
 
         if (currentNumOsbataclesPassed > numObstaclesPassed)
         {
             numObstaclesPassed = currentNumOsbataclesPassed;
-            PlayerState.canBoost = true;  // player can boost again after passing an obstacle
+            PlayerState.ReEnableBoost();  // player can boost again after passing an obstacle
         }
     }
 
@@ -141,7 +132,7 @@ public class PlatformManager : MonoBehaviour {
         for (int i = 0; i < ObstaclesPerBorder; i++)
         {
             obstacles.Enqueue(CreateObstacle(offset * borderWidth + (i * spaceBetweenObstacles)));
-            bottom = !bottom;
+            bottom = !bottom;   // alternate obstacles from potruding from top and bottom
         }
     }
 

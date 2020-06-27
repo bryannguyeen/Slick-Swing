@@ -10,7 +10,7 @@ public class BackgroundManager : MonoBehaviour
     public float parallax;
 
     Transform cameraT;
-    GameObject[] backgrounds = new GameObject[2];
+    readonly GameObject[] backgrounds = new GameObject[2];
 
     float backgroundWidth;
     float backgroundRefreshDistance;

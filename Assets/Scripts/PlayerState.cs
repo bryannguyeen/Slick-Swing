@@ -8,7 +8,7 @@ public class PlayerState : MonoBehaviour
     public const int SWINGING = 3;
 
     private static int state;
-    public static bool canBoost;
+    private static bool canBoost;
 
     public static bool mouseClick;    // is true only if the mouse is clicked on current frame
     public static bool mouseRelease;  // is true only if the mouse is released on current frame
@@ -120,6 +120,16 @@ public class PlayerState : MonoBehaviour
     public static bool BoostInput()
     {
         return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 650f;
+    }
+
+    public static void DisableBoost()
+    {
+        canBoost = false;
+    }
+
+    public static void ReEnableBoost()
+    {
+        canBoost = true;
     }
 
     public void StartPlayer()

@@ -111,9 +111,9 @@ public class PlayerMovement : MonoBehaviour {
         // determing the angle of the shoot direction
         // relative to finger press position on the screen
         if (GameState.RelativeMousePositionX() > 0)
-            shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, GameState.RelativeMousePositionX()));
+            shootDirection = AngularLerp(75f, 50f, GameState.RelativeMousePositionX());
         else
-            shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, GameState.RelativeMousePositionX() + 1));
+            shootDirection = AngularLerp(95f, 80f, GameState.RelativeMousePositionX() + 1);
 
         // shoot downward when player taps on bottom half of screen
         if (GameState.RelativeMousePositionY() < 0)
@@ -175,7 +175,7 @@ public class PlayerMovement : MonoBehaviour {
         // players can only boost once per obstacle
         if (PlayerState.BoostInput())
         {
-            PlayerState.canBoost = false;
+            PlayerState.DisableBoost();
             netBurstForce += GetBoostForce(GameState.cursorVelocity);
             afterimage.Play();
             audioManager.Play("BigLeap");
@@ -230,8 +230,15 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     // returns a 2D unit vector pointing to the specified angle in degrees
-    Vector2 AngleToVectorD(float angle)
+    Vector2 DegreeToVector(float angle)
     {
         return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+    }
+
+    // given 2 angles in degrees and a float from 0.0 to 1.0,
+    // returns the interpolation as a unit vector
+    Vector2 AngularLerp(float angle1, float angle2, float lerp)
+    {
+        return DegreeToVector(Mathf.Lerp(angle1, angle2, lerp));
     }
 }

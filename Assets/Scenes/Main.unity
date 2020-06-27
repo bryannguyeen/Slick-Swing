@@ -7597,6 +7597,9 @@ MonoBehaviour:
   player: {fileID: 664200268}
   ObstaclesPerBorder: 3
   obstacleWidth: 3
+  obstacleMinHeight: 6
+  obstacleMaxHeight: 12.5
+  beginningRandomSeed: 1
 --- !u!4 &1621331566
 Transform:
   m_ObjectHideFlags: 0

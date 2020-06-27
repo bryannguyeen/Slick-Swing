@@ -26,8 +26,8 @@ public class TutorialManager : MonoBehaviour
 
     void Update()
     {
-        // no need to show tutorial prompts once player completes tutorial
-        // completion of the jump tutorial implies completion of swing tutorial and that
+        // Disable script after completing tutorial
+        // Completion of the jump tutorial already implies completion of swing tutorial and that
         // GameState.state is in GAMEPLAY
         if (jumpTutorialAnimator.GetBool("firstJump"))
             this.enabled = false;
