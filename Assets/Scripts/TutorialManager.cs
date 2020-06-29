@@ -13,14 +13,16 @@ public class TutorialManager : MonoBehaviour
     public Animator tutorialAnimator;
     public Animator jumpTutorialAnimator;
 
+    GameState gs;
+
     [Range(0.2f, 1f)]
     public float tutorialTimeScale;
 
     void Start()
     {
-        // Tutorial is on by default and then checks PlayerPrefs too see whether to disable it
-        SlowTime();
+        gs = GetComponent<GameState>();
 
+        // Tutorial is on by default and then checks PlayerPrefs too see whether to disable it
         tutorialOff = disableTutorialToggle.isOn = GetDisableTutorialPlayerPref();
     }
 
@@ -32,10 +34,10 @@ public class TutorialManager : MonoBehaviour
         if (jumpTutorialAnimator.GetBool("firstJump"))
             this.enabled = false;
 
-        if (PlayerState.IsCasting())
+        if (PlayerState.mouseClick)
         {
             tutorialAnimator.SetBool("firstSwing", true);
-            ResumeNormalTime();
+            gs.ResumeNormalTime();
         }
 
         jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
@@ -50,25 +52,13 @@ public class TutorialManager : MonoBehaviour
         if (tutorialOff)
         {
             toggleText.text = "TUTORIAL: OFF";
-            ResumeNormalTime();
         }
         else
         {
             toggleText.text = "TUTORIAL: ON";
-            SlowTime();
         }
 
         SetDisableTutorialPlayerPref(tutorialOff);
-    }
-
-    void SlowTime()
-    {
-        Time.timeScale = tutorialTimeScale;
-    }
-
-    void ResumeNormalTime()
-    {
-        Time.timeScale = 1f;
     }
 
     bool GetDisableTutorialPlayerPref()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ public class GameState : MonoBehaviour
 
     public Animator tutorialAnimator;
 
-    float gameOverAnimationTimer;
+    bool enableResetButton;
 
     void Start()
     {
@@ -31,14 +32,12 @@ public class GameState : MonoBehaviour
         prevMousePosition = Input.mousePosition;
         HighScoreText.text = "HIGH SCORE: " + GetHighScore();
 
-        gameOverAnimationTimer = 0f;
+        enableResetButton = false;
     }
 
     void Update()
     {
         cursorVelocity = ((Vector2)Input.mousePosition - prevMousePosition) / Time.deltaTime;
-
-        DecrementTimers();
     }
 
     private void LateUpdate()
@@ -55,7 +54,10 @@ public class GameState : MonoBehaviour
         welcomeUI.GetComponent<Animator>().SetTrigger("disappear");
 
         if (!TutorialManager.tutorialOff)
+        {
             tutorialAnimator.SetTrigger("showTutorial");
+            StartCoroutine("GraduallyStopTime");
+        }
     }
 
     public void EndGame()
@@ -79,21 +81,21 @@ public class GameState : MonoBehaviour
 
         // turn of tutorial ui if it is currently on
         tutorialAnimator.SetBool("firstSwing", true);
+        ResumeNormalTime();
 
-        gameOverAnimationTimer = gameOverAnimationDuration;
+        StartCoroutine("WaitToAllowReset");
     }
 
     public void ResetGame()
     {
-        if (gameOverAnimationTimer == 0f)
+        if (enableResetButton)
             SceneManager.LoadScene("Main");
     }
 
-    public void DecrementTimers()
+    IEnumerator WaitToAllowReset()
     {
-        gameOverAnimationTimer -= Time.deltaTime;
-        if (gameOverAnimationTimer < 0f)
-            gameOverAnimationTimer = 0f;
+        yield return new WaitForSecondsRealtime(gameOverAnimationDuration);
+        enableResetButton = true;
     }
 
     public static int GetHighScore()
@@ -117,5 +119,21 @@ public class GameState : MonoBehaviour
     public static float RelativeMousePositionY()
     {
         return (Input.mousePosition.y) / (Screen.height) * 2 - 1;
+    }
+
+    IEnumerator GraduallyStopTime()
+    {
+        float originalTime = Time.timeScale;
+        for (int i = 1; i <= 10; i++)
+        {
+            Time.timeScale = Mathf.Lerp(originalTime, 0f, (float) i / 10);
+            yield return new WaitForSecondsRealtime(0.3f);
+        }
+    }
+
+    public void ResumeNormalTime()
+    {
+        StopCoroutine("GraduallyStopTime");
+        Time.timeScale = 1f;
     }
 }
