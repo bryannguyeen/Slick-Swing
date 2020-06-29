@@ -28,21 +28,24 @@ public class TutorialManager : MonoBehaviour
 
     void Update()
     {
-        // Disable script after completing tutorial
-        // Completion of the jump tutorial already implies completion of swing tutorial and that
-        // GameState.state is in GAMEPLAY
-        if (jumpTutorialAnimator.GetBool("firstJump"))
-            this.enabled = false;
-
-        if (PlayerState.mouseClick)
+        if (GameState.state == GameState.GAMEPLAY)
         {
-            tutorialAnimator.SetBool("firstSwing", true);
-            gs.ResumeNormalTime();
-        }
+            // Disable script after completing tutorial or tutorial is disabled in gameplay
+            // Completion of the jump tutorial already implies completion of swing tutorial and that
+            // GameState.state is in GAMEPLAY
+            if (jumpTutorialAnimator.GetBool("firstJump") || tutorialOff)
+                this.enabled = false;
 
-        jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
-        if (PlayerState.BoostInput())
-            jumpTutorialAnimator.SetBool("firstJump", true);
+            if (PlayerState.mouseClick)
+            {
+                tutorialAnimator.SetBool("firstSwing", true);
+                gs.ResumeNormalTime();
+            }
+
+            jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
+            if (PlayerState.BoostInput())
+                jumpTutorialAnimator.SetBool("firstJump", true);
+        }
     }
 
     public void DisableTutorial(bool isOn)
