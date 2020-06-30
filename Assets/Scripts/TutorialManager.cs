@@ -6,40 +6,36 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    public static bool tutorialOff;
+    public static bool tutorialEnabled;
     public Text toggleText;
-    public Toggle disableTutorialToggle;
+    public Toggle tutorialToggle;
 
     public Animator tutorialAnimator;
     public Animator jumpTutorialAnimator;
-
-    GameState gs;
 
     [Range(0.2f, 1f)]
     public float tutorialTimeScale;
 
     void Start()
     {
-        gs = GetComponent<GameState>();
-
         // Tutorial is on by default and then checks PlayerPrefs too see whether to disable it
-        tutorialOff = disableTutorialToggle.isOn = GetDisableTutorialPlayerPref();
+        tutorialEnabled = tutorialToggle.isOn = GetDisableTutorialPlayerPref();
     }
 
     void Update()
     {
-        if (GameState.state == GameState.GAMEPLAY)
+        if (GameState.state != GameState.START)
         {
             // Disable script after completing tutorial or tutorial is disabled in gameplay
             // Completion of the jump tutorial already implies completion of swing tutorial and that
             // GameState.state is in GAMEPLAY
-            if (jumpTutorialAnimator.GetBool("firstJump") || tutorialOff)
+            if (jumpTutorialAnimator.GetBool("firstJump") || !tutorialEnabled)
                 this.enabled = false;
 
             if (PlayerState.mouseClick)
             {
                 tutorialAnimator.SetBool("firstSwing", true);
-                gs.ResumeNormalTime();
+                GetComponent<GameState>().ResumeNormalTime();
             }
 
             jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
@@ -50,27 +46,27 @@ public class TutorialManager : MonoBehaviour
 
     public void DisableTutorial(bool isOn)
     {
-        tutorialOff = isOn;
-        jumpTutorialAnimator.SetBool("tutorialOff", tutorialOff);
-        if (tutorialOff)
-        {
-            toggleText.text = "TUTORIAL: OFF";
-        }
-        else
+        tutorialEnabled = isOn;
+        jumpTutorialAnimator.SetBool("tutorialEnabled", tutorialEnabled);
+        if (tutorialEnabled)
         {
             toggleText.text = "TUTORIAL: ON";
         }
+        else
+        {
+            toggleText.text = "TUTORIAL: OFF";
+        }
 
-        SetDisableTutorialPlayerPref(tutorialOff);
+        SetDisableTutorialPlayerPref(tutorialEnabled);
     }
 
     bool GetDisableTutorialPlayerPref()
     {
-        return Convert.ToBoolean(PlayerPrefs.GetInt("DisableTutorial"));
+        return Convert.ToBoolean(PlayerPrefs.GetInt("tutorialEnabled", 1));
     }
 
     void SetDisableTutorialPlayerPref(bool disable)
     {
-        PlayerPrefs.SetInt("DisableTutorial", Convert.ToInt32(disable));
+        PlayerPrefs.SetInt("tutorialEnabled", Convert.ToInt32(disable));
     }
 }

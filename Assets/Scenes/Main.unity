@@ -367,7 +367,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!1 &197143486
 GameObject:
   m_ObjectHideFlags: 0
@@ -7645,7 +7645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggleText: {fileID: 347353351}
-  disableTutorialToggle: {fileID: 135376301}
+  tutorialToggle: {fileID: 135376301}
   tutorialAnimator: {fileID: 1477871665}
   jumpTutorialAnimator: {fileID: 866320561}
   tutorialTimeScale: 0.785

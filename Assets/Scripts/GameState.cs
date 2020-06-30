@@ -51,9 +51,9 @@ public class GameState : MonoBehaviour
         state = GAMEPLAY;
         playerState.StartPlayer();
 
-        welcomeUI.GetComponent<Animator>().SetTrigger("disappear");
+        StartCoroutine("HideWelcomeUI");
 
-        if (!TutorialManager.tutorialOff)
+        if (TutorialManager.tutorialEnabled)
         {
             tutorialAnimator.SetTrigger("showTutorial");
             StartCoroutine("GraduallyStopTime");
@@ -72,9 +72,6 @@ public class GameState : MonoBehaviour
             SetHighScore(score);
             gameOverUI.GetComponent<GameOverDisplay>().DeclareNewRecord();
         }
-
-        // turn off welcome screen ui
-        welcomeUI.SetActive(false);
 
         // display game over screen
         gameOverUI.SetActive(true);
@@ -129,6 +126,14 @@ public class GameState : MonoBehaviour
             Time.timeScale = Mathf.Lerp(originalTime, 0f, (float) i / 10);
             yield return new WaitForSecondsRealtime(0.3f);
         }
+    }
+
+    IEnumerator HideWelcomeUI()
+    {
+        welcomeUI.GetComponent<Animator>().SetTrigger("disappear");
+        yield return new WaitForSeconds(0.25f);
+
+        welcomeUI.SetActive(false);
     }
 
     public void ResumeNormalTime()
