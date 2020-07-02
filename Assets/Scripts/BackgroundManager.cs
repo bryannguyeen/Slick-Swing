@@ -31,6 +31,7 @@ public class BackgroundManager : MonoBehaviour
 
         FollowCamera();
 
+        this.enabled = false;
     }
 
     void Update()

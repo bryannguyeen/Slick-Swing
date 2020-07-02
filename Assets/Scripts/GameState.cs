@@ -51,6 +51,9 @@ public class GameState : MonoBehaviour
         state = GAMEPLAY;
         playerState.StartPlayer();
 
+        GetComponent<BackgroundManager>().enabled = true;
+        GetComponent<PlatformManager>().enabled = true;
+
         StartCoroutine("HideWelcomeUI");
 
         if (TutorialManager.tutorialEnabled)
@@ -64,6 +67,9 @@ public class GameState : MonoBehaviour
     {
         state = GAMEOVER;
         playerState.KillPlayer();
+
+        // disable any unnecessary scripts
+        GetComponent<PlatformManager>().enabled = false;
 
         // update high score
         int score = PlatformManager.numObstaclesPassed;

@@ -35,6 +35,7 @@ public class PlayerMovement : MonoBehaviour {
         animator = GetComponent<Animator>();
         afterimage = GetComponent<AfterimageEffect>();
 
+        this.enabled = false;
     }
     void FixedUpdate () {
         netForce.Set(0, 0);

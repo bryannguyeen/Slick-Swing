@@ -15,6 +15,7 @@ public class PlayerState : MonoBehaviour
     public static bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
 
     PlayerMovement movement;
+    PlayerCollision collision;
     LineRenderer lr;
     BoxCollider2D boxCollider;
     SpriteRenderer sprite;
@@ -41,6 +42,7 @@ public class PlayerState : MonoBehaviour
         mouseHold = false;
 
         movement = GetComponent<PlayerMovement>();
+        collision = GetComponent<PlayerCollision>();
         lr = GetComponent<LineRenderer>();
         boxCollider = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
@@ -139,6 +141,9 @@ public class PlayerState : MonoBehaviour
         rb.AddForce(startingJump);
         animator.SetTrigger("doBackflip");
         audioManager.Play("BigLeap");
+
+        movement.enabled = true;
+        collision.enabled = true;
     }
 
     public void KillPlayer()
@@ -146,6 +151,7 @@ public class PlayerState : MonoBehaviour
         trail.enabled = false;
         this.sprite.enabled = false;
         movement.enabled = false;
+        collision.enabled = false;
         lr.enabled = false;
         boxCollider.enabled = false;
         rb.velocity = new Vector2(0, 0);

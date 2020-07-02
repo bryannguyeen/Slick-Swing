@@ -54,6 +54,7 @@ public class PlatformManager : MonoBehaviour {
         Random.state = oldState;
         AddObstaclesToQueue(1);
 
+        this.enabled = false;
     }
 
     void Update () {

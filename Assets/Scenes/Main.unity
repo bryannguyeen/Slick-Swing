@@ -1147,7 +1147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 664200266}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34673dd078f0ec841b6ca37275164c1d, type: 3}
   m_Name: 
@@ -7551,9 +7551,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1621331566}
+  - component: {fileID: 1621331567}
   - component: {fileID: 1621331565}
   - component: {fileID: 1621331564}
-  - component: {fileID: 1621331567}
   - component: {fileID: 1621331568}
   m_Layer: 0
   m_Name: Game Manager
@@ -7646,9 +7646,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggleText: {fileID: 347353351}
   tutorialToggle: {fileID: 135376301}
-  tutorialAnimator: {fileID: 1477871665}
-  jumpTutorialAnimator: {fileID: 866320561}
-  tutorialTimeScale: 0.785
+  swingTutorialUI: {fileID: 1477871661}
+  jumpTutorialUI: {fileID: 866320557}
 --- !u!1 &1645101874
 GameObject:
   m_ObjectHideFlags: 0

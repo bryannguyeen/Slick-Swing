@@ -10,11 +10,8 @@ public class TutorialManager : MonoBehaviour
     public Text toggleText;
     public Toggle tutorialToggle;
 
-    public Animator tutorialAnimator;
-    public Animator jumpTutorialAnimator;
-
-    [Range(0.2f, 1f)]
-    public float tutorialTimeScale;
+    public GameObject swingTutorialUI;
+    public GameObject jumpTutorialUI;
 
     void Start()
     {
@@ -29,25 +26,25 @@ public class TutorialManager : MonoBehaviour
             // Disable script after completing tutorial or tutorial is disabled in gameplay
             // Completion of the jump tutorial already implies completion of swing tutorial and that
             // GameState.state is in GAMEPLAY
-            if (jumpTutorialAnimator.GetBool("firstJump") || !tutorialEnabled)
-                this.enabled = false;
+            if (jumpTutorialUI.GetComponent<Animator>().GetBool("firstJump") || !tutorialEnabled)
+                StartCoroutine("ExitTutorial");
 
             if (PlayerState.mouseClick)
             {
-                tutorialAnimator.SetBool("firstSwing", true);
+                swingTutorialUI.GetComponent<Animator>().SetBool("firstSwing", true);
                 GetComponent<GameState>().ResumeNormalTime();
             }
 
-            jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
+            jumpTutorialUI.GetComponent<Animator>().SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
             if (PlayerState.BoostInput())
-                jumpTutorialAnimator.SetBool("firstJump", true);
+                jumpTutorialUI.GetComponent<Animator>().SetBool("firstJump", true);
         }
     }
 
     public void DisableTutorial(bool isOn)
     {
         tutorialEnabled = isOn;
-        jumpTutorialAnimator.SetBool("tutorialEnabled", tutorialEnabled);
+        jumpTutorialUI.GetComponent<Animator>().SetBool("tutorialEnabled", tutorialEnabled);
         if (tutorialEnabled)
         {
             toggleText.text = "TUTORIAL: ON";
@@ -68,5 +65,13 @@ public class TutorialManager : MonoBehaviour
     void SetDisableTutorialPlayerPref(bool disable)
     {
         PlayerPrefs.SetInt("tutorialEnabled", Convert.ToInt32(disable));
+    }
+
+    IEnumerator ExitTutorial()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        swingTutorialUI.SetActive(false);
+        jumpTutorialUI.SetActive(false);
+        this.enabled = false;
     }
 }
