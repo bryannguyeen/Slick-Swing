@@ -34,8 +34,8 @@ public class PlatformManager : MonoBehaviour {
         numObstaclesPassed = 0;
 
         pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
-        borderWidth = borderPlatform.GetComponent<Renderer>().bounds.size.x;
-        borderHeight = borderPlatform.GetComponent<Renderer>().bounds.size.y;
+        borderWidth = borderPlatform.GetComponentInChildren<Renderer>().bounds.size.x;
+        borderHeight = borderPlatform.GetComponentInChildren<Renderer>().bounds.size.y;
         spaceBetweenObstacles = borderWidth / ObstaclesPerBorder;
         upperBound = (distanceBetweenBorders / 2 - borderHeight / 2);
         lowerBound = -upperBound;
@@ -97,9 +97,8 @@ public class PlatformManager : MonoBehaviour {
             obstacle.GetComponent<SpriteRenderer>().flipY = true;
 
         // resizing obstacle, setting it in transform won't take advantage of slice mode
-        // so we must resize the sprite renderer and boxcollider instead
+        // so we must resize the sprite renderer instead
         obstacle.GetComponent<SpriteRenderer>().size = new Vector2(obstacleWidth, yScale);
-        obstacle.GetComponent<BoxCollider2D>().size = new Vector2(obstacleWidth, yScale);
         return obstacle;
     }
 

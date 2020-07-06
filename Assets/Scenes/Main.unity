@@ -7589,9 +7589,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936424fc6a2999e4a854aceac7dd0b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  borderPlatform: {fileID: 1000011995746672, guid: 730d1fa6c5052a74da924a055cfa3d83,
+  borderPlatform: {fileID: 6787956602998941404, guid: 4fe37f3a3661f57478b0f3d32458ebf0,
     type: 3}
-  obstaclePlatform: {fileID: 1000013116670576, guid: 870c2bbb6e586c9469ad1d86d8e8033b,
+  obstaclePlatform: {fileID: 7089593444740998645, guid: e795092561232084b9dd55b030b40c5d,
     type: 3}
   distanceBetweenBorders: 30
   player: {fileID: 664200268}

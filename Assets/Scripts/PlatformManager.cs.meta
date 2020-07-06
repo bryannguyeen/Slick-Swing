@@ -1,12 +1,14 @@
 fileFormatVersion: 2
 guid: 936424fc6a2999e4a854aceac7dd0b2f
-timeCreated: 1557344085
-licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - BorderPlatform: {fileID: 1000011995746672, guid: 730d1fa6c5052a74da924a055cfa3d83,
-      type: 2}
+  - borderPlatform: {fileID: 6787956602998941404, guid: 4fe37f3a3661f57478b0f3d32458ebf0,
+      type: 3}
+  - obstaclePlatform: {fileID: 7089593444740998645, guid: e795092561232084b9dd55b030b40c5d,
+      type: 3}
+  - player: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

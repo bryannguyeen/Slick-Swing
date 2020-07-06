@@ -3,7 +3,9 @@ guid: 170758548f5ae5044821df2972c01943
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - backgroundSprite: {fileID: 554632239163499910, guid: 804856e113de7df4a919e9e340fb468f,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
