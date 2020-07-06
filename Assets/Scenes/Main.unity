@@ -7589,7 +7589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936424fc6a2999e4a854aceac7dd0b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  borderPlatform: {fileID: 6787956602998941404, guid: 4fe37f3a3661f57478b0f3d32458ebf0,
+  borderPlatform: {fileID: 2955436019993766097, guid: 6c820a78278ad444f99a503ce393adfc,
     type: 3}
   obstaclePlatform: {fileID: 7089593444740998645, guid: e795092561232084b9dd55b030b40c5d,
     type: 3}

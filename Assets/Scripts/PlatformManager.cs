@@ -68,7 +68,9 @@ public class PlatformManager : MonoBehaviour {
             DestroyEarliestBorders();
             AddBorderToQueue(numBordersPassed + 1);
 
-            DestroyEarliestObstacles();
+            if (numBordersPassed > 1)
+                DestroyEarliestObstacles();
+
             AddObstaclesToQueue(numBordersPassed + 1);
         }
     }
