@@ -78,27 +78,29 @@ public class PlatformManager : MonoBehaviour {
         return Random.Range(obstacleMinHeight, obstacleMaxHeight);
     }
 
-    GameObject CreateObstacle(float xPos, float height, bool bottom)
+    GameObject CreateObstacle(float xPos, float obstacleHeight, bool bottom)
     {
         float yPos;
+        Quaternion rotation;
 
-        // since unity scales objects relative to their center, the position of the obstacle
-        // needs to be offsetted to be in the position I want
+        // place position of obstacle to be either from top or bottom
         if (bottom)
-            yPos = lowerBound + height / 2.0f;
+        {
+            yPos = lowerBound - 2 / pixelsPerUnit;
+            rotation = Quaternion.identity;
+        }
         else
-            yPos = upperBound - height / 2.0f;
+        {
+            yPos = upperBound + 2 / pixelsPerUnit;
+            rotation = Quaternion.Euler(180f, 0f, 0f);
+        }
 
-        float yScale = 2 * (upperBound - Mathf.Abs(yPos)) + 4.0f / pixelsPerUnit;
-
-        GameObject obstacle = (GameObject)Instantiate(obstaclePlatform, new Vector3(xPos, yPos, 0), Quaternion.identity);
-
-        if (!bottom)
-            obstacle.GetComponent<SpriteRenderer>().flipY = true;
+        GameObject obstacle = (GameObject) Instantiate(obstaclePlatform, new Vector3(xPos, yPos, 0), rotation);
 
         // resizing obstacle, setting it in transform won't take advantage of slice mode
         // so we must resize the sprite renderer instead
-        obstacle.GetComponent<SpriteRenderer>().size = new Vector2(obstacleWidth, yScale);
+        obstacle.GetComponent<SpriteRenderer>().size = new Vector2(obstacleWidth, obstacleHeight);
+
         return obstacle;
     }
 
