@@ -26,7 +26,7 @@ public class BackgroundManager : MonoBehaviour
 
         for (int i = 0; i < backgrounds.Length; i++)
         {
-            backgrounds[i] = (GameObject) Instantiate(backgroundSprite, new Vector3(0, 0, 1), Quaternion.identity);
+            backgrounds[i] = (GameObject) Instantiate(backgroundSprite);
         }
 
         FollowCamera();
@@ -46,9 +46,11 @@ public class BackgroundManager : MonoBehaviour
 
     void FollowCamera()
     {
+        float xPos;
         for (int i = 0; i < backgrounds.Length; i++)
         {
-            backgrounds[i].transform.position = Vector3.Lerp(new Vector3(0, 0, 1), new Vector3(cameraT.position.x, 0, 1), parallax) + new Vector3((counter + i) * backgroundWidth, 0, 0);
+            xPos = Mathf.Lerp(0, cameraT.position.x, parallax) + (counter + i) * backgroundWidth;
+            backgrounds[i].transform.position = new Vector3(xPos, 0, 1);
         }
     }
 }
