@@ -137,7 +137,7 @@ public class PlayerState : MonoBehaviour
     public void StartPlayer()
     {
         PlayerState.SetToFreefall();
-        rb.constraints = RigidbodyConstraints2D.None;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb.AddForce(startingJump);
         animator.SetTrigger("doBackflip");
         audioManager.Play("BigLeap");
@@ -149,13 +149,12 @@ public class PlayerState : MonoBehaviour
     public void KillPlayer()
     {
         trail.enabled = false;
-        this.sprite.enabled = false;
+        sprite.enabled = false;
         movement.enabled = false;
         collision.enabled = false;
         lr.enabled = false;
         boxCollider.enabled = false;
-        rb.velocity = new Vector2(0, 0);
-        rb.gravityScale = 0;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
         Instantiate(explosion, transform.position, Quaternion.identity);
         afterimage.Stop();
         audioManager.Play("Explosion");
