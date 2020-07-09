@@ -8044,6 +8044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3ae9ccb8accb5f4aa76de0b8310c19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterVolume: 1
   audioToggle: {fileID: 1721969145}
   sounds:
   - name: RopeShoot
