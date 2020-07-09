@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
+    [Range(0f, 1f)]
+    public float masterVolume;
+
     public Toggle audioToggle;
     public Sound[] sounds;
     public static bool mute;
@@ -17,7 +20,6 @@ public class AudioManager : MonoBehaviour
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
-            s.source.volume = s.volume;
         }
     }
 
@@ -33,6 +35,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
         s.source.pitch = UnityEngine.Random.Range(s.pitchRange.x, s.pitchRange.y);
+        s.source.volume = s.volume * masterVolume;
         s.source.Play();
     }
 
