@@ -66,13 +66,17 @@ public class PlatformManager : MonoBehaviour {
             numBordersPassed = (int) (player.position.x / borderWidth);
 
             DestroyEarliestBorders();
-            AddBorderToQueue(numBordersPassed + 1);
-
             if (numBordersPassed > 1)
                 DestroyEarliestObstacles();
 
-            AddObstaclesToQueue(numBordersPassed + 1);
+            LoadBorderObstacleSet(numBordersPassed + 1);
         }
+    }
+
+    void LoadBorderObstacleSet(int offset)
+    {
+        AddBorderToQueue(offset);
+        AddObstaclesToQueue(offset);
     }
 
     float RandomHeight()
