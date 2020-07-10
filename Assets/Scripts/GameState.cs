@@ -82,7 +82,7 @@ public class GameState : MonoBehaviour
         // display game over screen
         gameOverUI.SetActive(true);
 
-        // turn of tutorial ui if it is currently on
+        // turn off tutorial ui if it is currently on
         tutorialAnimator.SetBool("firstSwing", true);
         ResumeNormalTime();
 
@@ -122,6 +122,13 @@ public class GameState : MonoBehaviour
     public static float RelativeMousePositionY()
     {
         return (Input.mousePosition.y) / (Screen.height) * 2 - 1;
+    }
+
+    public static Vector2 RelativeMousePosition()
+    {
+        float x = (Input.mousePosition.x) / (Screen.width) * 2 - 1;
+        float y = (Input.mousePosition.y) / (Screen.height) * 2 - 1;
+        return new Vector2(x, y);
     }
 
     IEnumerator GraduallyStopTime()

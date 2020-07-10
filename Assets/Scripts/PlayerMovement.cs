@@ -108,16 +108,17 @@ public class PlayerMovement : MonoBehaviour {
         PlayerState.SetToCasting();
 
         Vector2 origin = GetRopeHandPosition();
+        Vector2 relativeMousePosition = GameState.RelativeMousePosition();
 
         // determing the angle of the shoot direction
         // relative to finger press position on the screen
-        if (GameState.RelativeMousePositionX() > 0)
-            shootDirection = AngularLerp(75f, 50f, GameState.RelativeMousePositionX());
+        if (relativeMousePosition.x > 0)
+            shootDirection = AngularLerp(75f, 50f, relativeMousePosition.x);
         else
-            shootDirection = AngularLerp(95f, 80f, GameState.RelativeMousePositionX() + 1);
+            shootDirection = AngularLerp(95f, 80f, relativeMousePosition.x + 1);
 
         // shoot downward when player taps on bottom half of screen
-        if (GameState.RelativeMousePositionY() < 0)
+        if (relativeMousePosition.y < 0)
             shootDirection.y = -shootDirection.y;
 
         ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
