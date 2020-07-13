@@ -29,21 +29,23 @@ public class PlatformManager : MonoBehaviour {
     int numBordersPassed;
     public static int numObstaclesPassed;
 
-	void Start () {
-        numBordersPassed = 0;
-        numObstaclesPassed = 0;
-
+    private void OnValidate()
+    {
         pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         borderSize = borderPlatform.GetComponentInChildren<Renderer>().bounds.size;
         spaceBetweenObstacles = borderSize.x / ObstaclesPerBorder;
         upperBound = (distanceBetweenBorders / 2 - borderSize.y / 2);
         lowerBound = -upperBound;
+    }
+
+    void Start () {
+        numBordersPassed = 0;
+        numObstaclesPassed = 0;
 
         bottom = true;
 
-        AddBorderToQueue(-1);
-        AddBorderToQueue(0);
-        AddBorderToQueue(1);
+        for (int i = -1; i < 2; i++)
+            AddBorderToQueue(i);
 
         Random.State oldState = Random.state;
 
