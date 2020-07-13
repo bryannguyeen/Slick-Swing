@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameOverDisplay : MonoBehaviour
@@ -7,10 +8,16 @@ public class GameOverDisplay : MonoBehaviour
     public Text messageShadow;
     public Text highScore;
 
+    private int oldHighScore, newHighScore;
+
     public Color newRecordColor;
-    void Start()
+
+    // Awake and not Start to ensure that oldHighScore is
+    // saved before GameState updates it
+    private void Awake()
     {
-        highScore.text = GameState.GetHighScore().ToString();
+        oldHighScore = GameState.GetHighScore();
+        highScore.text = oldHighScore.ToString();
     }
 
     public void DeclareNewRecord()
@@ -18,6 +25,19 @@ public class GameOverDisplay : MonoBehaviour
         message.text = "A NEW RECORD";
         messageShadow.text = message.text;
         messageShadow.color = newRecordColor;
-        highScore.text = GameState.GetHighScore().ToString();
+        newHighScore = GameState.GetHighScore();
+        StartCoroutine("HighScoreChangeAnimation");
+    }
+
+    IEnumerator HighScoreChangeAnimation()
+    {
+        yield return new WaitForSecondsRealtime(0.65f);
+        float pauseTime = 0.3f / (newHighScore - oldHighScore);
+
+        for (int i = oldHighScore + 1; i <= newHighScore; i++)
+        {
+            highScore.text = i.ToString();
+            yield return new WaitForSecondsRealtime(pauseTime);
+        }
     }
 }

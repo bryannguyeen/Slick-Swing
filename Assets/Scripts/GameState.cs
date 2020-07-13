@@ -37,11 +37,6 @@ public class GameState : MonoBehaviour
     void Update()
     {
         cursorVelocity = ((Vector2)Input.mousePosition - prevMousePosition) / Time.deltaTime;
-    }
-
-    private void LateUpdate()
-    {
-        // previous mouse position should be recorded at the end of the frame
         prevMousePosition = Input.mousePosition;
     }
 
@@ -70,16 +65,18 @@ public class GameState : MonoBehaviour
         // disable any unnecessary scripts
         GetComponent<PlatformManager>().enabled = false;
 
-        // update high score
+        // display game over screen
+        gameOverUI.SetActive(true);
+
+        // update high score if changed
         int score = PlatformManager.numObstaclesPassed;
         if (score > GetHighScore())
         {
             SetHighScore(score);
+
+            // show a special screen if the user gets a high score
             gameOverUI.GetComponent<GameOverDisplay>().DeclareNewRecord();
         }
-
-        // display game over screen
-        gameOverUI.SetActive(true);
 
         // turn off tutorial ui if it is currently on
         tutorialAnimator.SetBool("firstSwing", true);
