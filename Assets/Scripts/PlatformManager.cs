@@ -20,7 +20,7 @@ public class PlatformManager : MonoBehaviour {
     public int beginningRandomSeed;
 
     float pixelsPerUnit;
-    float borderWidth, borderHeight;
+    Vector2 borderSize;
     float upperBound, lowerBound;
 
     // To determine whether to spawn the pillar either top or bottom
@@ -34,10 +34,9 @@ public class PlatformManager : MonoBehaviour {
         numObstaclesPassed = 0;
 
         pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
-        borderWidth = borderPlatform.GetComponentInChildren<Renderer>().bounds.size.x;
-        borderHeight = borderPlatform.GetComponentInChildren<Renderer>().bounds.size.y;
-        spaceBetweenObstacles = borderWidth / ObstaclesPerBorder;
-        upperBound = (distanceBetweenBorders / 2 - borderHeight / 2);
+        borderSize = borderPlatform.GetComponentInChildren<Renderer>().bounds.size;
+        spaceBetweenObstacles = borderSize.x / ObstaclesPerBorder;
+        upperBound = (distanceBetweenBorders / 2 - borderSize.y / 2);
         lowerBound = -upperBound;
 
         bottom = true;
@@ -61,9 +60,9 @@ public class PlatformManager : MonoBehaviour {
         // FOR KEEPING TRACK OF SCORE
         UpdateNumObstaclesPassed();
 
-        if ((int) (player.position.x /borderWidth) > numBordersPassed)
+        if ((int) (player.position.x / borderSize.x) > numBordersPassed)
         {
-            numBordersPassed = (int) (player.position.x / borderWidth);
+            numBordersPassed = (int) (player.position.x / borderSize.x);
 
             DestroyEarliestBorders();
             if (numBordersPassed > 1)
@@ -129,7 +128,7 @@ public class PlatformManager : MonoBehaviour {
 
     void AddBorderToQueue(int offset)
     {
-        float xCoord = offset * borderWidth;
+        float xCoord = offset * borderSize.x;
         float yCoord = distanceBetweenBorders / 2;
         borders.Enqueue((GameObject)Instantiate(borderPlatform, new Vector3(xCoord, yCoord, 0), Quaternion.identity));
         borders.Enqueue((GameObject)Instantiate(borderPlatform, new Vector3(xCoord, -yCoord, 0), Quaternion.identity));
@@ -139,7 +138,7 @@ public class PlatformManager : MonoBehaviour {
     {
         for (int i = 0; i < ObstaclesPerBorder; i++)
         {
-            obstacles.Enqueue(CreateObstacle(offset * borderWidth + (i * spaceBetweenObstacles)));
+            obstacles.Enqueue(CreateObstacle(offset * borderSize.x + (i * spaceBetweenObstacles)));
             bottom = !bottom;   // alternate obstacles from potruding from top and bottom
         }
     }
