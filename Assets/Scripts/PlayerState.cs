@@ -121,7 +121,7 @@ public class PlayerState : MonoBehaviour
 
     public static bool BoostInput()
     {
-        return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 650f;
+        return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 400f;
     }
 
     public static void DisableBoost()
