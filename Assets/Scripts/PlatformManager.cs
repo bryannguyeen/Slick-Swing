@@ -28,18 +28,15 @@ public class PlatformManager : MonoBehaviour {
     int numBordersPassed;
     public static int numObstaclesPassed;
 
-    private void OnValidate()
-    {
+
+    void Start () {
+        numBordersPassed = 0;
+        numObstaclesPassed = 0;
         pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         borderSize = borderPlatform.GetComponentInChildren<Renderer>().bounds.size;
         spaceBetweenObstacles = borderSize.x / ObstaclesPerBorder;
         upperBound = (distanceBetweenBorders / 2 - borderSize.y / 2);
         lowerBound = -upperBound;
-    }
-
-    void Start () {
-        numBordersPassed = 0;
-        numObstaclesPassed = 0;
 
         bottom = true;
 
@@ -98,7 +95,7 @@ public class PlatformManager : MonoBehaviour {
         else
         {
             yPos = upperBound + 2 / pixelsPerUnit;
-            rotation = Quaternion.Euler(180f, 0f, 0f);
+            rotation = Quaternion.Euler(0f, 0f, 180f);
         }
 
         GameObject obstacle = (GameObject) Instantiate(obstaclePlatform, new Vector3(xPos, yPos, 0), rotation);

@@ -13,15 +13,11 @@ public class BackgroundManager : MonoBehaviour
     float backgroundLoopDistance;
     int counter;
 
-    private void OnValidate()
-    {
-        backgroundWidth = backgroundSprite.GetComponent<Renderer>().bounds.size.x;
-        backgroundLoopDistance = backgroundWidth / (1 - parallax);
-    }
-
     void Start()
     {
         cameraT = Camera.main.transform;
+        backgroundWidth = backgroundSprite.GetComponent<Renderer>().bounds.size.x;
+        backgroundLoopDistance = backgroundWidth / (1 - parallax);
 
         counter = GetNumBackgroundLoops(cameraT.position, backgroundLoopDistance);
 
