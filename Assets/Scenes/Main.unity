@@ -7577,6 +7577,7 @@ MonoBehaviour:
   backgroundSprite: {fileID: 554632239163499910, guid: 804856e113de7df4a919e9e340fb468f,
     type: 3}
   parallax: 0.95
+  numBackgrounds: 2
 --- !u!114 &1621331565
 MonoBehaviour:
   m_ObjectHideFlags: 0
