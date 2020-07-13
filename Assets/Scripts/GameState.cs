@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -114,16 +113,6 @@ public class GameState : MonoBehaviour
     // returns a float from -1.0f to +1.0f
     // -1.0f meaning the cursor is at the leftmost side of the screen
     // +1.0f meaning the cursor is at the rightmost side
-    public static float RelativeMousePositionX()
-    {
-        return (Input.mousePosition.x) / (Screen.width) * 2 - 1;
-    }
-
-    public static float RelativeMousePositionY()
-    {
-        return (Input.mousePosition.y) / (Screen.height) * 2 - 1;
-    }
-
     public static Vector2 RelativeMousePosition()
     {
         float x = (Input.mousePosition.x) / (Screen.width) * 2 - 1;
