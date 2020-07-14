@@ -36,8 +36,9 @@ public class GameOverDisplay : MonoBehaviour
 
         for (int i = oldHighScore + 1; i <= newHighScore; i++)
         {
-            highScore.text = i.ToString();
             yield return new WaitForSecondsRealtime(pauseTime);
+            highScore.text = i.ToString();
         }
+        GetComponent<Animator>().SetTrigger("Glow high score");
     }
 }
