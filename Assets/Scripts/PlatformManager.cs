@@ -95,7 +95,7 @@ public class PlatformManager : MonoBehaviour {
         else
         {
             yPos = upperBound + 2 / pixelsPerUnit;
-            rotation = Quaternion.Euler(0f, 0f, 180f);
+            rotation = Quaternion.Euler(180f, 0f, 0f);
         }
 
         GameObject obstacle = (GameObject) Instantiate(obstaclePlatform, new Vector3(xPos, yPos, 0), rotation);
