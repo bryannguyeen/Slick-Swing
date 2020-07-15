@@ -8052,24 +8052,9 @@ MonoBehaviour:
     volume: 1
     pitchRange: {x: 1, y: 1.2}
     source: {fileID: 0}
-  - name: RopeHit
-    clip: {fileID: 8300000, guid: 39696a8d42842ee4b88c6e8365583db9, type: 3}
-    volume: 0
-    pitchRange: {x: 1, y: 1}
-    source: {fileID: 0}
-  - name: Release
-    clip: {fileID: 8300000, guid: e13b5dd2d9c5b9f47ba3dd6d9868c082, type: 3}
-    volume: 0.2
-    pitchRange: {x: 0.8, y: 0.8}
-    source: {fileID: 0}
-  - name: SmallLeap
-    clip: {fileID: 8300000, guid: 3318ef7e3dd27d340b557bbf9c2cc836, type: 3}
-    volume: 0.2
-    pitchRange: {x: 1, y: 1}
-    source: {fileID: 0}
   - name: BigLeap
     clip: {fileID: 8300000, guid: 80188a1cb310995478606854ef1c958b, type: 3}
-    volume: 0.504
+    volume: 0.55
     pitchRange: {x: 1, y: 1}
     source: {fileID: 0}
   - name: Explosion
