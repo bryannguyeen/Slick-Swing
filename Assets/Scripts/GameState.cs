@@ -71,12 +71,7 @@ public class GameState : MonoBehaviour
         // update high score if changed
         int score = PlatformManager.numObstaclesPassed;
         if (score > GetHighScore())
-        {
             SetHighScore(score);
-
-            // show a special screen if the user gets a high score
-            gameOverUI.GetComponent<GameOverDisplay>().DeclareNewRecord();
-        }
 
         // turn off tutorial ui if it is currently on
         tutorialAnimator.SetBool("firstSwing", true);
