@@ -17,8 +17,6 @@ public class GameState : MonoBehaviour
     public GameObject gameOverUI;
     public GameObject welcomeUI;
 
-    public Text HighScoreText;
-
     public float gameOverAnimationDuration;
 
     public Animator tutorialAnimator;
@@ -29,7 +27,6 @@ public class GameState : MonoBehaviour
     {
         state = START;
         prevMousePosition = Input.mousePosition;
-        HighScoreText.text = "HIGH SCORE: " + GetHighScore();
 
         enableResetButton = false;
     }
@@ -48,7 +45,7 @@ public class GameState : MonoBehaviour
         GetComponent<BackgroundManager>().enabled = true;
         GetComponent<PlatformManager>().enabled = true;
 
-        StartCoroutine("HideWelcomeUI");
+        welcomeUI.GetComponent<WelcomeDisplay>().Close();
 
         if (TutorialManager.tutorialEnabled)
         {
@@ -120,14 +117,6 @@ public class GameState : MonoBehaviour
             Time.timeScale = Mathf.Lerp(originalTime, 0f, (float) i / 10);
             yield return new WaitForSecondsRealtime(0.3f);
         }
-    }
-
-    IEnumerator HideWelcomeUI()
-    {
-        welcomeUI.GetComponent<Animator>().SetTrigger("disappear");
-        yield return new WaitForSeconds(0.25f);
-
-        welcomeUI.SetActive(false);
     }
 
     public void ResumeNormalTime()

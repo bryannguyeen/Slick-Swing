@@ -7629,7 +7629,6 @@ MonoBehaviour:
   playerState: {fileID: 664200279}
   gameOverUI: {fileID: 459853818}
   welcomeUI: {fileID: 2036517646}
-  HighScoreText: {fileID: 803981175}
   gameOverAnimationDuration: 1
   tutorialAnimator: {fileID: 1477871665}
 --- !u!114 &1621331568
@@ -8166,6 +8165,7 @@ GameObject:
   - component: {fileID: 2036517650}
   - component: {fileID: 2036517649}
   - component: {fileID: 2036517648}
+  - component: {fileID: 2036517651}
   m_Layer: 5
   m_Name: Welcome Screen
   m_TagString: Untagged
@@ -8254,6 +8254,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2036517646}
   m_CullTransparentMesh: 0
+--- !u!114 &2036517651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036517646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37db61f21e0ef524096e731234db226d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighScoreText: {fileID: 803981175}
 --- !u!1 &2139677168
 GameObject:
   m_ObjectHideFlags: 0
