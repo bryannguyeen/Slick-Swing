@@ -8,7 +8,7 @@ public class FollowPlayer : MonoBehaviour {
 
     Vector3 destination;
 
-    void Start()
+    void Awake()
     {
         transform.position = GetDestination();
     }

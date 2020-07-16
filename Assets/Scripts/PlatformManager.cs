@@ -29,7 +29,7 @@ public class PlatformManager : MonoBehaviour {
     public static int numObstaclesPassed;
 
 
-    void Start () {
+    void Awake() {
         numBordersPassed = 0;
         numObstaclesPassed = 0;
         pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
@@ -54,7 +54,7 @@ public class PlatformManager : MonoBehaviour {
         this.enabled = false;
     }
 
-    void Update () {
+    void Update() {
         // FOR KEEPING TRACK OF SCORE
         UpdateNumObstaclesPassed();
 
