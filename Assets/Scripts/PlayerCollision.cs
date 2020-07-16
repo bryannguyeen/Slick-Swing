@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PlayerCollision : MonoBehaviour {
     public GameState gs;
     void OnCollisionEnter2D(Collision2D collisionInfo) {
-        gs.EndGame();
+        if (collisionInfo.collider.CompareTag("Platform"))
+            gs.EndGame();
     }
 
     void Update ()

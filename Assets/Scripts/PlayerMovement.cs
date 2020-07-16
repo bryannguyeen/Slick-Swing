@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour {
 
     Vector2 GetRopeHandPosition()
     {
-       return transform.position + (transform.up * (sprite.size.y / 2.0f)) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime);
+       return transform.position + (transform.up * (sprite.size.y / 2.0f)) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.fixedDeltaTime);
     }
 
     void OnMouseHold()
@@ -76,8 +76,9 @@ public class PlayerMovement : MonoBehaviour {
         {
             // add the forces that the rope acts on the player and update the line renderer position
             // as well as update the orientation of the player sprite
-            netForce += GetRopeForce();
-            netForce += GetDampingForce();
+            Vector2 ropeForce = GetRopeForce();
+            netForce += ropeForce;
+            netForce += GetDampingForce(ropeForce);
 
             lr.SetPosition(1, GetRopeHandPosition());
             SetPlayerRotation(connectionPoint - (Vector2) transform.position);
@@ -117,7 +118,10 @@ public class PlayerMovement : MonoBehaviour {
 
         // shoot downward when player taps on bottom half of screen
         if (relativeMousePosition.y < 0)
+        {
             shootDirection.y = -shootDirection.y;
+            sprite.flipX = true;
+        }
 
         ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
 
@@ -125,10 +129,6 @@ public class PlayerMovement : MonoBehaviour {
         lr.SetPosition(0, origin + ropeLength * shootDirection);
         lr.SetPosition(1, origin);
         lr.enabled = true;
-
-        // flip players sprite depending on the shoot direction
-        if (shootDirection.y < 0)
-            sprite.flipX = true;
 
         // rotate player to the direction they are shooting at
         SetPlayerRotation(shootDirection);
@@ -197,15 +197,13 @@ public class PlayerMovement : MonoBehaviour {
         return new Vector2(0, 0);
     }
 
-    Vector2 GetDampingForce()
+    Vector2 GetDampingForce(Vector2 ropeForce)
     {
-        Vector2 RopeForce = GetRopeForce();
-
-        if (RopeForce.magnitude == 0)
+        if (ropeForce.magnitude == 0)
             return new Vector2(0, 0);
 
-        RopeForce.Normalize();
-        return -dampingConstant * Vector2.Dot(rb.velocity, RopeForce) / Vector2.Dot(RopeForce, RopeForce) * RopeForce;
+        ropeForce.Normalize();
+        return -dampingConstant * Vector2.Dot(rb.velocity, ropeForce) / Vector2.Dot(ropeForce, ropeForce) * ropeForce;
     }
 
     Vector2 GetBoostForce(Vector2 boostDirection)
