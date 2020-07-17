@@ -6,7 +6,7 @@ public class WelcomeDisplay : MonoBehaviour
 {
     public Text HighScoreText;
 
-    private void Start()
+    void Start()
     {
         HighScoreText.text = "HIGH SCORE: " + GameState.GetHighScore();
     }

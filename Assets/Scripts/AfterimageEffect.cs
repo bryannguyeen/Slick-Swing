@@ -1,20 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AfterimageEffect : MonoBehaviour
 {
     ParticleSystem afterimageParticleSystem;
     SpriteRenderer playerSprite;
-
     ParticleSystemRenderer particleRenderer;
 
     void Start()
     {
         afterimageParticleSystem = GetComponent<ParticleSystem>();
+        afterimageParticleSystem.Stop();
+
         playerSprite = GetComponent<SpriteRenderer>();
 
-        afterimageParticleSystem.Stop();
         particleRenderer = GetComponent<ParticleSystemRenderer>();
         particleRenderer.material = new Material(Shader.Find("Sprites/Default"))
         {

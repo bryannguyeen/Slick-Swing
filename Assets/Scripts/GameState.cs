@@ -65,7 +65,7 @@ public class GameState : MonoBehaviour
         gameOverUI.SetActive(true);
 
         // update high score if changed
-        int score = PlatformManager.numObstaclesPassed;
+        int score = PlatformManager.totalNumObstaclesPassed;
         if (score > GetHighScore())
             SetHighScore(score);
 

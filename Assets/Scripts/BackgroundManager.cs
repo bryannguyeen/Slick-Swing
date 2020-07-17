@@ -4,14 +4,17 @@ public class BackgroundManager : MonoBehaviour
 {
 
     public GameObject backgroundSprite;
+
+    [Range(0f, 1f)]
     public float parallax;
 
     Transform cameraT;
+
     readonly GameObject[] backgrounds = new GameObject[2];
 
     float backgroundWidth;
     float backgroundLoopDistance;
-    int counter;
+    int offset;
 
     void Start()
     {
@@ -19,7 +22,7 @@ public class BackgroundManager : MonoBehaviour
         backgroundWidth = backgroundSprite.GetComponent<Renderer>().bounds.size.x;
         backgroundLoopDistance = backgroundWidth / (1 - parallax);
 
-        counter = GetNumBackgroundLoops(cameraT.position, backgroundLoopDistance);
+        offset = GetNumBackgroundLoops(cameraT.position, backgroundLoopDistance);
 
         for (int i = 0; i < backgrounds.Length; i++)
         {
@@ -33,7 +36,7 @@ public class BackgroundManager : MonoBehaviour
 
     void Update()
     {
-        counter = GetNumBackgroundLoops(cameraT.position, backgroundLoopDistance);
+        offset = GetNumBackgroundLoops(cameraT.position, backgroundLoopDistance);
 
         FollowCamera();
     }
@@ -41,7 +44,7 @@ public class BackgroundManager : MonoBehaviour
     void FollowCamera()
     {
         // set the first background position
-        float xPos = Mathf.Lerp(0, cameraT.position.x, parallax) + counter * backgroundWidth;
+        float xPos = Mathf.Lerp(0, cameraT.position.x, parallax) + offset * backgroundWidth;
         backgrounds[0].transform.position = new Vector3(xPos, 0, 1);
 
         // set the subsequent backgrounds ahead and side-to-side of the first background

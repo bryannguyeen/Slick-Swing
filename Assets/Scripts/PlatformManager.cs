@@ -26,12 +26,12 @@ public class PlatformManager : MonoBehaviour {
     bool bottom;
 
     int numBordersPassed;
-    public static int numObstaclesPassed;
+    public static int totalNumObstaclesPassed;
 
 
     void Awake() {
         numBordersPassed = 0;
-        numObstaclesPassed = 0;
+        totalNumObstaclesPassed = 0;
         pixelsPerUnit = obstaclePlatform.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         borderSize = borderPlatform.GetComponentInChildren<Renderer>().bounds.size;
         spaceBetweenObstacles = borderSize.x / ObstaclesPerBorder;
@@ -68,12 +68,6 @@ public class PlatformManager : MonoBehaviour {
 
             LoadBorderObstacleSet(numBordersPassed + 1);
         }
-    }
-
-    void LoadBorderObstacleSet(int offset)
-    {
-        AddBorderToQueue(offset);
-        AddObstaclesToQueue(offset);
     }
 
     float RandomHeight()
@@ -117,11 +111,17 @@ public class PlatformManager : MonoBehaviour {
     {
         int currentNumOsbataclesPassed = (int) (player.position.x / spaceBetweenObstacles + 1);
 
-        if (currentNumOsbataclesPassed > numObstaclesPassed)
+        if (currentNumOsbataclesPassed > totalNumObstaclesPassed)
         {
-            numObstaclesPassed = currentNumOsbataclesPassed;
+            totalNumObstaclesPassed = currentNumOsbataclesPassed;
             PlayerState.ReEnableBoost();  // player can boost again after passing an obstacle
         }
+    }
+
+    void LoadBorderObstacleSet(int offset)
+    {
+        AddBorderToQueue(offset);
+        AddObstaclesToQueue(offset);
     }
 
     void AddBorderToQueue(int offset)

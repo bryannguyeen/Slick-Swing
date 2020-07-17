@@ -7,12 +7,11 @@ public class GameOverDisplay : MonoBehaviour
     public Text message;
     public Text messageShadow;
     public Text highScore;
+    public Color newRecordColor;
 
     private int oldHighScore, newHighScore;
 
-    public Color newRecordColor;
-
-    private void Awake()
+    void Awake()
     {
         oldHighScore = GameState.GetHighScore();
         highScore.text = oldHighScore.ToString();
@@ -20,10 +19,10 @@ public class GameOverDisplay : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
         // check if the score is a new record
-        if (PlatformManager.numObstaclesPassed > oldHighScore)
+        if (PlatformManager.totalNumObstaclesPassed > oldHighScore)
             DeclareNewRecord();
     }
 
@@ -32,7 +31,7 @@ public class GameOverDisplay : MonoBehaviour
         message.text = "A NEW RECORD";
         messageShadow.text = message.text;
         messageShadow.color = newRecordColor;
-        newHighScore = PlatformManager.numObstaclesPassed;
+        newHighScore = PlatformManager.totalNumObstaclesPassed;
 
         StartCoroutine("HighScoreChangeAnimation");
     }
