@@ -36,7 +36,6 @@ public class PlayerState : MonoBehaviour
     {
         state = BEGINNING;
         canBoost = true;
-
         mouseClick = false;
         mouseRelease = false;
         mouseHold = false;
@@ -77,6 +76,32 @@ public class PlayerState : MonoBehaviour
             mouseRelease = true;
             mouseHold = false;
         }
+    }
+
+    public void StartPlayer()
+    {
+        PlayerState.SetToFreefall();
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.AddForce(startingJump);
+        animator.SetTrigger("doBackflip");
+        audioManager.Play("BigLeap");
+
+        movement.enabled = true;
+        collision.enabled = true;
+    }
+
+    public void KillPlayer()
+    {
+        trail.enabled = false;
+        sprite.enabled = false;
+        movement.enabled = false;
+        collision.enabled = false;
+        lr.enabled = false;
+        boxCollider.enabled = false;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        Instantiate(explosion, transform.position, Quaternion.identity);
+        afterimage.Stop();
+        audioManager.Play("Explosion");
     }
 
     public static int GetState()
@@ -132,31 +157,5 @@ public class PlayerState : MonoBehaviour
     public static void ReEnableBoost()
     {
         canBoost = true;
-    }
-
-    public void StartPlayer()
-    {
-        PlayerState.SetToFreefall();
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        rb.AddForce(startingJump);
-        animator.SetTrigger("doBackflip");
-        audioManager.Play("BigLeap");
-
-        movement.enabled = true;
-        collision.enabled = true;
-    }
-
-    public void KillPlayer()
-    {
-        trail.enabled = false;
-        sprite.enabled = false;
-        movement.enabled = false;
-        collision.enabled = false;
-        lr.enabled = false;
-        boxCollider.enabled = false;
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        Instantiate(explosion, transform.position, Quaternion.identity);
-        afterimage.Stop();
-        audioManager.Play("Explosion");
     }
 }

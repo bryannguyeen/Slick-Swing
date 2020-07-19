@@ -15,7 +15,6 @@ public class FollowPlayer : MonoBehaviour {
         transform.position = GetDestination();
     }
 
-
     void FixedUpdate () {
         destination = GetDestination();
 
