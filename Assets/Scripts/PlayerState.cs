@@ -8,21 +8,47 @@ public class PlayerState : MonoBehaviour
     public const int SWINGING = 3;
 
     private static int state;
-    public static bool canBoost;
+    private static bool canBoost;
 
     public static bool mouseClick;    // is true only if the mouse is clicked on current frame
     public static bool mouseRelease;  // is true only if the mouse is released on current frame
     public static bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
+
+    PlayerMovement movement;
+    PlayerCollision collision;
+    LineRenderer lr;
+    BoxCollider2D boxCollider;
+    SpriteRenderer sprite;
+    Rigidbody2D rb;
+    TrailRenderer trail;
+    AfterimageEffect afterimage;
+    Animator animator;
+
+    public AudioManager audioManager;
+    public GameObject explosion;
+
+    public GameState gs;
+
+    public Vector2 startingJump;
 
 
     void Start()
     {
         state = BEGINNING;
         canBoost = true;
-
         mouseClick = false;
         mouseRelease = false;
         mouseHold = false;
+
+        movement = GetComponent<PlayerMovement>();
+        collision = GetComponent<PlayerCollision>();
+        lr = GetComponent<LineRenderer>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        trail = GetComponent<TrailRenderer>();
+        afterimage = GetComponent<AfterimageEffect>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -50,6 +76,32 @@ public class PlayerState : MonoBehaviour
             mouseRelease = true;
             mouseHold = false;
         }
+    }
+
+    public void StartPlayer()
+    {
+        PlayerState.SetToFreefall();
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.AddForce(startingJump);
+        animator.SetTrigger("doBackflip");
+        audioManager.Play("BigLeap");
+
+        movement.enabled = true;
+        collision.enabled = true;
+    }
+
+    public void KillPlayer()
+    {
+        trail.enabled = false;
+        sprite.enabled = false;
+        movement.enabled = false;
+        collision.enabled = false;
+        lr.enabled = false;
+        boxCollider.enabled = false;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        Instantiate(explosion, transform.position, Quaternion.identity);
+        afterimage.Stop();
+        audioManager.Play("Explosion");
     }
 
     public static int GetState()
@@ -94,6 +146,16 @@ public class PlayerState : MonoBehaviour
 
     public static bool BoostInput()
     {
-        return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 650f;
+        return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 400f;
+    }
+
+    public static void DisableBoost()
+    {
+        canBoost = false;
+    }
+
+    public static void ReEnableBoost()
+    {
+        canBoost = true;
     }
 }

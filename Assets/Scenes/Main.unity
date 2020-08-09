@@ -367,7 +367,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!1 &197143486
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,7 +617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &459853819
 RectTransform:
   m_ObjectHideFlags: 0
@@ -635,7 +635,7 @@ RectTransform:
   - {fileID: 1932811208}
   - {fileID: 2139677169}
   m_Father: {fileID: 768970510}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -694,7 +694,6 @@ MonoBehaviour:
   message: {fileID: 1557630255}
   messageShadow: {fileID: 95212201}
   highScore: {fileID: 1932811210}
-  welcomeScreen: {fileID: 2036517646}
   newRecordColor: {r: 0.28773582, g: 1, b: 0.53124493, a: 1}
 --- !u!95 &459853823
 Animator:
@@ -890,15 +889,15 @@ GameObject:
   - component: {fileID: 664200267}
   - component: {fileID: 664200269}
   - component: {fileID: 664200270}
-  - component: {fileID: 664200272}
-  - component: {fileID: 664200274}
+  - component: {fileID: 664200279}
   - component: {fileID: 664200271}
   - component: {fileID: 664200273}
+  - component: {fileID: 664200278}
+  - component: {fileID: 664200272}
+  - component: {fileID: 664200274}
   - component: {fileID: 664200275}
   - component: {fileID: 664200277}
   - component: {fileID: 664200276}
-  - component: {fileID: 664200278}
-  - component: {fileID: 664200279}
   m_Layer: 2
   m_Name: guy
   m_TagString: Player
@@ -964,7 +963,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 664200266}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -55, y: -8, z: 0}
+  m_LocalPosition: {x: -53, y: -8, z: 0}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1029,18 +1028,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2edc2de2a427564f82db075d736592f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 664200267}
-  rb: {fileID: 664200269}
-  lr: {fileID: 664200272}
-  animator: {fileID: 664200275}
-  afterimage: {fileID: 664200278}
   blip: {fileID: 1645101878}
   audioManager: {fileID: 1723907395}
   bungeeStiffness: 4400
   dampingConstant: 6000
   boostScale: 680
   ropeCastSpeed: 130
-  startingJump: {x: 1550, y: 1400}
 --- !u!120 &664200272
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1154,21 +1147,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 664200266}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34673dd078f0ec841b6ca37275164c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 664200271}
-  lr: {fileID: 664200272}
-  boxCollider: {fileID: 664200270}
-  sprite: {fileID: 664200267}
-  rb: {fileID: 664200269}
-  trail: {fileID: 664200274}
-  afterimage: {fileID: 664200278}
-  audioManager: {fileID: 1723907395}
-  explosion: {fileID: 1630898001838446640, guid: ad5bb609dde1d5045bb0d99ccf9fe1e3,
-    type: 3}
   gs: {fileID: 1621331567}
 --- !u!96 &664200274
 TrailRenderer:
@@ -6029,8 +6012,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f99c13401cd504698f4b325659c616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  afterimageParticleSystem: {fileID: 664200277}
-  playerSprite: {fileID: 664200267}
 --- !u!114 &664200279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6043,6 +6024,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb9e0026160ec944e983e64c4b4b08f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioManager: {fileID: 1723907395}
+  explosion: {fileID: 1630898001838446640, guid: ad5bb609dde1d5045bb0d99ccf9fe1e3,
+    type: 3}
+  gs: {fileID: 1621331567}
+  startingJump: {x: 1550, y: 1400}
 --- !u!1 &712524497
 GameObject:
   m_ObjectHideFlags: 0
@@ -6229,7 +6215,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -6247,8 +6233,8 @@ RectTransform:
   - {fileID: 1426987686}
   - {fileID: 1477871662}
   - {fileID: 866320558}
-  - {fileID: 459853819}
   - {fileID: 2036517647}
+  - {fileID: 459853819}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6371,7 +6357,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -136}
-  m_SizeDelta: {x: 655.55676, y: 58.539886}
+  m_SizeDelta: {x: 701.62854, y: 58.539886}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &866320559
 MonoBehaviour:
@@ -6405,7 +6391,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: FLICK AND RELEASE TO JUMP
+  m_Text: FLICK AND RELEASE TO DO A JUMP
 --- !u!222 &866320560
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7478,6 +7464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 664200268}
   offset: {x: 10, y: 0, z: -10}
+  followSpeed: 0.1
 --- !u!1 &1557630254
 GameObject:
   m_ObjectHideFlags: 0
@@ -7565,9 +7552,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1621331566}
+  - component: {fileID: 1621331567}
   - component: {fileID: 1621331565}
   - component: {fileID: 1621331564}
-  - component: {fileID: 1621331567}
   - component: {fileID: 1621331568}
   m_Layer: 0
   m_Name: Game Manager
@@ -7603,15 +7590,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936424fc6a2999e4a854aceac7dd0b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  borderPlatform: {fileID: 1000011995746672, guid: 730d1fa6c5052a74da924a055cfa3d83,
+  borderPlatform: {fileID: 2955436019993766097, guid: 6c820a78278ad444f99a503ce393adfc,
     type: 3}
-  obstaclePlatform: {fileID: 1000013116670576, guid: 870c2bbb6e586c9469ad1d86d8e8033b,
+  obstaclePlatform: {fileID: 7089593444740998645, guid: e795092561232084b9dd55b030b40c5d,
     type: 3}
   distanceBetweenBorders: 30
   player: {fileID: 664200268}
   ObstaclesPerBorder: 3
   obstacleWidth: 3
-  pixelsPerUnit: 16
+  obstacleMinHeight: 6
+  obstacleMaxHeight: 12.5
+  beginningRandomSeed: 1
 --- !u!4 &1621331566
 Transform:
   m_ObjectHideFlags: 0
@@ -7638,13 +7627,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f0eb0aec6dd97468bc885337dd4c88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerState: {fileID: 664200279}
   gameOverUI: {fileID: 459853818}
-  HighScoreText: {fileID: 803981175}
-  player: {fileID: 664200271}
+  welcomeUI: {fileID: 2036517646}
   gameOverAnimationDuration: 1
-  welcomeScreenAnimator: {fileID: 2036517648}
   tutorialAnimator: {fileID: 1477871665}
-  audioToggle: {fileID: 1721969145}
 --- !u!114 &1621331568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7658,10 +7645,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toggleText: {fileID: 347353351}
-  disableTutorialToggle: {fileID: 135376301}
-  tutorialAnimator: {fileID: 1477871665}
-  jumpTutorialAnimator: {fileID: 866320561}
-  tutorialTimeScale: 0.785
+  tutorialToggle: {fileID: 135376301}
+  swingTutorialUI: {fileID: 1477871661}
+  jumpTutorialUI: {fileID: 866320557}
 --- !u!1 &1645101874
 GameObject:
   m_ObjectHideFlags: 0
@@ -7776,7 +7762,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e2358432c100645ac210b0b8591c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1645101876}
 --- !u!1 &1650051241
 GameObject:
   m_ObjectHideFlags: 0
@@ -8059,30 +8044,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3ae9ccb8accb5f4aa76de0b8310c19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  masterVolume: 1
+  audioToggle: {fileID: 1721969145}
   sounds:
   - name: RopeShoot
     clip: {fileID: 8300000, guid: b14ca3a855329a744ac93e7d68fe8c3e, type: 3}
     volume: 1
     pitchRange: {x: 1, y: 1.2}
     source: {fileID: 0}
-  - name: RopeHit
-    clip: {fileID: 8300000, guid: 39696a8d42842ee4b88c6e8365583db9, type: 3}
-    volume: 0
-    pitchRange: {x: 1, y: 1}
-    source: {fileID: 0}
-  - name: Release
-    clip: {fileID: 8300000, guid: e13b5dd2d9c5b9f47ba3dd6d9868c082, type: 3}
-    volume: 0.2
-    pitchRange: {x: 0.8, y: 0.8}
-    source: {fileID: 0}
-  - name: SmallLeap
-    clip: {fileID: 8300000, guid: 3318ef7e3dd27d340b557bbf9c2cc836, type: 3}
-    volume: 0.2
-    pitchRange: {x: 1, y: 1}
-    source: {fileID: 0}
   - name: BigLeap
     clip: {fileID: 8300000, guid: 80188a1cb310995478606854ef1c958b, type: 3}
-    volume: 0.504
+    volume: 0.55
     pitchRange: {x: 1, y: 1}
     source: {fileID: 0}
   - name: Explosion
@@ -8194,6 +8166,7 @@ GameObject:
   - component: {fileID: 2036517650}
   - component: {fileID: 2036517649}
   - component: {fileID: 2036517648}
+  - component: {fileID: 2036517651}
   m_Layer: 5
   m_Name: Welcome Screen
   m_TagString: Untagged
@@ -8219,7 +8192,7 @@ RectTransform:
   - {fileID: 1721969144}
   - {fileID: 135376300}
   m_Father: {fileID: 768970510}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -8282,6 +8255,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2036517646}
   m_CullTransparentMesh: 0
+--- !u!114 &2036517651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036517646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37db61f21e0ef524096e731234db226d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighScoreText: {fileID: 803981175}
 --- !u!1 &2139677168
 GameObject:
   m_ObjectHideFlags: 0

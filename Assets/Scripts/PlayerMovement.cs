@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 
 public class PlayerMovement : MonoBehaviour {
 
-    public SpriteRenderer sprite;
-    public Rigidbody2D rb;
-    public LineRenderer lr;
-    public Animator animator;
-    public AfterimageEffect afterimage;
+    SpriteRenderer sprite;
+    Rigidbody2D rb;
+    LineRenderer lr;
+    Animator animator;
+    AfterimageEffect afterimage;
+
     public BlipPlayer blip;
     public AudioManager audioManager;
 
@@ -18,8 +17,6 @@ public class PlayerMovement : MonoBehaviour {
 
     public float ropeCastSpeed;
 
-    public Vector2 startingJump;
-
     Vector2 connectionPoint;
     Vector2 shootDirection;
 
@@ -28,6 +25,16 @@ public class PlayerMovement : MonoBehaviour {
     Vector2 netForce;
     Vector2 netBurstForce;
 
+    private void Start()
+    {
+        sprite = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        lr = GetComponent<LineRenderer>();
+        animator = GetComponent<Animator>();
+        afterimage = GetComponent<AfterimageEffect>();
+
+        this.enabled = false;
+    }
     void FixedUpdate () {
         netForce.Set(0, 0);
         netBurstForce.Set(0, 0);
@@ -60,7 +67,7 @@ public class PlayerMovement : MonoBehaviour {
 
     Vector2 GetRopeHandPosition()
     {
-       return transform.position + (transform.up * (sprite.size.y / 2.0f)) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.deltaTime);
+       return transform.position + (transform.up * (sprite.size.y / 2.0f)) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.fixedDeltaTime);
     }
 
     void OnMouseHold()
@@ -69,8 +76,9 @@ public class PlayerMovement : MonoBehaviour {
         {
             // add the forces that the rope acts on the player and update the line renderer position
             // as well as update the orientation of the player sprite
-            netForce += GetRopeForce();
-            netForce += GetDampingForce();
+            Vector2 ropeForce = GetRopeForce();
+            netForce += ropeForce;
+            netForce += GetDampingForce(ropeForce);
 
             lr.SetPosition(1, GetRopeHandPosition());
             SetPlayerRotation(connectionPoint - (Vector2) transform.position);
@@ -78,10 +86,10 @@ public class PlayerMovement : MonoBehaviour {
 
         else if (PlayerState.IsCasting())
         {
-            RaycastHit2D hit = GetCastStatus();
             lr.SetPosition(0, GetRopeHandPosition() + ropeLength * shootDirection);
             lr.SetPosition(1, GetRopeHandPosition());
 
+            RaycastHit2D hit = GetCastStatus();
             // if rope has hit a surface
             if (hit.collider != null && hit.collider.CompareTag("Platform"))
             {
@@ -99,34 +107,28 @@ public class PlayerMovement : MonoBehaviour {
         PlayerState.SetToCasting();
 
         Vector2 origin = GetRopeHandPosition();
+        Vector2 relativeMousePosition = GameState.RelativeMousePosition();
 
-        // determing the shoot direction relative to finger press position
-        if (Input.mousePosition.y > Screen.height / 2)
-        {
-            if (Input.mousePosition.x > Screen.width / 2)
-                shootDirection = AngleToVectorD(Mathf.Lerp(75f , 50f, (Input.mousePosition.x - Screen.width / 2) / (Screen.width / 2)));
-            else
-                shootDirection = AngleToVectorD(Mathf.Lerp(95f, 75f, (Input.mousePosition.x) / (Screen.width / 2)));
-        }
-        
+        // determing the angle of the shoot direction
+        // relative to finger press position on the screen
+        if (relativeMousePosition.x > 0)
+            shootDirection = AngularLerp(75f, 50f, relativeMousePosition.x);
         else
+            shootDirection = AngularLerp(95f, 80f, relativeMousePosition.x + 1);
+
+        // shoot downward when player taps on bottom half of screen
+        if (relativeMousePosition.y < 0)
         {
-            if (Input.mousePosition.x > Screen.width / 2)
-                shootDirection = AngleToVectorD(Mathf.Lerp(-75f, -50f, (Input.mousePosition.x - Screen.width / 2) / (Screen.width / 2)));
-            else
-                shootDirection = AngleToVectorD(Mathf.Lerp(-95f, -75f, (Input.mousePosition.x) / (Screen.width / 2)));
+            shootDirection.y = -shootDirection.y;
+            sprite.flipX = true;
         }
-        shootDirection = shootDirection.normalized;
+
         ropeLength = ropeCastSpeed * Time.fixedDeltaTime;
 
         // set up line renderer
         lr.SetPosition(0, origin + ropeLength * shootDirection);
         lr.SetPosition(1, origin);
         lr.enabled = true;
-
-        // flip players sprite depending on the shoot direction
-        if (shootDirection.y < 0)
-            sprite.flipX = true;
 
         // rotate player to the direction they are shooting at
         SetPlayerRotation(shootDirection);
@@ -151,8 +153,6 @@ public class PlayerMovement : MonoBehaviour {
         connectionPoint = point;
         ropeLength = length;
         lr.SetPosition(0, point);
-
-        //audioManager.Play("RopeHit");
     }
 
     void OnMouseRelease()
@@ -175,8 +175,8 @@ public class PlayerMovement : MonoBehaviour {
         // players can only boost once per obstacle
         if (PlayerState.BoostInput())
         {
-            PlayerState.canBoost = false;
-            netBurstForce += GetBoostForce();
+            PlayerState.DisableBoost();
+            netBurstForce += GetBoostForce(GameState.cursorVelocity);
             afterimage.Play();
             audioManager.Play("BigLeap");
         }
@@ -189,7 +189,7 @@ public class PlayerMovement : MonoBehaviour {
         Vector2 playerPosition = GetRopeHandPosition();
         float distanceFromEquilibrium = ropeLength - (playerPosition - connectionPoint).magnitude;
 
-        // unlike a spring, a compressed bungee does not give a force
+        // unlike a spring, a compressed rope does not give a force
         if (distanceFromEquilibrium < 0)
         {
             return bungeeStiffness * distanceFromEquilibrium * (playerPosition - connectionPoint).normalized;
@@ -197,20 +197,18 @@ public class PlayerMovement : MonoBehaviour {
         return new Vector2(0, 0);
     }
 
-    Vector2 GetDampingForce()
+    Vector2 GetDampingForce(Vector2 ropeForce)
     {
-        Vector2 RopeForce = GetRopeForce();
-
-        if (RopeForce.magnitude == 0)
+        if (ropeForce.magnitude == 0)
             return new Vector2(0, 0);
 
-        RopeForce.Normalize();
-        return -dampingConstant * Vector2.Dot(rb.velocity, RopeForce) / Vector2.Dot(RopeForce, RopeForce) * RopeForce;
+        ropeForce.Normalize();
+        return -dampingConstant * Vector2.Dot(rb.velocity, ropeForce) / Vector2.Dot(ropeForce, ropeForce) * ropeForce;
     }
 
-    Vector2 GetBoostForce()
+    Vector2 GetBoostForce(Vector2 boostDirection)
     {
-        return GameState.cursorVelocity.normalized * boostScale;
+        return boostDirection.normalized * boostScale;
     }
 
 
@@ -229,17 +227,16 @@ public class PlayerMovement : MonoBehaviour {
         transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
-    public void StartPlayer()
-    {
-        PlayerState.SetToFreefall();
-        rb.constraints = RigidbodyConstraints2D.None;
-        rb.AddForce(startingJump);
-        animator.SetTrigger("doBackflip");
-        audioManager.Play("BigLeap");
-    }
-
-    Vector2 AngleToVectorD(float angle)
+    // returns a 2D unit vector pointing to the specified angle in degrees
+    Vector2 DegreeToVector(float angle)
     {
         return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+    }
+
+    // given 2 angles in degrees and a float from 0.0 to 1.0,
+    // returns the interpolation as a unit vector
+    Vector2 AngularLerp(float angle1, float angle2, float lerp)
+    {
+        return DegreeToVector(Mathf.Lerp(angle1, angle2, lerp));
     }
 }

@@ -1,16 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BlipPlayer : MonoBehaviour
 {
-    public Animator animator;
-
     public void Play(Vector2 position)
     {
-        transform.position = (Vector3) position;
-        animator.SetTrigger("playBlip");
-        //animator.Play("blip", -1, 0);
-
+        transform.position = position;
+        GetComponent<Animator>().SetTrigger("playBlip");
     }
 }

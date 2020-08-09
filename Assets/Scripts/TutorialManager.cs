@@ -6,78 +6,72 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    public static bool tutorialOff;
+    public static bool tutorialEnabled;
     public Text toggleText;
-    public Toggle disableTutorialToggle;
+    public Toggle tutorialToggle;
 
-    public Animator tutorialAnimator;
-    public Animator jumpTutorialAnimator;
-
-    [Range(0.2f, 1f)]
-    public float tutorialTimeScale;
+    public GameObject swingTutorialUI;
+    public GameObject jumpTutorialUI;
 
     void Start()
     {
         // Tutorial is on by default and then checks PlayerPrefs too see whether to disable it
-        SlowTime();
-
-        tutorialOff = disableTutorialToggle.isOn = GetDisableTutorialPlayerPref();
+        tutorialEnabled = tutorialToggle.isOn = GetDisableTutorialPlayerPref();
     }
 
     void Update()
     {
-        // no need to show tutorial prompts once player completes tutorial
-        // completion of the jump tutorial implies completion of swing tutorial and that
-        // GameState.state is in GAMEPLAY
-        if (jumpTutorialAnimator.GetBool("firstJump"))
-            this.enabled = false;
-
-        if (PlayerState.IsCasting())
+        if (GameState.state != GameState.START)
         {
-            tutorialAnimator.SetBool("firstSwing", true);
-            ResumeNormalTime();
-        }
+            // Disable script after completing tutorial or tutorial is disabled in gameplay
+            // Completion of the jump tutorial already implies completion of swing tutorial and that
+            // GameState.state is in GAMEPLAY
+            if (jumpTutorialUI.GetComponent<Animator>().GetBool("firstJump") || !tutorialEnabled)
+                StartCoroutine("ExitTutorial");
 
-        jumpTutorialAnimator.SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
-        if (PlayerState.BoostInput())
-            jumpTutorialAnimator.SetBool("firstJump", true);
+            if (PlayerState.mouseClick)
+            {
+                swingTutorialUI.GetComponent<Animator>().SetBool("firstSwing", true);
+                GetComponent<GameState>().ResumeNormalTime();
+            }
+
+            jumpTutorialUI.GetComponent<Animator>().SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
+            if (PlayerState.BoostInput())
+                jumpTutorialUI.GetComponent<Animator>().SetBool("firstJump", true);
+        }
     }
 
     public void DisableTutorial(bool isOn)
     {
-        tutorialOff = isOn;
-        jumpTutorialAnimator.SetBool("tutorialOff", tutorialOff);
-        if (tutorialOff)
+        tutorialEnabled = isOn;
+        jumpTutorialUI.GetComponent<Animator>().SetBool("tutorialEnabled", tutorialEnabled);
+        if (tutorialEnabled)
         {
-            toggleText.text = "TUTORIAL: OFF";
-            ResumeNormalTime();
+            toggleText.text = "TUTORIAL: ON";
         }
         else
         {
-            toggleText.text = "TUTORIAL: ON";
-            SlowTime();
+            toggleText.text = "TUTORIAL: OFF";
         }
 
-        SetDisableTutorialPlayerPref(tutorialOff);
-    }
-
-    void SlowTime()
-    {
-        Time.timeScale = tutorialTimeScale;
-    }
-
-    void ResumeNormalTime()
-    {
-        Time.timeScale = 1f;
+        SetDisableTutorialPlayerPref(tutorialEnabled);
     }
 
     bool GetDisableTutorialPlayerPref()
     {
-        return Convert.ToBoolean(PlayerPrefs.GetInt("DisableTutorial"));
+        return Convert.ToBoolean(PlayerPrefs.GetInt("tutorialEnabled", 1));
     }
 
     void SetDisableTutorialPlayerPref(bool disable)
     {
-        PlayerPrefs.SetInt("DisableTutorial", Convert.ToInt32(disable));
+        PlayerPrefs.SetInt("tutorialEnabled", Convert.ToInt32(disable));
+    }
+
+    IEnumerator ExitTutorial()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        swingTutorialUI.SetActive(false);
+        jumpTutorialUI.SetActive(false);
+        this.enabled = false;
     }
 }

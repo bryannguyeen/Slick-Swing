@@ -1,14 +1,13 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameState : MonoBehaviour
 {
+    public PlayerState playerState;
     public static int state;
     public static Vector2 prevMousePosition;
     public static Vector2 cursorVelocity;
-
 
     public const int START = 0;
     public const int GAMEPLAY = 1;
@@ -17,86 +16,111 @@ public class GameState : MonoBehaviour
     public GameObject gameOverUI;
     public GameObject welcomeUI;
 
-    public Text HighScoreText;
-
-    public PlayerMovement player;
     public float gameOverAnimationDuration;
 
-    public Animator welcomeScreenAnimator;
     public Animator tutorialAnimator;
 
-    public Toggle audioToggle;
-
-    float gameOverAnimationTimer;
+    bool enableResetButton;
 
     void Start()
     {
         state = START;
         prevMousePosition = Input.mousePosition;
-        audioToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("DisableAudio"));
-        HighScoreText.text = "HIGH SCORE: " + PlayerPrefs.GetInt("HighScore");
 
-        gameOverAnimationTimer = 0f;
+        enableResetButton = false;
     }
 
     void Update()
     {
-        DecrementTimers();
-    }
-
-    private void LateUpdate()
-    {
-        cursorVelocity = ((Vector2) Input.mousePosition - prevMousePosition) / Time.deltaTime;
-
-        // previous mouse position should be recorded at the end of the frame
+        cursorVelocity = ((Vector2)Input.mousePosition - prevMousePosition) / Time.deltaTime;
         prevMousePosition = Input.mousePosition;
     }
 
     public void StartGame()
     {
         state = GAMEPLAY;
-        player.StartPlayer();
+        playerState.StartPlayer();
 
-        welcomeScreenAnimator.SetTrigger("disappear");
+        GetComponent<BackgroundManager>().enabled = true;
+        GetComponent<PlatformManager>().enabled = true;
 
-        if (!TutorialManager.tutorialOff)
+        welcomeUI.GetComponent<WelcomeDisplay>().Close();
+
+        if (TutorialManager.tutorialEnabled)
+        {
             tutorialAnimator.SetTrigger("showTutorial");
+            StartCoroutine("GraduallyStopTime");
+        }
     }
 
     public void EndGame()
     {
         state = GAMEOVER;
+        playerState.KillPlayer();
 
-        // update high score
-        int score = PlatformManager.numObstaclesPassed;
-        if (score > PlayerPrefs.GetInt("HighScore"))
-        {
-            PlayerPrefs.SetInt("HighScore", score);
-            gameOverUI.GetComponent<GameOverDisplay>().DeclareNewRecord();
-        }
-
-        // turn off welcome screen ui
-        welcomeUI.SetActive(false);
+        // disable any unnecessary scripts
+        GetComponent<PlatformManager>().enabled = false;
 
         // display game over screen
         gameOverUI.SetActive(true);
 
-        // turn of tutorial ui if it is currently on
-        tutorialAnimator.SetBool("firstSwing", true);
+        // update high score if changed
+        int score = PlatformManager.totalNumObstaclesPassed;
+        if (score > GetHighScore())
+            SetHighScore(score);
 
-        gameOverAnimationTimer = gameOverAnimationDuration;
+        // turn off tutorial ui if it is currently on
+        tutorialAnimator.SetBool("firstSwing", true);
+        ResumeNormalTime();
+
+        StartCoroutine("WaitToAllowReset");
     }
 
     public void ResetGame()
     {
-        if (gameOverAnimationTimer == 0f)
+        if (enableResetButton)
             SceneManager.LoadScene("Main");
     }
 
-    public void DecrementTimers()
+    IEnumerator WaitToAllowReset()
     {
-        gameOverAnimationTimer -= Time.deltaTime;
-        if (gameOverAnimationTimer < 0f)
-            gameOverAnimationTimer = 0f;
+        yield return new WaitForSecondsRealtime(gameOverAnimationDuration);
+        enableResetButton = true;
+    }
+
+    public static int GetHighScore()
+    {
+        return PlayerPrefs.GetInt("HighScore");
+    }
+
+    public static void SetHighScore(int highScore)
+    {
+        PlayerPrefs.SetInt("HighScore", highScore);
+    }
+
+    // returns a float from -1.0f to +1.0f
+    // -1.0f meaning the cursor is at the leftmost side of the screen
+    // +1.0f meaning the cursor is at the rightmost side
+    public static Vector2 RelativeMousePosition()
+    {
+        float x = (Input.mousePosition.x) / (Screen.width) * 2 - 1;
+        float y = (Input.mousePosition.y) / (Screen.height) * 2 - 1;
+        return new Vector2(x, y);
+    }
+
+    IEnumerator GraduallyStopTime()
+    {
+        float originalTime = Time.timeScale;
+        for (int i = 1; i <= 10; i++)
+        {
+            Time.timeScale = Mathf.Lerp(originalTime, 0f, (float) i / 10);
+            yield return new WaitForSecondsRealtime(0.3f);
+        }
+    }
+
+    public void ResumeNormalTime()
+    {
+        StopCoroutine("GraduallyStopTime");
+        Time.timeScale = 1f;
     }
 }
