@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour {
 
     Vector2 GetRopeHandPosition()
     {
-       return transform.position + (transform.up * (sprite.size.y / 2.0f)) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.fixedDeltaTime);
+       return transform.position + (transform.up * (sprite.size.y / 4.0f)) + (new Vector3(rb.velocity.x, rb.velocity.y, 0) * Time.fixedDeltaTime);
     }
 
     void OnMouseHold()
