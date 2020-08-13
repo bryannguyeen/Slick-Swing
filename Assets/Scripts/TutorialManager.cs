@@ -69,7 +69,7 @@ public class TutorialManager : MonoBehaviour
 
     IEnumerator ExitTutorial()
     {
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(0.75f);
         swingTutorialUI.SetActive(false);
         jumpTutorialUI.SetActive(false);
         this.enabled = false;
