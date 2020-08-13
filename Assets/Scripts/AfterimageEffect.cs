@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class AfterimageEffect : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class AfterimageEffect : MonoBehaviour
         if (afterimageParticleSystem.isPlaying)
         {
             particleRenderer.material.mainTexture = playerSprite.sprite.texture;
+            particleRenderer.flip = new Vector3(Convert.ToInt32(playerSprite.flipX), Convert.ToInt32(playerSprite.flipY), 0);
         }
     }
 
