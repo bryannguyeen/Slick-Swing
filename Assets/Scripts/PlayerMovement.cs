@@ -153,6 +153,13 @@ public class PlayerMovement : MonoBehaviour {
         connectionPoint = point;
         ropeLength = length;
         lr.SetPosition(0, point);
+
+        Vector2 perpendicular = new Vector2(shootDirection.y, -shootDirection.x).normalized * rb.velocity.magnitude;
+        if (shootDirection.y < 0)
+            perpendicular = -perpendicular;
+
+        rb.velocity = Vector3.Slerp(rb.velocity, perpendicular, 0.3f);
+
     }
 
     void OnMouseRelease()
