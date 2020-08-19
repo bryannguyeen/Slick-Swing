@@ -7652,7 +7652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSprite: {fileID: 554632239163499910, guid: 804856e113de7df4a919e9e340fb468f,
     type: 3}
-  parallax: 0.95
+  parallax: 0.94
 --- !u!114 &1621331565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7675,7 +7675,6 @@ MonoBehaviour:
   obstacleWidth: 3
   obstacleMinHeight: 6
   obstacleMaxHeight: 12.5
-  beginningRandomSeed: 1
 --- !u!4 &1621331566
 Transform:
   m_ObjectHideFlags: 0

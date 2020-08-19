@@ -16,7 +16,6 @@ public class PlatformManager : MonoBehaviour {
     public float obstacleWidth;
     public float obstacleMinHeight;
     public float obstacleMaxHeight;
-    public int beginningRandomSeed;
 
     float pixelsPerUnit;
     Vector2 borderSize;
@@ -43,13 +42,8 @@ public class PlatformManager : MonoBehaviour {
         for (int i = -1; i < 2; i++)
             AddBorderToQueue(i);
 
-        Random.State oldState = Random.state;
-
-        Random.InitState(beginningRandomSeed);
-        AddObstaclesToQueue(0);
-
-        Random.state = oldState;
-        AddObstaclesToQueue(1);
+        for (int i = 0; i < 2; i++)
+        AddObstaclesToQueue(i);
 
         this.enabled = false;
     }
@@ -72,7 +66,9 @@ public class PlatformManager : MonoBehaviour {
 
     float RandomHeight()
     {
-        return Random.Range(obstacleMinHeight, obstacleMaxHeight);
+        // difficultyScale will make the obstacle heights shorter for the early game
+        float difficultyScale = Mathf.Lerp(0.55f, 1.0f, Mathf.Min(numBordersPassed, 10f) / 10f);
+        return Random.Range(obstacleMinHeight, obstacleMaxHeight) * difficultyScale;
     }
 
     GameObject CreateObstacle(float xPos, float obstacleHeight, bool bottom)
