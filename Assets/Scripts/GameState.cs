@@ -19,6 +19,7 @@ public class GameState : MonoBehaviour
     public float gameOverAnimationDuration;
 
     public Animator tutorialAnimator;
+    public Animator transitionAnimator;
 
     bool enableResetButton;
 
@@ -79,7 +80,15 @@ public class GameState : MonoBehaviour
     public void ResetGame()
     {
         if (enableResetButton)
-            SceneManager.LoadScene("Main");
+            StartCoroutine("TransitionToNewScene");
+    }
+
+    IEnumerator TransitionToNewScene()
+    {
+        transitionAnimator.SetTrigger("exitScene");
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        SceneManager.LoadScene("Main");
     }
 
     IEnumerator WaitToAllowReset()
