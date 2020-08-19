@@ -6466,7 +6466,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: FLICK AND RELEASE TO DO A JUMP
+  m_Text: SWIPE FINGER AND RELEASE TO DO A JUMP
 --- !u!222 &866320560
 CanvasRenderer:
   m_ObjectHideFlags: 0
