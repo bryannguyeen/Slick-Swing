@@ -36,7 +36,7 @@ public class TutorialManager : MonoBehaviour
             }
 
             jumpTutorialUI.GetComponent<Animator>().SetBool("isSwinging", PlayerState.IsSwinging() && GameState.state == GameState.GAMEPLAY);
-            if (PlayerState.BoostInput())
+            if (PlayerState.mouseRelease && PlayerState.BoostInput())
                 jumpTutorialUI.GetComponent<Animator>().SetBool("firstJump", true);
         }
     }
