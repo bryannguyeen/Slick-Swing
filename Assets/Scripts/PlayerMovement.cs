@@ -215,7 +215,7 @@ public class PlayerMovement : MonoBehaviour {
 
     Vector2 GetBoostForce()
     {
-        return PlayerState.BoostDirection() * boostScale;
+        return PlayerState.BoostDirection() * (boostScale * Mathf.Lerp(0f, 1f, Mathf.Min(PlayerState.DistanceFromMouseclick(), PlayerState.maxFingerBoostDistance) / PlayerState.maxFingerBoostDistance));
     }
 
 

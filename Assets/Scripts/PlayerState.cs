@@ -16,6 +16,9 @@ public class PlayerState : MonoBehaviour
     public static bool mouseRelease;  // is true only if the mouse is released on current frame
     public static bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
 
+    public static float minFingerBoostDistance = 20f;
+    public static float maxFingerBoostDistance = 120f;
+
     public static Vector3 clickPosition;
 
     PlayerMovement movement;
@@ -151,7 +154,7 @@ public class PlayerState : MonoBehaviour
 
     public static bool BoostInput()
     {
-        return canBoost && IsSwinging() && DistanceFromMouseclick() > 20f;
+        return canBoost && IsSwinging() && DistanceFromMouseclick() > minFingerBoostDistance;
     }
 
     public static void DisableBoost()
