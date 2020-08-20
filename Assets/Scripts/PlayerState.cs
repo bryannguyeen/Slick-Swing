@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
@@ -11,8 +12,11 @@ public class PlayerState : MonoBehaviour
     private static bool canBoost;
 
     public static bool mouseClick;    // is true only if the mouse is clicked on current frame
+
     public static bool mouseRelease;  // is true only if the mouse is released on current frame
     public static bool mouseHold;     // is true as long as the mouse is pressed, false otherwise
+
+    public static Vector3 clickPosition;
 
     PlayerMovement movement;
     PlayerCollision collision;
@@ -66,6 +70,7 @@ public class PlayerState : MonoBehaviour
         {
             mouseClick = true;
             mouseHold = true;
+            clickPosition = Input.mousePosition;
         }
     }
 
@@ -146,7 +151,7 @@ public class PlayerState : MonoBehaviour
 
     public static bool BoostInput()
     {
-        return canBoost && IsSwinging() && GameState.cursorVelocity.magnitude > 400f;
+        return canBoost && IsSwinging() && DistanceFromMouseclick() > 20f;
     }
 
     public static void DisableBoost()
@@ -157,5 +162,20 @@ public class PlayerState : MonoBehaviour
     public static void ReEnableBoost()
     {
         canBoost = true;
+    }
+
+    public static bool CanBoost()
+    {
+        return canBoost;
+    }
+
+    public static Vector2 BoostDirection()
+    {
+        return (Input.mousePosition - clickPosition).normalized;
+    }
+
+    public static float DistanceFromMouseclick()
+    {
+        return (Input.mousePosition - clickPosition).magnitude;
     }
 }

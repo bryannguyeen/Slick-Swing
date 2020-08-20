@@ -183,7 +183,7 @@ public class PlayerMovement : MonoBehaviour {
         if (PlayerState.BoostInput())
         {
             PlayerState.DisableBoost();
-            netBurstForce += GetBoostForce(GameState.cursorVelocity);
+            netBurstForce += GetBoostForce();
             afterimage.Play();
             audioManager.Play("BigLeap");
         }
@@ -213,9 +213,9 @@ public class PlayerMovement : MonoBehaviour {
         return -dampingConstant * Vector2.Dot(rb.velocity, ropeForce) / Vector2.Dot(ropeForce, ropeForce) * ropeForce;
     }
 
-    Vector2 GetBoostForce(Vector2 boostDirection)
+    Vector2 GetBoostForce()
     {
-        return boostDirection.normalized * boostScale;
+        return PlayerState.BoostDirection() * boostScale;
     }
 
 
