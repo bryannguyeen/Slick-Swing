@@ -32,22 +32,13 @@ public class BoostIndicator : MonoBehaviour
             indicatorSprite.sprite = disabledSprite;
 
         Vector2 position = guyTf.position + ((Vector3)PlayerState.BoostDirection()) * Mathf.Min(PlayerState.DistanceFromMouseclick() * 0.025f, 3f);
-        arrowheadTf.position = position;
 
         Vector2 direction = PlayerState.BoostDirection();
         float angle = Mathf.Acos(direction.y) * Mathf.Rad2Deg;
         if (direction.x > 0)
             angle = -angle;
 
+        arrowheadTf.position = position;
         arrowheadTf.eulerAngles = new Vector3(0, 0, angle);
-    }
-
-    // angle in degrees
-    Vector2 Rotate(Vector2 v, float angle)
-    {
-        float cos = Mathf.Cos(angle * Mathf.Deg2Rad);
-        float sin = Mathf.Sin(angle * Mathf.Deg2Rad);
-
-        return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
     }
 }
