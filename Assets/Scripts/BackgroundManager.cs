@@ -10,15 +10,32 @@ public class BackgroundManager : MonoBehaviour
 
     Transform cameraT;
 
+    public Background[] backgroundLayers;
     readonly GameObject[] backgrounds = new GameObject[2];
 
     float backgroundWidth;
     float backgroundLoopDistance;
     int offset;
 
-    void Start()
+    void Awake()
     {
         cameraT = Camera.main.transform;
+
+        foreach (Background b in backgroundLayers)
+        {
+            b.width = b.spriteObject.GetComponent<Renderer>().bounds.size.x;
+            b.loopDistance = b.width / (1 - b.parallax);
+            b.offset = b.GetNumBackgroundLoops(cameraT.position);
+
+            for (int i = 0; i < b.instances.Length; i++)
+            {
+                b.instances[i] = (GameObject)Instantiate(b.spriteObject);
+            }
+
+            b.FollowCamera(cameraT.position);
+        }
+
+        /*
         backgroundWidth = backgroundSprite.GetComponent<Renderer>().bounds.size.x;
         backgroundLoopDistance = backgroundWidth / (1 - parallax);
 
@@ -30,15 +47,25 @@ public class BackgroundManager : MonoBehaviour
         }
 
         FollowCamera();
+        */
 
         this.enabled = false;
     }
 
     void Update()
     {
+        foreach (Background b in backgroundLayers)
+        {
+            b.offset = b.GetNumBackgroundLoops(cameraT.position);
+
+            b.FollowCamera(cameraT.position);
+        }
+
+        /*
         offset = GetNumBackgroundLoops(cameraT.position, backgroundLoopDistance);
 
         FollowCamera();
+        */
     }
 
     void FollowCamera()

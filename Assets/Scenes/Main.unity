@@ -7750,6 +7750,34 @@ MonoBehaviour:
   backgroundSprite: {fileID: 554632239163499910, guid: 804856e113de7df4a919e9e340fb468f,
     type: 3}
   parallax: 0.94
+  backgroundLayers:
+  - spriteObject: {fileID: 8179216210611895008, guid: 263d03d5168809845b3b64d598d22acf,
+      type: 3}
+    parallax: 1
+    width: 0
+    loopDistance: 0
+    offset: 0
+    instances:
+    - {fileID: 0}
+    - {fileID: 0}
+  - spriteObject: {fileID: 3811643226189069829, guid: e3594e8a84be3354598e607e04b5004b,
+      type: 3}
+    parallax: 0.96
+    width: 0
+    loopDistance: 0
+    offset: 0
+    instances:
+    - {fileID: 0}
+    - {fileID: 0}
+  - spriteObject: {fileID: 8601635710278026830, guid: 3ee80f7fd134a6240bb2e05c6406b868,
+      type: 3}
+    parallax: 0.92
+    width: 0
+    loopDistance: 0
+    offset: 0
+    instances:
+    - {fileID: 0}
+    - {fileID: 0}
 --- !u!114 &1621331565
 MonoBehaviour:
   m_ObjectHideFlags: 0
