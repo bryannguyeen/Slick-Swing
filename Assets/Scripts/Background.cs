@@ -21,11 +21,6 @@ public class Background
     [HideInInspector]
     public GameObject[] instances = new GameObject[2];
 
-    public Background()
-    {
-
-    }
-
     public int GetNumBackgroundLoops(Vector3 cameraPosition)
     {
         return (int)Mathf.Floor(cameraPosition.x / loopDistance);
