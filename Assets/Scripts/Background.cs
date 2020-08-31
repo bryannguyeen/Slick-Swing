@@ -16,9 +16,6 @@ public class Background
     public float loopDistance;
 
     [HideInInspector]
-    public int offset;
-
-    [HideInInspector]
     public GameObject[] instances = new GameObject[2];
 
     public int GetNumBackgroundLoops(Vector3 cameraPosition)
@@ -29,6 +26,7 @@ public class Background
     public void FollowCamera(Vector3 cameraPosition)
     {
         // set the first background position
+        int offset = GetNumBackgroundLoops(cameraPosition);
         float xPos = Mathf.Lerp(0, cameraPosition.x, parallax) + offset * width;
         instances[0].transform.position = new Vector3(xPos, 0, 1);
 

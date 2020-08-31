@@ -13,8 +13,6 @@ public class BackgroundManager : MonoBehaviour
         {
             b.width = b.spriteObject.GetComponent<Renderer>().bounds.size.x;
             b.loopDistance = b.width / (1 - b.parallax);
-            b.offset = b.GetNumBackgroundLoops(cameraT.position);
-
             for (int i = 0; i < b.instances.Length; i++)
             {
                 b.instances[i] = (GameObject)Instantiate(b.spriteObject);
@@ -30,8 +28,6 @@ public class BackgroundManager : MonoBehaviour
     {
         foreach (Background b in backgroundLayers)
         {
-            b.offset = b.GetNumBackgroundLoops(cameraT.position);
-
             b.FollowCamera(cameraT.position);
         }
     }
