@@ -7,6 +7,6 @@ public class ScoreManager : MonoBehaviour
 
     void Update()
     {
-        scoreBox.text = PlatformManager.totalNumObstaclesPassed.ToString();
+        scoreBox.text = (PlatformManager.totalNumObstaclesPassed + GameState.coinsCollected).ToString();
     }
 }

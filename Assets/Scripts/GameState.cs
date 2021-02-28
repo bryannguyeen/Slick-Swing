@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class GameState : MonoBehaviour
 {
     public PlayerState playerState;
     public static int state;
+    public static int coinsCollected;
     public static Vector2 prevMousePosition;
     public static Vector2 cursorVelocity;
 
@@ -27,8 +29,11 @@ public class GameState : MonoBehaviour
     {
         state = START;
         prevMousePosition = Input.mousePosition;
+        coinsCollected = 0;
 
         enableResetButton = false;
+
+        //StartCoroutine(GetRequest("https://run.mocky.io/v3/68bf0931-2525-412a-adb4-e2781d68a4df"));
     }
 
     void Update()
@@ -66,7 +71,7 @@ public class GameState : MonoBehaviour
         gameOverUI.SetActive(true);
 
         // update high score if changed
-        int score = PlatformManager.totalNumObstaclesPassed;
+        int score = PlatformManager.totalNumObstaclesPassed + coinsCollected;
         if (score > GetHighScore())
             SetHighScore(score);
 
@@ -132,4 +137,6 @@ public class GameState : MonoBehaviour
         StopCoroutine("GraduallyStopTime");
         Time.timeScale = 1f;
     }
+
+
 }
